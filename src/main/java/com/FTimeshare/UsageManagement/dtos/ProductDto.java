@@ -1,5 +1,10 @@
 package com.FTimeshare.UsageManagement.dtos;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class ProductDto {
     private String productID;
     private String productName;
@@ -10,5 +15,5 @@ public class ProductDto {
     private boolean productStatus;
     private String productPicture;
     private String projectID;
-    private String projectTypeID;
+    private String productTypeID;
 }
