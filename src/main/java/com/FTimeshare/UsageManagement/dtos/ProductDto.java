@@ -1,6 +1,6 @@
 package com.FTimeshare.UsageManagement.dtos;
 
-public class Productdto {
+public class ProductDto {
     private String productID;
     private String productName;
     private String productDescription;

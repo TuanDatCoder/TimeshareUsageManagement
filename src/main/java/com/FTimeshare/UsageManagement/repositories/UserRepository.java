@@ -1,7 +1,7 @@
 package com.FTimeshare.UsageManagement.repositories;
 
-import com.FTimeshare.UsageManagement.entities.User;
+import com.FTimeshare.UsageManagement.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 }
