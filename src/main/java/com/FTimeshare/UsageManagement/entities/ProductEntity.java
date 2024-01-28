@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.entities;
 
+import com.FTimeshare.UsageManagement.dtos.ProductTypeDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,5 +43,5 @@ public class ProductEntity {
 
     @ManyToOne
     @JoinColumn(name = "productTypeID", referencedColumnName = "productTypeID")
-    private ProductEntity productTypeID;
+    private ProductTypeEntity productTypeID;
 }
