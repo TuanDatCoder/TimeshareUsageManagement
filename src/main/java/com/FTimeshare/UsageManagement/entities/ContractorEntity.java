@@ -1,4 +1,4 @@
-package Entities;
+package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
