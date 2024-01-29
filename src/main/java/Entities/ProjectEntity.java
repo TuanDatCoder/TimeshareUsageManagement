@@ -1,4 +1,4 @@
-package com.FTimeshare.UsageManagement.entities;
+package Entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,6 +31,16 @@ public class ProjectEntity {
 
     @Column(name = "projectPicture")
     private String projectPicture;
+
+    @ManyToOne
+    @JoinColumn(name = "contractorID", referencedColumnName = "contractorID")
+    private ContractorEntity contractorID;
+
+    @ManyToOne
+    @JoinColumn(name = "projectTypeID", referencedColumnName = "projectTypeID")
+    private ProjectTypeEntity projectTypeID;
+
+
 
 
 }
