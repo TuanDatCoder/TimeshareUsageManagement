@@ -1,5 +1,8 @@
 package com.FTimeshare.UsageManagement.entities;
 
+public class ProjectEntity {
+}
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,3 +37,4 @@ public class ProjectEntity {
 
 
 }
+
