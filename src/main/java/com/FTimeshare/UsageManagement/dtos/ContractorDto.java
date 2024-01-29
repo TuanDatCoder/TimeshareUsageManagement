@@ -1,4 +1,4 @@
-package dtos;
+package com.FTimeshare.UsageManagement.dtos;
 
 import lombok.Data;
 
