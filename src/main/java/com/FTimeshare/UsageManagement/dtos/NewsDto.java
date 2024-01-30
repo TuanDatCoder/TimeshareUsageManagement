@@ -14,9 +14,7 @@ import java.sql.Date;
 public class NewsDto {
     private String NewsID;
     private String newsTitle;
-
     private Date newsPost;
-    private String newsAuthor;
     private String newsContent;
     private String Userid;
 

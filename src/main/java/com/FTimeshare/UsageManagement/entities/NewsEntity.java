@@ -19,9 +19,6 @@ public class NewsEntity {
     @Column(name = "newsPost")
     private Date newsPost;
 
-    @Column(name = "newsAuthor")
-    private String newsAuthor;
-
     @Column(name = "newsContent")
     private String newsContent;
 
