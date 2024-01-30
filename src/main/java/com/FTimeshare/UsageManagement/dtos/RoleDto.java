@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ContractorDto {
-    private String contractorID;
-    private String contractorName;
-    private String contractorDescription;
-
+public class RoleDto {
+    private String roleID;
+    private String roleName;
+    private String roleDescription;
 }
-
-
