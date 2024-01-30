@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class FeedbackDto {
-    private int feedbackID;
-    private LocalDateTime feedbackCreateDate;
+    private String feedbackID;
+    private Date feedbackCreateDate;
     private String feedbackDetail;
-    private String feedbackStatus;
-    private int bookingID;
+    private boolean feedbackStatus;
+    private String bookingID;
 }

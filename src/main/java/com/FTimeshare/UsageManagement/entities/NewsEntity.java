@@ -1,44 +1,66 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Entity
-@Table(name = "News")
-@Data
-@NoArgsConstructor
+@Table(name = "News", schema = "dbo", catalog = "master")
 public class NewsEntity {
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "news_id")
-    private int newsID;
-
-    @Column(name = "news_title")
+    @Id
+    @Column(name = "newsID", nullable = false, length = 20)
+    private String newsId;
+    @Basic
+    @Column(name = "newsTitle", nullable = true, length = 20)
     private String newsTitle;
-
-    @Column(name = "news_post")
-    private LocalDateTime newsPost;
-
-    @Column(name = "news_content")
+    @Basic
+    @Column(name = "newsPost", nullable = true)
+    private Date newsPost;
+    @Basic
+    @Column(name = "newsContent", nullable = true, length = 600)
     private String newsContent;
+    @Basic
+    @Column(name = "userID", nullable = false, length = 20)
+    private String userId;
 
-    @Column(name = "img_name")
-    private String imgName;
+    public String getNewsId() {
+        return newsId;
+    }
 
-    @Lob
-    @Column(name = "img_data")
-    private byte[] imgData;
+    public void setNewsId(String newsId) {
+        this.newsId = newsId;
+    }
 
-    @Column(name = "news_viewer")
-    private int newsViewer;
+    public String getNewsTitle() {
+        return newsTitle;
+    }
 
-    @Column(name = "news_status")
-    private String newsStatus;
+    public void setNewsTitle(String newsTitle) {
+        this.newsTitle = newsTitle;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
-    private AccountEntity accID;
+    public Date getNewsPost() {
+        return newsPost;
+    }
+
+    public void setNewsPost(Date newsPost) {
+        this.newsPost = newsPost;
+    }
+
+    public String getNewsContent() {
+        return newsContent;
+    }
+
+    public void setNewsContent(String newsContent) {
+        this.newsContent = newsContent;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

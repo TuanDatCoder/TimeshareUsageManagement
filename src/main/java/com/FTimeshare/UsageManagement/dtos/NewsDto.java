@@ -5,21 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class NewsDto {
-    private int newsID;
+    private String newsId;
     private String newsTitle;
-    private LocalDateTime newsPost;
+    private Date newsPost;
     private String newsContent;
-    private String imgName;
-    private byte[] imgData;
-    private int newsViewer;
-    private String newsStatus;
-    private int accID;
-
+    private String userId;
 }
