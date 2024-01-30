@@ -1,6 +1,5 @@
 package com.FTimeshare.UsageManagement.entities;
 
-import com.FTimeshare.UsageManagement.dtos.ProductTypeDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

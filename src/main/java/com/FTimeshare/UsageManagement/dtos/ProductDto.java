@@ -9,7 +9,7 @@ public class ProductDto {
     private String productID;
     private String productName;
     private String productDescription;
-    private String productConvinience;
+    private String productConvenience;
     private float productArea;
     private float productPrice;
     private boolean productStatus;
