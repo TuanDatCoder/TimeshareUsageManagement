@@ -13,7 +13,7 @@ import java.sql.Date;
 @Builder
 public class BookingDto {
     private String bookingID;
-    private Date starDate;
+    private Date startDate;
     private Date endDate;
     private float bookingPrice;
     private String userID;
