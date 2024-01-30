@@ -1,8 +1,7 @@
 package com.FTimeshare.UsageManagement.entities;
 
-public class ProjectEntity {
-}
-
+import com.FTimeshare.UsageManagement.entities.ContractorEntity;
+import com.FTimeshare.UsageManagement.entities.ProjectTypeEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,7 +43,4 @@ public class ProjectEntity {
     private ProjectTypeEntity projectTypeID;
 
 
-
-
 }
-
