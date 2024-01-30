@@ -15,8 +15,8 @@ public class BookingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String bookingID;
 
-    @Column(name = "starDate")
-    private Date starDate;
+    @Column(name = "startDate")
+    private Date startDate;
 
     @Column(name = "endDate")
     private Date endDate;

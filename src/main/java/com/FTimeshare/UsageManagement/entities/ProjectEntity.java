@@ -1,17 +1,13 @@
 package com.FTimeshare.UsageManagement.entities;
 
-public class ProjectEntity {
-}
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
 @Table(name = "Project")
+@Data
 @NoArgsConstructor
-
 public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +38,4 @@ public class ProjectEntity {
     @ManyToOne
     @JoinColumn(name = "projectTypeID", referencedColumnName = "projectTypeID")
     private ProjectTypeEntity projectTypeID;
-
-
-
-
 }
-

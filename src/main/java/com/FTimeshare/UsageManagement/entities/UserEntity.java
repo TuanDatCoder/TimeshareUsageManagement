@@ -30,6 +30,6 @@ public class UserEntity {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "roleID")
-    private RoleEntity role;
+    private RoleEntity roleID;
 
 }

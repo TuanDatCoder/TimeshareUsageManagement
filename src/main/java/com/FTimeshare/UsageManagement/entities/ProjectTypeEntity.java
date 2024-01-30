@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "ProjectType")
+@Table(name = "Project_Type")
 @NoArgsConstructor
 public class ProjectTypeEntity {
     @Id
