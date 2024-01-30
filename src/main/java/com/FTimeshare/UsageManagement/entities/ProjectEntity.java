@@ -38,4 +38,5 @@ public class ProjectEntity {
     @ManyToOne
     @JoinColumn(name = "projectTypeID", referencedColumnName = "projectTypeID")
     private ProjectTypeEntity projectTypeID;
+
 }
