@@ -9,12 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
-    private String userID;
-    private String userName;
-    private String userPhone;
-    private String userEmail;
-    private String userPassword;
+public class RoleDto {
     private String roleID;
-
+    private String roleName;
+    private String roleDescription;
 }
