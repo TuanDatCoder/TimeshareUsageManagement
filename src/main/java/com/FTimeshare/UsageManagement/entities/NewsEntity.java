@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "News")
 @Data
@@ -17,7 +18,7 @@ public class NewsEntity {
     private String newsTitle;
 
     @Column(name = "newsPost")
-    private Date newsPost;
+    private LocalDateTime newsPost;
 
     @Column(name = "newsContent")
     private String newsContent;

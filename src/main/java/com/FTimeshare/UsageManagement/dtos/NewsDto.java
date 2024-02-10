@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +14,7 @@ import java.sql.Date;
 public class NewsDto {
     private String NewsID;
     private String newsTitle;
-    private Date newsPost;
+    private LocalDateTime newsPost;
     private String newsContent;
     private String Userid;
 

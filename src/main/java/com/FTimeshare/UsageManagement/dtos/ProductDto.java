@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +22,8 @@ public class ProductDto {
     private String productConvenience;
     private float productArea;
     private float productPrice;
+    private LocalDateTime availableStartDate;
+    private  LocalDateTime availableEndDate;
     private boolean productStatus;
     private String productPicture;
     private String projectID;

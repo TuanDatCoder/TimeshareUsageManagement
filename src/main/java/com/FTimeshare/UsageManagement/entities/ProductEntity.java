@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Product")
 @Data
@@ -28,6 +30,12 @@ public class ProductEntity {
 
     @Column(name = "productPrice")
     private float productPrice;
+
+    @Column(name = "availableStartDate")
+    private LocalDateTime availableStartDate;
+
+    @Column(name = "availableEndDate")
+    private LocalDateTime availableEndDate;
 
     @Column(name = "productStatus")
     private boolean productStatus;
