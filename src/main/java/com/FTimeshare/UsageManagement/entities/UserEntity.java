@@ -33,8 +33,9 @@ public class UserEntity {
     @Column(name="userBirthday")
     private Date userBirthday;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "roleID")
+    @ManyToOne
+    @JoinColumn(name = "roleID", referencedColumnName = "roleID")
     private RoleEntity roleID;
+
 
 }

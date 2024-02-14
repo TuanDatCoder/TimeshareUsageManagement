@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class NewsDto {
-    private String NewsID;
+    private String newsID;
     private String newsTitle;
     private LocalDateTime newsPost;
     private String newsContent;
