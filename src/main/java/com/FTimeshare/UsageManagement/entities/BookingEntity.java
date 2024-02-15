@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Booking")
 @Data
@@ -16,10 +17,10 @@ public class BookingEntity {
     private String bookingID;
 
     @Column(name = "startDate")
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "endDate")
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "bookingPrice")
     private float bookingPrice;

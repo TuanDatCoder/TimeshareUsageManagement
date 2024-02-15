@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Feedback")
 @Data
@@ -16,7 +18,7 @@ public class FeedbackEntity {
     private String feedbackID;
 
     @Column(name = "feedbackCreateDate")
-    private Date feedbackCreateDate;
+    private LocalDateTime feedbackCreateDate;
 
     @Column(name = "feedbackDetail")
     private String feedbackDetail;

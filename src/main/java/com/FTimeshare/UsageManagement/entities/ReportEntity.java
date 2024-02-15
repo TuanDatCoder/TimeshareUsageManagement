@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Report")
 @Data
@@ -15,7 +16,7 @@ public class ReportEntity {
     private String reportID;
 
     @Column(name = "reportCreateDate")
-    private Date reportCreateDate;
+    private LocalDateTime reportCreateDate;
 
     @Column(name = "reportDetail")
     private String reportDetail;
