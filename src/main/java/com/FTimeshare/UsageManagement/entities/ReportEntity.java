@@ -1,10 +1,18 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Report", schema = "dbo", catalog = "master")
 public class ReportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,43 +32,5 @@ public class ReportEntity {
     @Column(name = "userID", nullable = false, length = 20)
     private String userId;
 
-    public String getrId() {
-        return rId;
-    }
 
-    public void setrId(String rId) {
-        this.rId = rId;
-    }
-
-    public Date getrCreateDate() {
-        return rCreateDate;
-    }
-
-    public void setrCreateDate(Date rCreateDate) {
-        this.rCreateDate = rCreateDate;
-    }
-
-    public String getrDetail() {
-        return rDetail;
-    }
-
-    public void setrDetail(String rDetail) {
-        this.rDetail = rDetail;
-    }
-
-    public Boolean getrStatus() {
-        return rStatus;
-    }
-
-    public void setrStatus(Boolean rStatus) {
-        this.rStatus = rStatus;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

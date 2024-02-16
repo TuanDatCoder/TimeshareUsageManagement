@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Product")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductEntity {
 
     @Id
