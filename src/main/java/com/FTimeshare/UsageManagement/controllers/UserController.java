@@ -1,31 +1,28 @@
 package com.FTimeshare.UsageManagement.controllers;
 
+import ch.qos.logback.core.model.Model;
 import com.FTimeshare.UsageManagement.entities.UserEntity;
 import com.FTimeshare.UsageManagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
-
     private UserService userService;
 
-    @GetMapping("/role/owner")
-    @ResponseBody
-    public List<UserEntity> getUsersByRoleOwner() {
-        System.out.print(userService.getUsersByRole("owner"));
-        return userService.getUsersByRole("owner");
-    }
+//    @RequestMapping ("/all")
+//    public List<UserEntity> getUsers(){
+//        List<UserEntity> userList = userService.getUsers();
+//        return userList;
+//    }
+@GetMapping("/all")
+public ResponseEntity<List<UserEntity>> getUsers(){
 
-    @GetMapping("/")
-    @ResponseBody
-    public String hello(){
-        return "hello";
-    }
-
-    // Other controller methods
+    return new ResponseEntity<>(userService.getUsers(), HttpStatus.FOUND);
+}
 }

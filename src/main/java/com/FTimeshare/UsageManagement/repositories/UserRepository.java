@@ -8,9 +8,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-
 public interface UserRepository extends JpaRepository<UserEntity, String> {
-    List<UserEntity> findByRoleId(String roleID);
+    boolean existsByUserID(String userID);
+
+    void deleteById(String email);
+
+    Optional<UserEntity> findById(String email);
 }
