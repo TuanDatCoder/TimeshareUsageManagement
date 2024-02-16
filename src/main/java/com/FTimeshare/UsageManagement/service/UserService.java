@@ -14,6 +14,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<UserEntity> getUsersByRole(String role) {
-        return userRepository.findByRole(role);
+        return userRepository.findByRoleId(role);
     }
 }

@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Project_Type")
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProjectTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
