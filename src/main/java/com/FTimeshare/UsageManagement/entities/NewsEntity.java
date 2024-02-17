@@ -13,17 +13,19 @@ import java.time.LocalDateTime;
 public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "news_id")
     private String newsID;
-    @Column(name = "newsTitle")
+
+    @Column(name = "news_title")
     private String newsTitle;
 
-    @Column(name = "newsPost")
+    @Column(name = "news_post")
     private LocalDateTime newsPost;
 
-    @Column(name = "newsContent")
+    @Column(name = "news_content")
     private String newsContent;
 
     @ManyToOne
-    @JoinColumn(name = "userID", referencedColumnName = "userID")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity Userid;
 }

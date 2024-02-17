@@ -14,19 +14,20 @@ public class BookingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bookingID")
     private String bookingID;
 
-    @Column(name = "startDate")
+    @Column(name = "start_date")
     private LocalDateTime startDate;
 
-    @Column(name = "endDate")
+    @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Column(name = "bookingPrice")
+    @Column(name = "booking_price")
     private float bookingPrice;
 
     @ManyToOne
-    @JoinColumn(name = "userID", referencedColumnName = "userID")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity userID;
 
     @OneToOne
