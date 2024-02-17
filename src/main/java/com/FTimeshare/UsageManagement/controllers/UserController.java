@@ -47,7 +47,7 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-    private UserDto convertToDto(UserEntity userEntity) {
+    public UserDto convertToDto(UserEntity userEntity) {
         UserDto userDto = new UserDto();
         userDto.setUserID(userEntity.getUserID());
         userDto.setUserName(userEntity.getUserName());

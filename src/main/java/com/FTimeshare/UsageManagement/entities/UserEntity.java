@@ -34,6 +34,9 @@ public class UserEntity {
     @Column(name="user_birthday")
     private Date userBirthday;
 
+    @Column(name="user_status")
+    private boolean userStatus;
+
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private RoleEntity roleID;

@@ -22,4 +22,16 @@ public class UserService {
     }
 
 
+    // update
+    public UserEntity updateUserStatus(String userId, boolean newUserStatus) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Cập nhật trạng thái mới cho người dùng
+        userEntity.setUserStatus(newUserStatus);
+
+        // Lưu thay đổi vào cơ sở dữ liệu
+        return userRepository.save(userEntity);
+    }
+
 }
