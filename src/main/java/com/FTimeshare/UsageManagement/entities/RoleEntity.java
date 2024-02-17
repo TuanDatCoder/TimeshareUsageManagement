@@ -14,12 +14,13 @@ import lombok.NoArgsConstructor;
 public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="role_id")
     private String roleID;
 
-    @Column(name="roleName")
+    @Column(name="role_name")
     private String roleName;
 
-    @Column(name="roleDescription")
+    @Column(name="role_description")
     private String roleDescription;
 
 }

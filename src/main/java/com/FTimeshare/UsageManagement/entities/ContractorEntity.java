@@ -13,12 +13,13 @@ public class ContractorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "contractor_id")
     private String contractorID;
 
-    @Column(name = "contractorName")
+    @Column(name = "contractor_name")
     private String contractorName;
 
-    @Column(name = "contractorDescription")
+    @Column(name = "contractor_description")
     private String contractorDescription;
 
 }

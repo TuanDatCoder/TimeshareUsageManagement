@@ -13,32 +13,33 @@ import java.time.LocalDateTime;
 public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "project_id")
     private String projectID;
 
-    @Column(name = "projectName")
+    @Column(name = "project_name")
     private String projectName;
 
-    @Column(name = "projectDescription")
+    @Column(name = "project_description")
     private String projectDescription;
 
-    @Column(name = "projectBuildDate")
+    @Column(name = "project_build_date")
     private LocalDateTime projectBuildDate;
 
-    @Column(name = "projectArea")
+    @Column(name = "project_area")
     private String projectArea;
 
-    @Column(name = "projectStatus")
+    @Column(name = "project_status")
     private String projectStatus;
 
-    @Column(name = "projectPicture")
+    @Column(name = "project_picture")
     private String projectPicture;
 
     @ManyToOne
-    @JoinColumn(name = "contractorID", referencedColumnName = "contractorID")
+    @JoinColumn(name = "contractor_id", referencedColumnName = "contractor_id")
     private ContractorEntity contractorID;
 
     @ManyToOne
-    @JoinColumn(name = "projectTypeID", referencedColumnName = "projectTypeID")
+    @JoinColumn(name = "project_type_id", referencedColumnName = "project_type_id")
     private ProjectTypeEntity projectTypeID;
 
 }

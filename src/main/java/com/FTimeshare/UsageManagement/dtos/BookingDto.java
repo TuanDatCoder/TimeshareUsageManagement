@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class BookingDto {
     private String bookingID;
     private LocalDateTime startDate;
-    private  LocalDateTime endDate;
+    private LocalDateTime endDate;
     private float bookingPrice;
     private String userID;
     private String productID;

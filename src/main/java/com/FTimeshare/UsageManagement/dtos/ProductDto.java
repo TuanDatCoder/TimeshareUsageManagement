@@ -28,4 +28,5 @@ public class ProductDto {
     private String productPicture;
     private String projectID;
     private String productTypeID;
+
 }
