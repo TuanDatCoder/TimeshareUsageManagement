@@ -1,47 +1,45 @@
 package com.FTimeshare.UsageManagement.entities;
 
-import com.FTimeshare.UsageManagement.entities.ContractorEntity;
-import com.FTimeshare.UsageManagement.entities.ProjectTypeEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Project")
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "project_id")
     private String projectID;
 
-    @Column(name = "projectName")
+    @Column(name = "project_Name")
     private String projectName;
 
-    @Column(name = "projectDescription")
+    @Column(name = "project_description")
     private String projectDescription;
 
-    @Column(name = "projectBuildDate")
-    private String projectBuildDate;
+    @Column(name = "project_build_date")
+    private LocalDateTime projectBuildDate;
 
-    @Column(name = "projectArea")
+    @Column(name = "project_area")
     private String projectArea;
 
-    @Column(name = "projectStatus")
+    @Column(name = "project_status")
     private String projectStatus;
 
-    @Column(name = "projectPicture")
+    @Column(name = "project_picture")
     private String projectPicture;
 
     @ManyToOne
-    @JoinColumn(name = "contractorID", referencedColumnName = "contractorID")
+    @JoinColumn(name = "contractor_id", referencedColumnName = "contractor_id")
     private ContractorEntity contractorID;
 
     @ManyToOne
-    @JoinColumn(name = "projectTypeID", referencedColumnName = "projectTypeID")
+    @JoinColumn(name = "project_type_id", referencedColumnName = "project_type_id")
     private ProjectTypeEntity projectTypeID;
-
 
 }

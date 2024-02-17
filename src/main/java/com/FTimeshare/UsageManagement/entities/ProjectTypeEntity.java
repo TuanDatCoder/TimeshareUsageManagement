@@ -7,15 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "ProjectType")
+@Table(name = "Project_Type")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "project_type_id")
     private String projectTypeID;
 
-    @Column(name = "projectTypeName")
+    @Column(name = "project_type_name")
     private String projectTypeName;
 
 }

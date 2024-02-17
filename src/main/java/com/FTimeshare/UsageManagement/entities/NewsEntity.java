@@ -1,35 +1,31 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "News")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "News", schema = "dbo", catalog = "master")
 public class NewsEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "newsID", nullable = false, length = 20)
-    private String newsId;
-    @Basic
-    @Column(name = "newsTitle", nullable = true, length = 20)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "news_id")
+    private String newsID;
+
+    @Column(name = "news_title")
     private String newsTitle;
-    @Basic
-    @Column(name = "newsPost", nullable = true)
+
+    @Column(name = "news_post")
     private LocalDateTime newsPost;
-    @Basic
-    @Column(name = "newsContent", nullable = true, length = 600)
+
+    @Column(name = "news_content")
     private String newsContent;
-    @Basic
-    @Column(name = "userID", nullable = false, length = 20)
-    private String userId;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private UserEntity Userid;
 }

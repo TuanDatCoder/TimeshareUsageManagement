@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Product")
 @Data
@@ -14,35 +16,42 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productID")
     private String productID;
 
-    @Column(name = "productName")
+    @Column(name = "product_name")
     private String productName;
 
-    @Column(name = "productDescription")
+    @Column(name = "product_description")
     private String productDescription;
 
-    @Column(name = "productConvinience")
-    private String productConvinience;
+    @Column(name = "product_convenience")
+    private String productConvenience;
 
-    @Column(name = "productArea")
+    @Column(name = "product_area")
     private float productArea;
 
-    @Column(name = "productPrice")
+    @Column(name = "product_price")
     private float productPrice;
 
-    @Column(name = "productStatus")
+    @Column(name = "available_start_date")
+    private LocalDateTime availableStartDate;
+
+    @Column(name = "available_end_date")
+    private LocalDateTime availableEndDate;
+
+    @Column(name = "product_status")
     private boolean productStatus;
 
-    @Column(name = "productPicture")
+    @Column(name = "product_picture")
     private String productPicture;
 
     @ManyToOne
-    @JoinColumn(name = "projectID", referencedColumnName = "projectID")
+    @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     private ProjectEntity projectID;
 
 
     @ManyToOne
-    @JoinColumn(name = "productTypeID", referencedColumnName = "productTypeID")
+    @JoinColumn(name = "product_type_id", referencedColumnName = "product_type_id")
     private ProductTypeEntity productTypeID;
 }

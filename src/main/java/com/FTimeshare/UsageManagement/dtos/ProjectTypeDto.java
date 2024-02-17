@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class ProjectTypeDto {
     private String projectTypeID;
     private String projectTypeName;

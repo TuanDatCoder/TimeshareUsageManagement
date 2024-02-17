@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 
 @Data
 @AllArgsConstructor
@@ -13,8 +14,8 @@ import java.sql.Date;
 @Builder
 public class BookingDto {
     private String bookingID;
-    private Date starDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private  LocalDateTime endDate;
     private float bookingPrice;
     private String userID;
     private String productID;

@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ReportDto {
-    private String rId;
-    private Date rCreateDate;
-    private String rDetail;
-    private Boolean rStatus;
-    private String userId;
+    private String reportID;
+    private LocalDateTime reportCreateDate;
+    private String reportDetail;
+    private String reportStatus;
+    private String userID;
 }
