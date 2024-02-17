@@ -15,7 +15,7 @@ public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="role_id")
-    private String roleId;
+    private String roleID;
 
     @Column(name="role_name")
     private String roleName;

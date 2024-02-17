@@ -2,7 +2,7 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.UserDto;
 import com.FTimeshare.UsageManagement.entities.UserEntity;
-import com.FTimeshare.UsageManagement.services.UserServices;
+import com.FTimeshare.UsageManagement.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,63 +15,50 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
-    private UserServices userService;
+    private UserService userService;
 
-//    @GetMapping("viewall")
-//    public ResponseEntity<List<UserDto>> getAllUsers() {
-//        List<UserEntity> users = userService.getAllUsers();
-//        List<UserDto> userDtos = users.stream()
-//                .map(user -> new UserDto(user.getUserID(), user.getUserName(), user.getUserPhone(), user.getUserEmail(),
-//                        user.getUserPassword(), user.getUserBirthday(), user.getRoleID().getRoleID()))
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity.ok().body(userDtos);
-//    }
+    @GetMapping("/admin")
+    public ResponseEntity<List<UserDto>> getAdminUsers() {
+        List<UserEntity> userEntities = userService.getUsersByRole("rol001");
+        return ResponseEntity.ok(convertToDtoList(userEntities));
+    }
 
-    //Quý
+    @GetMapping("/staff")
+    public ResponseEntity<List<UserDto>> getStaffUsers() {
+        List<UserEntity> userEntities = userService.getUsersByRole("rol004");
+        return ResponseEntity.ok(convertToDtoList(userEntities));
+    }
 
-//
-//    @GetMapping("/role/owner")
-//    @ResponseBody
-//    public List<UserEntity> getUsersByRoleOwner() {
-//        System.out.print(userService.getUsersByRole("owner"));
-//        return userService.getUsersByRole("owner");
-//    }
-//
-//    @GetMapping("/")
-//    @ResponseBody
-//    public String hello(){
-//        return "hello";
-//    }
+    @GetMapping("/customer")
+    public ResponseEntity<List<UserDto>> getCustomerUsers() {
+        List<UserEntity> userEntities = userService.getUsersByRole("rol002");
+        return ResponseEntity.ok(convertToDtoList(userEntities));
+    }
 
+    @GetMapping("/owner")
+    public ResponseEntity<List<UserDto>> getOwnerUsers() {
+        List<UserEntity> userEntities = userService.getUsersByRole("rol013");
+        return ResponseEntity.ok(convertToDtoList(userEntities));
+    }
+
+    private List<UserDto> convertToDtoList(List<UserEntity> userEntities) {
+        return userEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private UserDto convertToDto(UserEntity userEntity) {
+        UserDto userDto = new UserDto();
+        userDto.setUserID(userEntity.getUserID());
+        userDto.setUserName(userEntity.getUserName());
+        userDto.setUserPhone(userEntity.getUserPhone());
+        userDto.setUserEmail(userEntity.getUserEmail());
+        userDto.setUserPassword(userEntity.getUserPassword());
+        userDto.setUserBirthday(userEntity.getUserBirthday());
+        String roleID = (userEntity.getRoleID() != null) ? userEntity.getRoleID().getRoleID() : null;
+        userDto.setRoleID(roleID);
+        return userDto;
+    }
 
 }
 
-
-//@Autowired
-//private UserService userService;
-//@GetMapping("{id}")
-//public ResponseEntity<UserEntity> findUser(@PathVariable String id) {
-//    Optional<UserEntity> userEntityOptional = userService.findUser(id);
-//    return userEntityOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-//}
-//
-//@GetMapping("/admin")
-//public ResponseEntity<List<UserEntity>> findAll() {
-//    return ResponseEntity.ok(userService.findAll());
-//}
-//
-//@PostMapping("/admin/save")
-//public ResponseEntity<UserEntity> save(@RequestBody UserEntity userEntity) {
-//    return ResponseEntity.ok(userService.save(userEntity));
-//}
-//
-//@PutMapping("/admin/update")
-//public ResponseEntity<UserEntity> update(@RequestBody UserEntity userEntity) {
-//    return ResponseEntity.ok(userService.update(userEntity));
-//}
-//
-//@DeleteMapping("/admin/delete")
-//public void delete(@RequestBody UserEntity userEntity) {
-//    userService.delete(userEntity);
-//}

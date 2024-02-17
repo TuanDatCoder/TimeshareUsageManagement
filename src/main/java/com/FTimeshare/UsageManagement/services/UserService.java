@@ -1,17 +1,25 @@
-//package com.FTimeshare.UsageManagement.services;
-//
-//import com.FTimeshare.UsageManagement.entities.UserEntity;
-//import org.springframework.stereotype.Component;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//import java.util.Optional;
-//@Component
-//@Service
-//public interface UserService {
-//    Optional<UserEntity> findUser(String id);
-//    List<UserEntity> findAll();
-//    UserEntity save(UserEntity userEntity);
-//    UserEntity update(UserEntity userEntity);
-//    void delete(UserEntity userEntity);
-//}
+package com.FTimeshare.UsageManagement.services;
+
+import com.FTimeshare.UsageManagement.entities.UserEntity;
+import com.FTimeshare.UsageManagement.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public List<UserEntity> getUsersByRole(String roleId) {
+        return userRepository.findAllByRoleID(roleId);
+    }
+
+
+}

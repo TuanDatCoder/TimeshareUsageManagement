@@ -10,8 +10,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
-//    List<UserEntity> findByRole(String role);
+    @Query("SELECT u FROM UserEntity u WHERE u.roleID.roleID = :roleId")
+    List<UserEntity> findAllByRoleID(@Param("roleId") String roleId);
 }
 
-//@Query(value = "SELECT * FROM [User] WHERE [userID] = ?1", nativeQuery = true)
-//UserEntity findByUser(@Param("userID") String userID);
