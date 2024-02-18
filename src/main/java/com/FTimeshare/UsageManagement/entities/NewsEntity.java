@@ -14,7 +14,7 @@ public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_id")
-    private String newsID;
+    private int newsID;
 
     @Column(name = "news_title")
     private String newsTitle;

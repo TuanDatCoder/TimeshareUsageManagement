@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, String> {
-    @Query("SELECT u FROM UserEntity u WHERE u.roleID.roleID = :roleId")
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+    @Query("SELECT u FROM UserEntity u WHERE u.roleID = :roleId")
     List<UserEntity> findAllByRoleID(@Param("roleId") String roleId);
 }
 

@@ -15,7 +15,7 @@ public class ContractorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contractor_id")
-    private String contractorID;
+    private int contractorID;
 
     @Column(name = "contractor_name")
     private String contractorName;

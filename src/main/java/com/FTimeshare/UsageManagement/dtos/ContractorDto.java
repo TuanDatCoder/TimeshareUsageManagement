@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ContractorDto {
-    private String contractorID;
+    private int contractorID;
     private String contractorName;
     private String contractorDescription;
 

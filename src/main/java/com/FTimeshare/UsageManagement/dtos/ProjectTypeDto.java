@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProjectTypeDto {
-    private String projectTypeID;
+    private int projectTypeID;
     private String projectTypeName;
 }

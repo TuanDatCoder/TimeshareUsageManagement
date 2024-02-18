@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ReportDto {
-    private String reportID;
+    private int reportID;
     private LocalDateTime reportCreateDate;
     private String reportDetail;
     private String reportStatus;
-    private String userID;
+    private int userID;
 }

@@ -8,7 +8,7 @@ public class LoginController {
     public String getPerson(Model model){
 
 
-        return "person";
+        return "index";
     }
 
 }
