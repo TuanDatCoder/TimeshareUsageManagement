@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class FeedbackDto {
-    private String feedbackID;
+    private int feedbackID;
     private LocalDateTime feedbackCreateDate;
     private String feedbackDetail;
-    private boolean feedbackStatus;
-    private String bookingID;
+    private String feedbackStatus;
+    private int bookingID;
 }

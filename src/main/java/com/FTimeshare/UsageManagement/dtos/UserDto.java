@@ -12,13 +12,13 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 public class UserDto {
-    private String userID;
+    private int userID;
     private String userName;
     private String userPhone;
     private String userEmail;
     private String userPassword;
-    private boolean userStatus;
+    private String userStatus;
     private Date userBirthday;
-    private String roleID;
+    private int roleID;
 
 }

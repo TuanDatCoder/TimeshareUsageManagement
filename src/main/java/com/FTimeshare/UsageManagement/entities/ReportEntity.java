@@ -14,7 +14,7 @@ public class ReportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="report_id")
-    private String reportID;
+    private int reportID;
 
     @Column(name = "report_create_date")
     private LocalDateTime reportCreateDate;

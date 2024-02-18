@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ProductTypeDto {
-    private String productTypeID;
+    private int productTypeID;
     private String productTypeName;
 }

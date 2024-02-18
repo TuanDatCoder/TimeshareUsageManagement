@@ -17,7 +17,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private String userID;
+    private int userID;
 
     @Column(name="user_name")
     private String userName;
@@ -35,7 +35,7 @@ public class UserEntity {
     private Date userBirthday;
 
     @Column(name="user_status")
-    private boolean userStatus;
+    private String userStatus;
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")

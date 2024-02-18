@@ -15,7 +15,7 @@ public class FeedbackEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedback_id")
-    private String feedbackID;
+    private int feedbackID;
 
     @Column(name = "feedback_create_date")
     private LocalDateTime feedbackCreateDate;

@@ -17,21 +17,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<UserEntity> getUsersByRole(String roleId) {
+    public List<UserEntity> getUsersByRole(int roleId) {
         return userRepository.findAllByRoleID(roleId);
     }
 
 
     // update
-    public UserEntity updateUserStatus(String userId, boolean newUserStatus) {
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
-        // Cập nhật trạng thái mới cho người dùng
-        userEntity.setUserStatus(newUserStatus);
-
-        // Lưu thay đổi vào cơ sở dữ liệu
-        return userRepository.save(userEntity);
-    }
+//    public UserEntity updateUserStatus(int userId, String newUserStatus) {
+//        UserEntity userEntity = userRepository.findById(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+//
+//        // Cập nhật trạng thái mới cho người dùng
+//        userEntity.setUserStatus(newUserStatus);
+//
+//        // Lưu thay đổi vào cơ sở dữ liệu
+//        return userRepository.save(userEntity);
+//    }
 
 }

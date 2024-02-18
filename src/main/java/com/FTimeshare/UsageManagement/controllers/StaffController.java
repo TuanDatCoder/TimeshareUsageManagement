@@ -30,9 +30,9 @@ public class StaffController {
         return userController.getOwnerUsers();
     }
 
-    @PutMapping("/update-status/{userId}")
-    public ResponseEntity<UserDto> updateUserStatus(@PathVariable String userId, @RequestBody UserDto userDto) {
-        UserEntity updatedUser = userService.updateUserStatus(userId, userDto.isUserStatus());
-        return ResponseEntity.ok(userController.convertToDto(updatedUser));
-    }
+//    @PutMapping("/update-status/{userId}")
+//    public ResponseEntity<UserDto> updateUserStatus(@PathVariable int userId, @RequestBody UserDto userDto) {
+//        UserEntity updatedUser = userService.updateUserStatus(userId, userDto.getUserStatus());
+//        return ResponseEntity.ok(userController.convertToDto(updatedUser));
+//    }
 }

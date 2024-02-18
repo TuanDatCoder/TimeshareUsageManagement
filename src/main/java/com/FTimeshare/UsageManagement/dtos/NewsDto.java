@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class NewsDto {
-    private String newsID;
+    private int newsID;
     private String newsTitle;
     private LocalDateTime newsPost;
     private String newsContent;
-    private String Userid;
+    private int Userid;
 
 }
