@@ -11,14 +11,15 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
-    private int userID;
-    private String userName;
-    private String userPhone;
-    private String userEmail;
-    private String userPassword;
-    private String userStatus;
-    private Date userBirthday;
+public class AccountDto {
+    private int accID;
+    private String accName;
+    private String accPhone;
+    private String accEmail;
+    private String accPassword;
+    private String accImg;
+    private String accStatus;
+    private Date accBirthday;
     private int roleID;
 
 }

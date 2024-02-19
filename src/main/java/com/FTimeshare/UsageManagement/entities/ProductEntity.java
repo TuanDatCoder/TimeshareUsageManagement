@@ -41,8 +41,8 @@ public class ProductEntity {
     @Column(name = "product_status")
     private String productStatus;
 
-    @Column(name = "product_picture")
-    private String productPicture;
+    @Column(name = "product_viewer")
+    private int productViewer;
 
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
@@ -53,6 +53,6 @@ public class ProductEntity {
     private ProductTypeEntity productTypeID;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private UserEntity userID;
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
 }

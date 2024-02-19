@@ -1,38 +1,38 @@
 package com.FTimeshare.UsageManagement.controllers;
 
-import com.FTimeshare.UsageManagement.dtos.UserDto;
-import com.FTimeshare.UsageManagement.entities.UserEntity;
-import com.FTimeshare.UsageManagement.services.UserService;
+import com.FTimeshare.UsageManagement.dtos.AccountDto;
+import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/staff")
 public class StaffController {
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
-    private UserController userController;
+    private AccountController accountController;
 
     @GetMapping("/customer")
-    public ResponseEntity<List<UserDto>> getCustomerUsers() {
-        return userController.getCustomerUsers();
+    public ResponseEntity<List<AccountDto>> getCustomerUsers() {
+        return accountController.getCustomerUsers();
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<List<UserDto>> getOwnerUsers() {
-        return userController.getOwnerUsers();
+    public ResponseEntity<List<AccountDto>> getOwnerUsers() {
+        return accountController.getOwnerUsers();
     }
 
-//    @PutMapping("/update-status/{userId}")
-//    public ResponseEntity<UserDto> updateUserStatus(@PathVariable int userId, @RequestBody UserDto userDto) {
-//        UserEntity updatedUser = userService.updateUserStatus(userId, userDto.getUserStatus());
-//        return ResponseEntity.ok(userController.convertToDto(updatedUser));
-//    }
+    @PutMapping("/update-status/{userId}")
+    public ResponseEntity<AccountDto> updateAccStatus(@PathVariable int accId, @RequestBody AccountDto accDto) {
+        AccountEntity updatedAcc= accountService.updateUserStatus(accId, accDto.getAccStatus());
+        return ResponseEntity.ok(accountController.convertToDto(updatedAcc));
+    }
 }
+

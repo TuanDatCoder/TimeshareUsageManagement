@@ -25,6 +25,7 @@ public class ProductDto {
     private LocalDateTime availableStartDate;
     private  LocalDateTime availableEndDate;
     private String productStatus;
+    private int productViewer;
     private String productPicture;
     private int projectID;
     private int productTypeID;

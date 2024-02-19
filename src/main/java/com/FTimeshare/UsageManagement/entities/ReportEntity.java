@@ -26,7 +26,7 @@ public class ReportEntity {
     private String reportStatus;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private UserEntity userID;
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
 
 }

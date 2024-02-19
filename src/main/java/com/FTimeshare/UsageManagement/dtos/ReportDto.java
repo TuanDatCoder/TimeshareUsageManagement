@@ -16,5 +16,5 @@ public class ReportDto {
     private LocalDateTime reportCreateDate;
     private String reportDetail;
     private String reportStatus;
-    private int userID;
+    private int accID;
 }
