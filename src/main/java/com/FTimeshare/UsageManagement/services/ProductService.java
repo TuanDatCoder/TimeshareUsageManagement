@@ -3,6 +3,7 @@ package com.FTimeshare.UsageManagement.services;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +17,15 @@ public class ProductService {
     public List<ProductEntity> getAllProducts() {
         return productRepository.findAll();
     }
-    public List<ProductEntity> getProductsByUserID(int userID) {
+    public List<ProductEntity> getProductsByAccID(int accID) {
 
-        return productRepository.findByUserID(userID);
+        return productRepository.findByUserID(accID);
     }
 
-    public void deleteProduct(int productID, int user_id) {
+    public void deleteProduct(int productID, int accID) {
         Optional<ProductEntity> product = productRepository.findById(productID);
-        if(product.isPresent()&&!product.get().getProductStatus().equalsIgnoreCase("active_booked ")&&product.get().getUserID().getUserID() == user_id){
-            productRepository.deleteById(productID);
+        if(product.isPresent()&&!product.get().getProductStatus().equalsIgnoreCase("active_booked ")&&product.get().getAccID().getAccID() == accID){
+            productRepository.deleteById(product.get().getProductID());
         }
     }
 }
