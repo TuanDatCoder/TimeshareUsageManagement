@@ -21,12 +21,8 @@ public class BookingController {
     private BookingService bookingService;
 
     @GetMapping("/ViewAll")
-    public ResponseEntity<List<BookingDto>> getAllBookings() {
+    public ResponseEntity<List<BookingEntity>> getAllBookings() {
         List<BookingEntity> bookings = bookingService.getAllBookings();
-        List<BookingDto> bookingDtos = bookings.stream()
-                .map(booking -> new BookingDto(booking.getBookingID(), booking.getStartDate(), booking.getEndDate(), booking.getBookingPrice(), booking.getUserID().getUserID(), booking.getProductID().getProductID()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok().body(bookingDtos);
+        return ResponseEntity.ok(bookings);
     }
 }

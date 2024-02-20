@@ -6,19 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
-    private int userID;
-    private String userName;
-    private String userPhone;
-    private String userEmail;
-    private String userPassword;
-    private LocalDateTime userBirthday;
+public class AccountDto {
+    private int accID;
+    private String accName;
+    private String accPhone;
+    private String accEmail;
+    private String accPassword;
+    private String accImg;
+    private String accStatus;
+    private Date accBirthday;
     private int roleID;
 
 }

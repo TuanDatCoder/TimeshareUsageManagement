@@ -25,7 +25,18 @@ public class NewsEntity {
     @Column(name = "news_content")
     private String newsContent;
 
+    @Column(name = "news_picture")
+    private String newsPicture;
+
+    @Column(name = "news_viewer")
+    private int newsViewer;
+
+    @Column(name = "news_status")
+    private String newsStatus;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private UserEntity Userid;
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
+
+
 }

@@ -17,6 +17,8 @@ public class BookingDto {
     private LocalDateTime startDate;
     private  LocalDateTime endDate;
     private float bookingPrice;
-    private int userID;
+    private String bookingStatus;
+    private int accID;
     private int productID;
+
 }

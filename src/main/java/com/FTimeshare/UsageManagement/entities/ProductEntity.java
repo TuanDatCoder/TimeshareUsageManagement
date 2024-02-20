@@ -1,7 +1,6 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 @Table(name = "Product")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProductEntity {
 
     @Id
@@ -43,17 +41,18 @@ public class ProductEntity {
     @Column(name = "product_status")
     private String productStatus;
 
-    @Column(name = "product_picture")
-    private String productPicture;
+    @Column(name = "product_viewer")
+    private int productViewer;
 
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     private ProjectEntity projectID;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName ="user_id")
-    private UserEntity userID;
-    @ManyToOne
     @JoinColumn(name = "product_type_id", referencedColumnName = "product_type_id")
     private ProductTypeEntity productTypeID;
+
+    @ManyToOne
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
 }
