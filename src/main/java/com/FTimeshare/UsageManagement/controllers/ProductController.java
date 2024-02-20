@@ -7,8 +7,10 @@ import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.entities.UserEntity;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +33,17 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
         List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);
         return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    @PostMapping("/delete/{productID}/{user_id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productID") int productID, @PathVariable("user_id") int user_id){
+        try {
+            productService.deleteProduct(productID, user_id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            // Log the exception and handle it appropriately
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     private List<ProductDto> convertToDtoList(List<ProductEntity> productEntities) {
         return productEntities.stream()
