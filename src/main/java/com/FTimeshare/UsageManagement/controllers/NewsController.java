@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
+import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +55,6 @@ public class NewsController {
         return ResponseEntity.ok("News with ID " + newsId + " has been deleted successfully.");
     }
 
-
-
-
     // Helper method to convert Entity to DTO
     private NewsDto convertToDto(NewsEntity newsEntity) {
         NewsDto newsDto = new NewsDto();
@@ -67,19 +65,29 @@ public class NewsController {
         newsDto.setNewsPicture(newsEntity.getNewsPicture());
         newsDto.setNewsViewer(newsEntity.getNewsViewer());
         newsDto.setNewsStatus(newsEntity.getNewsStatus());
-        // You can map other fields here if needed
+
+        if (newsEntity.getAccID() != null) {
+            newsDto.setAccID(newsEntity.getAccID().getAccID());
+        }
+
         return newsDto;
     }
 
     // Helper method to convert DTO to Entity
     private NewsEntity convertToEntity(NewsDto newsDto) {
         NewsEntity newsEntity = new NewsEntity();
+        newsEntity.setNewsID(newsDto.getNewsID());
         newsEntity.setNewsTitle(newsDto.getNewsTitle());
         newsEntity.setNewsPost(newsDto.getNewsPost());
         newsEntity.setNewsContent(newsDto.getNewsContent());
         newsEntity.setNewsPicture(newsDto.getNewsPicture());
         newsEntity.setNewsViewer(newsDto.getNewsViewer());
         newsEntity.setNewsStatus(newsDto.getNewsStatus());
+
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setAccID(newsDto.getAccID());
+
+        newsEntity.setAccID(accountEntity);
         // You can map other fields here if needed
         return newsEntity;
     }
