@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ProjectDto {
-    private String projectID;
+    private int projectID;
     private String projectName;
     private String projectDescription;
     private LocalDateTime projectBuildDate;
     private String projectArea;
     private String projectStatus;
     private String projectPicture;
-    private String contractorID;
-    private String projectTypeID;
+    private int contractorID;
+    private int projectTypeID;
 
 }

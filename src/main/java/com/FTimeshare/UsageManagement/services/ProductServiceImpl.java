@@ -1,7 +1,6 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
-import com.FTimeshare.UsageManagement.dtos.ProjectDto;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,8 @@ public class ProductServiceImpl implements ProductService {
                         product.getProductPrice(),
                         product.getAvailableStartDate(),
                         product.getAvailableEndDate(),
-                        product.isProductStatus(),
-                        product.getProductPicture(),
+                        product.getProductStatus(),
+                        product.getProductViewer(),
                         product.getProjectID().getProjectID(),
                         product.getProductTypeID().getProductTypeID()))
                 .collect(Collectors.toList());

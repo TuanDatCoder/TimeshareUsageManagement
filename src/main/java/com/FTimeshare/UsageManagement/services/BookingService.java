@@ -2,13 +2,12 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 
-public interface BookingService  {
-    String createBooking(BookingDto bookingDto);
-    String reserveRoom(BookingDto bookingDto);
+import java.util.List;
 
-    BookingDto getBookingById(String bookingId);
+public interface BookingService {
+    List<BookingDto> getAllBookings();
 
-    boolean updateBooking(String bookingId, BookingDto bookingDto);
 
-    boolean deleteBooking(String bookingId);
+    BookingDto createBooking(BookingDto booking);
 }
+

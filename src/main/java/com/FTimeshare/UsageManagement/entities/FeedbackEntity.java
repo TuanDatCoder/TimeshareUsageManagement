@@ -16,7 +16,7 @@ public class FeedbackEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedback_id")
-    private String feedbackID;
+    private int feedbackID;
 
     @Column(name = "feedback_create_date")
     private LocalDateTime feedbackCreateDate;
@@ -25,7 +25,7 @@ public class FeedbackEntity {
     private String feedbackDetail;
 
     @Column(name = "feedback_status")
-    private boolean feedbackStatus;
+    private String feedbackStatus;
 
     @OneToOne
     @JoinColumn(name = "bookingID", referencedColumnName = "bookingID")

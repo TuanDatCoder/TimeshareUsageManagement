@@ -13,10 +13,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class BookingDto {
-    private String bookingID;
+    private int bookingID;
     private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private  LocalDateTime endDate;
     private float bookingPrice;
-    private String userID;
-    private String productID;
+    private String bookingStatus;
+    private int accID;
+    private int productID;
 }

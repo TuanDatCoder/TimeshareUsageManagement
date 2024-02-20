@@ -15,7 +15,7 @@ public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookingID")
-    private String bookingID;
+    private int bookingID;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;
@@ -26,9 +26,12 @@ public class BookingEntity {
     @Column(name = "booking_price")
     private float bookingPrice;
 
+    @Column(name = "booking_status")
+    private String bookingStatus;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private UserEntity userID;
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
 
     @OneToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")

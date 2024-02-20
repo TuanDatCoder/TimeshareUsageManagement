@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ProductDto {
-    private String productID;
+    private int productID;
     private String productName;
     private String productDescription;
     private String productConvenience;
@@ -24,9 +24,9 @@ public class ProductDto {
     private float productPrice;
     private LocalDateTime availableStartDate;
     private  LocalDateTime availableEndDate;
-    private boolean productStatus;
-    private String productPicture;
-    private String projectID;
-    private String productTypeID;
+    private String productStatus;
+    private int productViewer;
+    private int projectID;
+    private int productTypeID;
 
 }

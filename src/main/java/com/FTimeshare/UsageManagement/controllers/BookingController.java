@@ -7,50 +7,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
-
-    private final BookingService bookingService;
-
     @Autowired
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
+    private BookingService bookingService;
+
+    @GetMapping("/customerview")
+    public ResponseEntity<List<BookingDto>> getAllBookings() {
+        List<BookingDto> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(bookings);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createBooking(@RequestBody(required = false) BookingDto bookingDto) {
-        String bookingId = bookingService.createBooking(bookingDto);
-        return new ResponseEntity<>(bookingId, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{bookingId}") // Sửa đổi đường dẫn để sử dụng biến đường dẫn bookingId
-    public ResponseEntity<BookingDto> getBooking(@PathVariable String bookingId) {
-        BookingDto booking = bookingService.getBookingById(bookingId);
-        if (booking != null) {
-            return new ResponseEntity<>(booking, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping("/booking/update/{bookingId}") // Thêm biến đường dẫn bookingId vào URL
-    public ResponseEntity<Void> updateBooking(@PathVariable String bookingId, @RequestBody BookingDto bookingDto) {
-        boolean updated = bookingService.updateBooking(bookingId, bookingDto);
-        if (updated) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @DeleteMapping("/booking/delete/{bookingId}") // Thêm biến đường dẫn bookingId vào URL
-    public ResponseEntity<Void> deleteBooking(@PathVariable String bookingId) {
-        boolean deleted = bookingService.deleteBooking(bookingId);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("/customer/create")
+    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto booking) {
+        BookingDto createdBooking = bookingService.createBooking(booking);
+        return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
 }

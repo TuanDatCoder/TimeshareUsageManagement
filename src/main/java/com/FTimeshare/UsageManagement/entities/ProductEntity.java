@@ -15,7 +15,7 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productID")
-    private String productID;
+    private int productID;
 
     @Column(name = "product_name")
     private String productName;
@@ -39,17 +39,20 @@ public class ProductEntity {
     private LocalDateTime availableEndDate;
 
     @Column(name = "product_status")
-    private boolean productStatus;
+    private String productStatus;
 
-    @Column(name = "product_picture")
-    private String productPicture;
+    @Column(name = "product_viewer")
+    private int productViewer;
 
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     private ProjectEntity projectID;
 
-
     @ManyToOne
     @JoinColumn(name = "product_type_id", referencedColumnName = "product_type_id")
     private ProductTypeEntity productTypeID;
+
+    @ManyToOne
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
 }
