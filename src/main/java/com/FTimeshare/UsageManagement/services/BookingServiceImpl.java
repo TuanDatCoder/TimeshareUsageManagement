@@ -1,10 +1,8 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
-import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
-import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,5 +78,27 @@ public class BookingServiceImpl implements BookingService{
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
+    public BookingDto deleteBooking(int bookingID) {
+        // Tìm đặt phòng theo ID
+        Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(String.valueOf(bookingID));
+
+        if (bookingEntityOptional.isPresent()) {
+            BookingEntity bookingEntity = bookingEntityOptional.get();
+
+            // Kiểm tra xem người dùng có quyền xóa đặt phòng hay không (tùy thuộc vào logic của bạn)
+
+            // Xóa đặt phòng
+            bookingRepository.delete(bookingEntity);
+
+            // Chuyển đổi và trả về DTO của đặt phòng đã xóa
+            return convertToDto(bookingEntity);
+        } else {
+            // Xử lý trường hợp không tìm thấy đặt phòng
+            return null;
+        }
+    }
+
+
 }
+
 

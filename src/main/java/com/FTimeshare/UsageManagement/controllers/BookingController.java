@@ -21,9 +21,22 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
-    @PostMapping("/customer/create")
+    @PostMapping("/customer/createbooking")
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto booking) {
         BookingDto createdBooking = bookingService.createBooking(booking);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
+    @DeleteMapping("/customer/deletebooking/{bookingID}")
+    public ResponseEntity<?> deleteBooking(@PathVariable int bookingID) {
+        BookingDto deletedBooking = bookingService.deleteBooking(bookingID);
+
+        if (deletedBooking != null) {
+            return ResponseEntity.ok(deletedBooking);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
 }

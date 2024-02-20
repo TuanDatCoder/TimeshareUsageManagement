@@ -41,6 +41,12 @@ public class FeedbackServiceImpl implements FeedbackService {
             FeedbackEntity savedFeedback = feedbackRepository.save(feedbackEntity);
             return convertToDto(savedFeedback);
         }
+
+    @Override
+    public FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback) {
+        return null;
+    }
+
     private FeedbackEntity convertToEntity(FeedbackDto feedbackDto) {
         FeedbackEntity feedbackEntity = new FeedbackEntity();
         feedbackEntity.setFeedbackID(feedbackDto.getFeedbackID());
@@ -57,63 +63,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         return feedbackEntity;
     }
-
-
-    }
+}
 
 
 
-//    @Override
-//    public FeedbackDto submitFeedback(FeedbackDto feedbackDto) {
-//        return null;
-//    }
-
-//    @Override
-//    public FeedbackDto submitFeedback(FeedbackDto feedbackDto) {
-//        // Convert DTO to Entity and save
-//        Feedback savedFeedback = feedbackRepository.save(convertToFeedbackEntity(feedbackDto));
-//        // Convert the saved Entity back to DTO and return
-//        return convertToDto(savedFeedback);
-//    }
-//
-//@Override
-//public FeedbackDto submitFeedback(FeedbackDto feedbackDto) {
-//    // Check if the booking exists
-//    if (!bookingRepository.existsById(feedbackDto.getBookingID())) {
-//        // Handle the case where the booking does not exist
-//        // You may throw an exception or return an appropriate response
-//        // For simplicity, let's assume you return null in case of a non-existing booking
-//        return null;
-//    }
-//
-//    // Convert DTO to Entity and save
-//    FeedbackEntity savedFeedbackEntity = feedbackRepository.save(convertToFeedbackEntity(feedbackDto));
-//
-//    // Convert the saved Entity back to DTO and return
-//    return convertToFeedbackDto(savedFeedbackEntity);
-//}
-//
-//    private FeedbackEntity convertToFeedbackEntity(FeedbackDto feedbackDto) {
-//        FeedbackEntity feedbackEntity = new FeedbackEntity();
-//        feedbackEntity.setFeedbackCreateDate(feedbackDto.getFeedbackCreateDate());
-//        feedbackEntity.setFeedbackDetail(feedbackDto.getFeedbackDetail());
-//        feedbackEntity.setFeedbackStatus(feedbackDto.isFeedbackStatus());
-//
-//        // Fetch the BookingEntity from the database using the provided bookingID
-//        feedbackEntity.setBookingID(bookingRepository.findById(feedbackDto.getBookingID()).orElse(null));
-//
-//        return feedbackEntity;
-//    }
-//
-//    private FeedbackDto convertToFeedbackDto(FeedbackEntity feedbackEntity) {
-//        FeedbackDto feedbackDto = new FeedbackDto();
-//        feedbackDto.setFeedbackID(feedbackEntity.getFeedbackID());
-//        feedbackDto.setFeedbackCreateDate(feedbackEntity.getFeedbackCreateDate());
-//        feedbackDto.setFeedbackDetail(feedbackEntity.getFeedbackDetail());
-//        feedbackDto.setFeedbackStatus(feedbackEntity.isFeedbackStatus());
-//        feedbackDto.setBookingID(feedbackEntity.getBookingID().getBookingID());
-//
-//        return feedbackDto;
-//    }
 
 

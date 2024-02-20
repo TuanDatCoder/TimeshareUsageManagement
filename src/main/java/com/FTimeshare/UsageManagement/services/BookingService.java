@@ -9,5 +9,7 @@ public interface BookingService {
 
 
     BookingDto createBooking(BookingDto booking);
+
+    BookingDto deleteBooking(int bookingId);
 }
 

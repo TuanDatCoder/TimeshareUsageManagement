@@ -8,4 +8,6 @@ public interface FeedbackService {
     List<FeedbackDto> getAllFeedback();
 
     public FeedbackDto submitFeedback(FeedbackDto feedbackDto);
+
+    FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback);
 }
