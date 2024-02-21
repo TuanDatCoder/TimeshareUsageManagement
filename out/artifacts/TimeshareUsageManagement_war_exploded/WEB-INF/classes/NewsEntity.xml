@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="com.FTimeshare.UsageManagement.entities.NewsEntity">
+        <table name="News" schema="dbo" catalog="master"/>
+        <attributes>
+            <id name="newsId">
+                <column name="newsID" length="20"/>
+            </id>
+            <basic name="newsTitle">
+                <column name="newsTitle" nullable="false" length="20"/>
+            </basic>
+            <basic name="newsPost">
+                <column name="newsPost" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="newsContent">
+                <column name="newsContent" nullable="false" length="600"/>
+            </basic>
+            <basic name="userId">
+                <column name="userID" length="20"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

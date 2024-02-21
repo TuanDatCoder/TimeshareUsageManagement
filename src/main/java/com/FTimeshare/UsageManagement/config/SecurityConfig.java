@@ -46,13 +46,12 @@ public class SecurityConfig {
 //                );
          http.csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        )
-                .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .anyRequest().authenticated()
-                );
+        ).authorizeHttpRequests((authorize) ->
+                //authorize.anyRequest().authenticated()
+                authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated()
+               );
         return http.build();
     }
 }
