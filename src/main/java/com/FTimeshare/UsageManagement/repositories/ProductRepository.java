@@ -2,11 +2,16 @@ package com.FTimeshare.UsageManagement.repositories;
 
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
-@Repository
-public interface ProductRepository extends JpaRepository<ProductEntity, String> {
-    List<ProductEntity> findByAvailableEndDateGreaterThan(LocalDateTime date);
+
+public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
+    @Query("SELECT p FROM ProductEntity p WHERE p.accID.accID = :accID")
+    List<ProductEntity> findByUserID(@Param("accID") int accID);
+
+    List<ProductEntity> findByProductStatus(String productStatus);
+
+
 }

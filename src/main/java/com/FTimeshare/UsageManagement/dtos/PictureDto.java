@@ -7,14 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class PictureDto {
 
-    private int img_id;
-    private String img_name;
-    private String img_url;
+    private int imgID;
+    private String imgName;
+    private String imgUrl;
+    private int productID;
 
 
 }
