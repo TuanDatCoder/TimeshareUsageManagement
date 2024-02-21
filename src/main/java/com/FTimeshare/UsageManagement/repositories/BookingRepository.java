@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookingRepository extends JpaRepository<BookingEntity, String> {
+public interface BookingRepository extends JpaRepository<BookingEntity, Integer> {
 
 
     List<BookingEntity> findByAccID_AccID(int accID);

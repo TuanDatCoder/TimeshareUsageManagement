@@ -9,11 +9,27 @@ import java.util.List;
 
 @Service
 public class NewsService {
-    //List<NewsDto> getAllNews();
 
     @Autowired
     private NewsRepository newsRepository;
+
+    // Get all news
     public List<NewsEntity> getAllNews() {
         return newsRepository.findAll();
     }
+
+    // Add news
+    public NewsEntity addNews(NewsEntity newsEntity) {
+        return newsRepository.save(newsEntity);
+    }
+
+    // Delete news by ID
+    public void deleteNewsById(int newsId) {
+        newsRepository.deleteById(newsId);
+    }
+
+    public NewsEntity getNewsById(int newsId) {
+        return newsRepository.findById(newsId).orElse(null);
+    }
+
 }
