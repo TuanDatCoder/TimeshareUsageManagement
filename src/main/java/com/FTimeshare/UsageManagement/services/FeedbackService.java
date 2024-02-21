@@ -40,7 +40,7 @@ public class FeedbackService {
 
     public FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback) {
         // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
-        FeedbackEntity existingFeedback = feedbackRepository.findById(String.valueOf(feedbackID))
+        FeedbackEntity existingFeedback = feedbackRepository.findById(feedbackID)
                 .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + feedbackID));
 
         // Cập nhật thông tin của phản hồi
@@ -57,7 +57,7 @@ public class FeedbackService {
 
     public FeedbackDto deleteFeedback(int feedbackID) {
         // Tìm đặt phòng theo ID
-        Optional<FeedbackEntity> bookingEntityOptional = feedbackRepository.findById(String.valueOf(feedbackID));
+        Optional<FeedbackEntity> bookingEntityOptional = feedbackRepository.findById(feedbackID);
 
         if (bookingEntityOptional.isPresent()) {
             FeedbackEntity feedbackEntity = bookingEntityOptional.get();

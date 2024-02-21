@@ -48,8 +48,8 @@ private BookingRepository bookingRepository;
         bookingEntity.setBookingPrice(booking.getBookingPrice());
 
         // Assuming you have UserRepository and ProductRepository
-        AccountEntity accountEntity = accountRepository.findById(String.valueOf(booking.getAccID())).orElse(null);
-        ProductEntity productEntity = productRepository.findById(String.valueOf(booking.getProductID())).orElse(null);
+        AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
+        ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
 
         if (accountEntity != null && productEntity != null) {
             bookingEntity.setAccID(accountEntity);
@@ -80,7 +80,7 @@ private BookingRepository bookingRepository;
     }
     public BookingDto deleteBooking(int bookingID) {
         // Tìm đặt phòng theo ID
-        Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(String.valueOf(bookingID));
+        Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(bookingID);
 
         if (bookingEntityOptional.isPresent()) {
             BookingEntity bookingEntity = bookingEntityOptional.get();
@@ -108,7 +108,7 @@ private BookingRepository bookingRepository;
 
 
     public List<BookingDto> getBookingsByBookingId(int bookingID) {
-        Optional<BookingEntity> bookingEntities = bookingRepository.findById(String.valueOf(bookingID));
+        Optional<BookingEntity> bookingEntities = bookingRepository.findById(bookingID);
         return bookingEntities.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
