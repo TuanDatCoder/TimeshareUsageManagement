@@ -13,6 +13,12 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     @Query("SELECT u FROM AccountEntity u WHERE u.roleID.roleID = :roleId")
     List<AccountEntity> findAllByRoleID(@Param("roleId") int roleId);
 
+    Optional<AccountEntity> findByAccEmail(String accEmail);
+    Optional<AccountEntity> findByAccName(String username);
+    Optional<AccountEntity> findByAccNameOrAccEmail(String accName, String accEmail);
+    Boolean existsByAccName(String accName);
+    Boolean existsByAccEmail(String accEmail);
+
 
     int countByRoleIDRoleName(String roleName);
     List<AccountEntity> findByRoleIDRoleName(String roleName);
@@ -28,7 +34,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     AccountEntity findByAccName(String username);
 //    Optional<AccountEntity> findByAccNameOrAccEmail(String accName, String accEmail);
     void deleteByAccEmail(String email);
-    Boolean existsByAccName(String accName);
-    Boolean existsByAccEmail(String accEmail);
+
 }
 
