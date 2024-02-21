@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
@@ -68,8 +69,8 @@ public class AuthController {
         account.setAccImg(accountUpDto.getAccImg());
         account.setAccPassword(passwordEncoder.encode(accountUpDto.getAccPassword()));
 
-        RoleEntity roles = roleRepository.findByRoleName("Customer").get();
-        account.setRoleID(roles);
+        RoleEntity role = roleRepository.findByRoleName("Customer").get();
+        account.setRoleID(role);
 
         accountRepository.save(account);
 

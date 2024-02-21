@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="com.FTimeshare.UsageManagement.entities.ReportEntity">
+        <table name="Report" schema="dbo" catalog="master"/>
+        <attributes>
+            <id name="rId">
+                <column name="rID" length="20"/>
+            </id>
+            <basic name="rCreateDate">
+                <column name="rCreateDate" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="rDetail">
+                <column name="rDetail" nullable="false" length="300"/>
+            </basic>
+            <basic name="rStatus">
+                <column name="rStatus" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="userId">
+                <column name="userID" length="20"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>
