@@ -23,6 +23,8 @@ public class BookingServiceImpl implements BookingService{
     private AccountRepository accountRepository;
     @Autowired
     private ProductRepository productRepository;
+//    @Autowired
+//    private BookingRepository findByAccID_AccID;
 
     @Override
     public List<BookingDto> getAllBookings() {
@@ -98,7 +100,25 @@ public class BookingServiceImpl implements BookingService{
         }
     }
 
+    @Override
+    public List<BookingDto> getBookingsByAccountId(int accID) {
+        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
+        return bookingEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookingDto> getBookingsByBookingId(int bookingID) {
+        Optional<BookingEntity> bookingEntities = bookingRepository.findById(String.valueOf(bookingID));
+        return bookingEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
 }
+
+
+
 
 

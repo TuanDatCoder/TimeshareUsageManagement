@@ -11,5 +11,10 @@ public interface BookingService {
     BookingDto createBooking(BookingDto booking);
 
     BookingDto deleteBooking(int bookingId);
+
+    List<BookingDto> getBookingsByAccountId(int accID);
+
+
+    List<BookingDto> getBookingsByBookingId(int bookingID);
 }
 

@@ -21,6 +21,19 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
+    @GetMapping("/view-booking-by-Id/{bookingID}")
+    public ResponseEntity<List<BookingDto>> viewBookingsByBookingId(@PathVariable int bookingID) {
+        List<BookingDto> bookings = bookingService.getBookingsByBookingId(bookingID);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/by-account/{accID}")
+    public ResponseEntity<List<BookingDto>> viewBookingsByAccountId(@PathVariable int accID) {
+        List<BookingDto> bookings = bookingService.getBookingsByAccountId(accID);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
     @PostMapping("/customer/createbooking")
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto booking) {
         BookingDto createdBooking = bookingService.createBooking(booking);

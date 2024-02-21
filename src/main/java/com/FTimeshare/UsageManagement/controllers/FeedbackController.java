@@ -1,5 +1,4 @@
 package com.FTimeshare.UsageManagement.controllers;
-
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +33,14 @@ public class FeedbackController {
         return ResponseEntity.ok(editedFeedback);
     }
 
+    @DeleteMapping("/customer/deletefeedback/{feedbackID}")
+    public ResponseEntity<?> deleteFeedback(@PathVariable int feedbackID) {
+        FeedbackDto deletedFeedback = feedbackService.deleteFeedback(feedbackID);
 
+        if (deletedFeedback != null) {
+            return ResponseEntity.ok(deletedFeedback);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

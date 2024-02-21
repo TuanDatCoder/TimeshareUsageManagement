@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface ReportService {
     List<ReportDto> getAllReport();
+
+    ReportDto submitFeedback(ReportDto reportDto);
+
+    ReportDto deleteReport(int reportID);
 }

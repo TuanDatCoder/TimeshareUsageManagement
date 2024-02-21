@@ -17,4 +17,5 @@ public class ReportDto {
     private String reportDetail;
     private String reportStatus;
     private int accID;
+    private int productID;
 }
