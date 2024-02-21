@@ -7,12 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Account")
+@Table(name="Account", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"acc_name"}),
+        @UniqueConstraint(columnNames = {"acc_email"})
+})
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

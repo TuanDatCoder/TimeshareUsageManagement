@@ -2,9 +2,8 @@ package com.FTimeshare.UsageManagement.controllers;
 
 
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
-import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
-import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,27 +19,28 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/")
+    private final ProductRepository productRepository;
+
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    @GetMapping("/view_all")//View tat ca san pham
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductEntity> productEntities = productService.getAllProducts();
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
-    @GetMapping("/{user_id}")
+    @GetMapping("/{user_id}")//View san pham thuoc ve 1 nguoi dung
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
         List<ProductEntity> productEntities = productService.getProductsByAccID(user_id);
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
 
-    @PostMapping("/delete/{productID}/{user_id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("productID") int productID, @PathVariable("user_id") int user_id){
-        try {
-            productService.deleteProduct(productID, user_id);
-            return ResponseEntity.ok("Product with ID " + productID + " has been deleted successfully.");
-        } catch (Exception e) {
-            // Log the exception and handle it appropriately
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("delete/{productID}")//delete san pham
+    public void deleteReport(@PathVariable int productID) {
+        productRepository.deleteById(productID);
     }
+
 
 
     private List<ProductDto> convertToDtoList(List<ProductEntity> productEntities) {
