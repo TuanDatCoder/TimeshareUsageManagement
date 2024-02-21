@@ -1,11 +1,11 @@
 package com.FTimeshare.UsageManagement.controllers;
 
-
 import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.ReportEntity;
 import com.FTimeshare.UsageManagement.repositories.ReportRepository;
 import com.FTimeshare.UsageManagement.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/reports")
 public class ReportController {
 
-    private ReportService reportService;
+    private final ReportService reportService;
 
     private final ReportRepository reportRepository;
 
@@ -54,6 +54,12 @@ public class ReportController {
                     return reportRepository.save(report);
                 })
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
+    }
+
+    @PostMapping("/customer/submitreport")
+    public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
+        ReportDto submittedReport = reportService.submitReport(reportDto);
+        return new ResponseEntity<>(submittedReport, HttpStatus.CREATED);
     }
 
     // API endpoint để xóa một báo cáo dựa trên reportID
