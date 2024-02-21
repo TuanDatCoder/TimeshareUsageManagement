@@ -75,7 +75,7 @@ private ReportDto convertToDto(ReportEntity reportEntity) {
     if (reportEntity.getAccID() != null) {
         reportDto.setAccID(reportEntity.getAccID().getAccID());
     }
-    //reportDto.setAccID(reportEntity.getAccID());
+
 
     // Bổ sung productID từ ReportEntity (nếu có)
     if (reportEntity.getProductID() != null) {
