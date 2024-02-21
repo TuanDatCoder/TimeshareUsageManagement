@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
+import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -39,6 +42,7 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBooking(booking);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/customer/deletebooking/{bookingID}")
     public ResponseEntity<?> deleteBooking(@PathVariable int bookingID) {
         BookingDto deletedBooking = bookingService.deleteBooking(bookingID);
@@ -49,7 +53,4 @@ public class BookingController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
 }
