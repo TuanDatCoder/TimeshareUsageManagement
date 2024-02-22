@@ -38,42 +38,42 @@ public class FeedbackService {
         return convertToDto(savedFeedback);
     }
 
-    public FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback) {
-        // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
-        FeedbackEntity existingFeedback = feedbackRepository.findById(feedbackID)
-                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + feedbackID));
+//    public FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback) {
+//        // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
+//        FeedbackEntity existingFeedback = feedbackRepository.findById(feedbackID)
+//                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + feedbackID));
+//
+//        // Cập nhật thông tin của phản hồi
+//        existingFeedback.setFeedbackCreateDate(updatedFeedback.getFeedbackCreateDate());
+//        existingFeedback.setFeedbackDetail(updatedFeedback.getFeedbackDetail());
+//        existingFeedback.setFeedbackStatus(updatedFeedback.getFeedbackStatus());
+//
+//        // Lưu cập nhật vào cơ sở dữ liệu
+//        FeedbackEntity savedFeedback = feedbackRepository.save(existingFeedback);
+//
+//        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
+//        return convertToDto(savedFeedback);
+//    }
 
-        // Cập nhật thông tin của phản hồi
-        existingFeedback.setFeedbackCreateDate(updatedFeedback.getFeedbackCreateDate());
-        existingFeedback.setFeedbackDetail(updatedFeedback.getFeedbackDetail());
-        existingFeedback.setFeedbackStatus(updatedFeedback.getFeedbackStatus());
-
-        // Lưu cập nhật vào cơ sở dữ liệu
-        FeedbackEntity savedFeedback = feedbackRepository.save(existingFeedback);
-
-        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
-        return convertToDto(savedFeedback);
-    }
-
-    public FeedbackDto deleteFeedback(int feedbackID) {
-        // Tìm đặt phòng theo ID
-        Optional<FeedbackEntity> bookingEntityOptional = feedbackRepository.findById(feedbackID);
-
-        if (bookingEntityOptional.isPresent()) {
-            FeedbackEntity feedbackEntity = bookingEntityOptional.get();
-
-            // Kiểm tra xem người dùng có quyền xóa đặt phòng hay không (tùy thuộc vào logic của bạn)
-
-            // Xóa đặt phòng
-            feedbackRepository.delete(feedbackEntity);
-
-            // Chuyển đổi và trả về DTO của đặt phòng đã xóa
-            return convertToDto(feedbackEntity);
-        } else {
-            // Xử lý trường hợp không tìm thấy đặt phòng
-            return null;
-        }
-    }
+//    public FeedbackDto deleteFeedback(int feedbackID) {
+//        // Tìm đặt phòng theo ID
+//        Optional<FeedbackEntity> bookingEntityOptional = feedbackRepository.findById(feedbackID);
+//
+//        if (bookingEntityOptional.isPresent()) {
+//            FeedbackEntity feedbackEntity = bookingEntityOptional.get();
+//
+//            // Kiểm tra xem người dùng có quyền xóa đặt phòng hay không (tùy thuộc vào logic của bạn)
+//
+//            // Xóa đặt phòng
+//            feedbackRepository.delete(feedbackEntity);
+//
+//            // Chuyển đổi và trả về DTO của đặt phòng đã xóa
+//            return convertToDto(feedbackEntity);
+//        } else {
+//            // Xử lý trường hợp không tìm thấy đặt phòng
+//            return null;
+//        }
+//    }
 
     private FeedbackEntity convertToEntity(FeedbackDto feedbackDto) {
         FeedbackEntity feedbackEntity = new FeedbackEntity();
