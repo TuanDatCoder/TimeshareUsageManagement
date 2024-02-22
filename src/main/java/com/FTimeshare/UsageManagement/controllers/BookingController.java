@@ -18,9 +18,9 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @GetMapping("/ViewAll")
-    public ResponseEntity<List<BookingEntity>> getAllBookings() {
-        List<BookingEntity> bookings = bookingService.getAllBookings();
-        return ResponseEntity.ok(bookings);
-    }
+//    @GetMapping("/ViewAll")
+//    public ResponseEntity<List<BookingEntity>> getAllBookings() {
+//        List<BookingEntity> bookings = bookingService.getAllBookings();
+//        return ResponseEntity.ok(bookings);
+//    }
 }

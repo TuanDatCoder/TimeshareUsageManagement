@@ -5,6 +5,7 @@ import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,9 +38,42 @@ public class ProductService {
 
 
     // Quý
+    //Goi tat ca san pham
     public List<ProductEntity> getAllProducts() {
         return productRepository.findAll();
     }
+
+    //Goi cac danh sach san pham tang dan theo view
+    public List<ProductEntity> getAllProductsAscendingByView() {
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productViewer"));
+    }
+
+    //Goi cac danh sach san pham giam dan theo view
+    public List<ProductEntity> getAllProductsDescendingByView() {
+        return productRepository.findAll(Sort.by(Sort.Direction.DESC, "productViewer"));
+    }
+
+    //Goi cac danh sach san pham tang dan theo area
+    public List<ProductEntity> getAllProductsAscendingByArea() {
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productArea"));
+    }
+
+    //Goi cac danh sach san pham giam dan theo area
+    public List<ProductEntity> getAllProductsDescendingByArea() {
+        return productRepository.findAll(Sort.by(Sort.Direction.DESC, "productArea"));
+    }
+
+    //Goi cac danh sach san pham tang dan theo price
+    public List<ProductEntity> getAllProductsAscendingByPrice() {
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productPrice"));
+    }
+
+    //Goi cac danh sach san pham giam dan theo price
+    public List<ProductEntity> getAllProductsDescendingByPrice() {
+        return productRepository.findAll(Sort.by(Sort.Direction.DESC, "productPrice"));
+    }
+
+    //Tinh tong tien
     public List<ProductEntity> getProductsByUserID(int userID) {
 
         return productRepository.findByUserID(userID);

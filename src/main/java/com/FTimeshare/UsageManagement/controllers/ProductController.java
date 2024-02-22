@@ -102,11 +102,52 @@ public class ProductController {
     }
 
     // Quý
-    @GetMapping("/")
+    @GetMapping("/view_all")
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductEntity> productEntities = productService.getAllProducts();
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
+
+    //Goi cac danh sach san pham tang dan theo view
+    @GetMapping("/view/by_viewer/ascending")
+    public ResponseEntity<List<ProductDto>> getProductsByViewerAscending() {
+        List<ProductEntity> productEntities = productService.getAllProductsAscendingByView();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    //Goi cac danh sach san pham giam dan theo view
+    @GetMapping("/view/by_viewer/descending")
+    public ResponseEntity<List<ProductDto>> getProductsByViewerDescending() {
+        List<ProductEntity> productEntities = productService.getAllProductsDescendingByView();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    @GetMapping("/view/by_area/ascending")
+    public ResponseEntity<List<ProductDto>> getProductsByAreaAscending() {
+        List<ProductEntity> productEntities = productService.getAllProductsAscendingByArea();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    //Goi cac danh sach san pham giam dan theo view
+    @GetMapping("/view/by_area/descending")
+    public ResponseEntity<List<ProductDto>> getProductsByAreaDescending() {
+        List<ProductEntity> productEntities = productService.getAllProductsDescendingByArea();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    @GetMapping("/view/by_price/ascending")
+    public ResponseEntity<List<ProductDto>> getProductsByPriceAscending() {
+        List<ProductEntity> productEntities = productService.getAllProductsAscendingByPrice();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    //Goi cac danh sach san pham giam dan theo view
+    @GetMapping("/view/by_price/descending")
+    public ResponseEntity<List<ProductDto>> getProductsByPriceDescending() {
+        List<ProductEntity> productEntities = productService.getAllProductsDescendingByPrice();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
     @GetMapping("/{user_id}")
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
         List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);

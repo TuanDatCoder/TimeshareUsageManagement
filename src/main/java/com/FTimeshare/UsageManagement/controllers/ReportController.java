@@ -37,24 +37,24 @@ public class ReportController {
 
 
     // API endpoint để lấy một báo cáo dựa trên reportID
-    @GetMapping("viewDetail/{reportID}")
-    public ReportEntity getReportById(@PathVariable int reportID) {
-        return reportRepository.findById(reportID)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
-    }
-
-    // API endpoint để cập nhật một báo cáo đã tồn tại
-    @PutMapping("update/{reportID}")
-    public ReportEntity updateReport(@PathVariable int reportID, @RequestBody ReportEntity updatedReport) {
-        return reportRepository.findById(reportID)
-                .map(report -> {
-                    report.setReportDetail(updatedReport.getReportDetail());
-                    report.setReportStatus(updatedReport.getReportStatus());
-                    // Cập nhật các trường khác nếu cần
-                    return reportRepository.save(report);
-                })
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
-    }
+//    @GetMapping("viewDetail/{reportID}")
+//    public ReportEntity getReportById(@PathVariable int reportID) {
+//        return reportRepository.findById(reportID)
+//                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
+//    }
+//
+//    // API endpoint để cập nhật một báo cáo đã tồn tại
+//    @PutMapping("update/{reportID}")
+//    public ReportEntity updateReport(@PathVariable int reportID, @RequestBody ReportEntity updatedReport) {
+//        return reportRepository.findById(reportID)
+//                .map(report -> {
+//                    report.setReportDetail(updatedReport.getReportDetail());
+//                    report.setReportStatus(updatedReport.getReportStatus());
+//                    // Cập nhật các trường khác nếu cần
+//                    return reportRepository.save(report);
+//                })
+//                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
+//    }
 
     @PostMapping("/customer/submitreport")
     public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
@@ -63,10 +63,10 @@ public class ReportController {
     }
 
     // API endpoint để xóa một báo cáo dựa trên reportID
-    @DeleteMapping("delete/{reportID}")
-    public void deleteReport(@PathVariable int reportID) {
-        reportRepository.deleteById(reportID);
-    }
+//    @DeleteMapping("delete/{reportID}")
+//    public void deleteReport(@PathVariable int reportID) {
+//        reportRepository.deleteById(reportID);
+//    }
 
 
 

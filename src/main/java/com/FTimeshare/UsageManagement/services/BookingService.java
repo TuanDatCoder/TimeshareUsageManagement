@@ -23,7 +23,9 @@ private BookingRepository bookingRepository;
 
     private  ProductRepository productRepository;
 
-
+    public float getSumPriceByProductId(int productID){
+        return bookingRepository.sumPriceByProductID(productID);
+    }
 
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
@@ -99,12 +101,12 @@ private BookingRepository bookingRepository;
     }
 
 
-    public List<BookingDto> getBookingsByAccountId(int accID) {
-        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
-        return bookingEntities.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
+//    public List<BookingDto> getBookingsByAccountId(int accID) {
+//        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
+//        return bookingEntities.stream()
+//                .map(this::convertToDto)
+//                .collect(Collectors.toList());
+//    }
 
 
     public List<BookingDto> getBookingsByBookingId(int bookingID) {

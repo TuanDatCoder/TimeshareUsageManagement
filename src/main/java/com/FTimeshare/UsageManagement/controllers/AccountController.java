@@ -2,7 +2,10 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
+import com.FTimeshare.UsageManagement.services.BookingService;
+import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,10 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
+    @Autowired
+    private BookingService bookingService;
+    @Autowired
+    private ProductService productService;
     //-------------------------- View all -----------------------
     @GetMapping("/admin")
     public ResponseEntity<List<AccountDto>> getAdminUsers() {
@@ -51,6 +57,16 @@ public class AccountController {
         return ResponseEntity.ok("User with ID " + userId + " has been deleted successfully.");
     }
 
+    //Tinh tong doanh thu cua user
+    @GetMapping("sum_revenue/{userId}")
+    public float sumRevenue(@PathVariable int userId) {
+        List<ProductEntity> productEntities = productService.getProductsByUserID(userId);
+        float sum = 0;
+        for(int i = 0; i<productEntities.size(); i++){
+            sum+= bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());
+        }
+        return sum;
+    }
 
     private List<AccountDto> convertToDtoList(List<AccountEntity> userEntities) {
         return userEntities.stream()
