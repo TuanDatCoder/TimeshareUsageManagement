@@ -4,6 +4,7 @@ import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.entities.ProductTypeEntity;
 import com.FTimeshare.UsageManagement.entities.ProjectEntity;
+import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 public class ProductController {
     @Autowired
     private ProductService productService;
-
+    private ProductRepository productRepository;
     // Đạt
 
     // Change Status
@@ -111,12 +113,19 @@ public class ProductController {
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
     @PostMapping("/add")
-    public ResponseEntity<ProductDto> addNews(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> addNewProduct(@RequestBody ProductDto productDto) {
         ProductEntity productEntity = convertToEntity(productDto);
         productEntity = productService.addNewProduct(productEntity);
         ProductDto responseDto = convertToDto(productEntity);
         return ResponseEntity.ok(responseDto);
     }
+
+    @PutMapping("/edit/{product_id}")
+    public ResponseEntity<?> editProducts(@PathVariable int productID, @RequestBody  ProductDto updateProduct) {
+        ProductDto editProduct = productService.editProduct(productID, updateProduct);
+        return ResponseEntity.ok(editProduct);
+    }
+
     @PostMapping("/delete/{productID}/{user_id}")
     public List<ProductEntity> deleteProduct(@PathVariable("productID") int productID, @PathVariable("user_id") int user_id){
 
@@ -130,7 +139,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    private ProductDto convertToDto(ProductEntity productEntity) {
+    public ProductDto convertToDto(ProductEntity productEntity) {
         ProductDto productDto = new ProductDto();
         productDto.setProductID(productEntity.getProductID());
         productDto.setProductName(productEntity.getProductName());
@@ -143,12 +152,11 @@ public class ProductController {
         productDto.setProductStatus(productEntity.getProductStatus());
         productDto.setProductViewer(productEntity.getProductViewer());
         productDto.setProjectID(productEntity.getProjectID().getProjectID());
-//        productDto.setProductPicture(productEntity.getProductPrice());
         productDto.setAccID(productEntity.getAccID().getAccID());
         productDto.setProductTypeID(productEntity.getProductTypeID().getProductTypeID());
         return productDto;
     }
-    private ProductEntity convertToEntity(ProductDto productDto) {
+    public ProductEntity convertToEntity(ProductDto productDto) {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setProductID(productDto.getProductID());
         productEntity.setProductName(productDto.getProductName());

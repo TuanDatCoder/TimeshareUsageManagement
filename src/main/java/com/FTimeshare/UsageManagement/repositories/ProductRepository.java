@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
     @Query("SELECT p FROM ProductEntity p WHERE p.accID.accID= :accID")
     List<ProductEntity> findByUserID(@Param("accID") int accID);
     List<ProductEntity> findByProductStatus(String productStatus);
     @Query("SELECT p FROM ProductEntity p WHERE p.productID = :productID")
-    ProductEntity findByProductID(@Param("productID") int productID);
+    Optional<ProductEntity> findByProductID(@Param("productID") int productID);
 }

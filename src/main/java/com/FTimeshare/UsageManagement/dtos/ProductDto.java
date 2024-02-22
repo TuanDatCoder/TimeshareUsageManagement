@@ -29,4 +29,5 @@ public class ProductDto {
     private String productPicture;
     private int projectID;
     private int productTypeID;
+    private int accID;
 }

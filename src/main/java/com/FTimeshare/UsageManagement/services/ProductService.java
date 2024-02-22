@@ -1,5 +1,7 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.controllers.ProductController;
+import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import java.util.Optional;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-
+    private ProductController productController;
     //Đạt
     public List<ProductEntity> getProductsByStatus(String status) {
         return productRepository.findByProductStatus(status);
@@ -41,6 +43,17 @@ public class ProductService {
     public List<ProductEntity> getProductsByUserID(int userID) {
 
         return productRepository.findByUserID(userID);
+    }
+    public ProductDto editProduct(int productID, ProductDto productDto) {
+
+        ProductEntity productEntity = productRepository.findByProductID(productID)
+                .orElseThrow(() -> new RuntimeException("Prodcut not found with id: " + productID));
+
+        productEntity = productController.convertToEntity(productDto);
+
+        ProductEntity savedProduct = productRepository.save(productEntity);
+
+        return productController.convertToDto(savedProduct);
     }
 
     public ProductEntity addNewProduct(ProductEntity productEntity) {
