@@ -59,11 +59,11 @@ public class AccountController {
 
     //Tinh tong doanh thu cua user
     @GetMapping("sum_revenue/{userId}")
-    public float sumRevenue(@PathVariable int userId) {
+    public double sumRevenue(@PathVariable int userId) {
         List<ProductEntity> productEntities = productService.getProductsByUserID(userId);
-        float sum = 0;
+        double sum = 0;
         for(int i = 0; i<productEntities.size(); i++){
-            sum+= bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());
+            sum+= (double) bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());
         }
         return sum;
     }

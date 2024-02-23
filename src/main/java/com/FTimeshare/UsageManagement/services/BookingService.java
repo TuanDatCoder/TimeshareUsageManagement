@@ -16,15 +16,22 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
-@Autowired
-private BookingRepository bookingRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
 
+    @Autowired
     private  AccountRepository accountRepository;
 
+    @Autowired
     private  ProductRepository productRepository;
 
-    public float getSumPriceByProductId(int productID){
-        return bookingRepository.sumPriceByProductID(productID);
+    public double getSumPriceByProductId(int productID){
+        float sum = 0;
+        List<BookingEntity> bookingEntities = bookingRepository.findByProductID(productID);
+        for(int i = 0; i<bookingEntities.size(); i++){
+            sum+=bookingEntities.get(i).getBookingPrice();
+        }
+        return sum;
     }
 
     public List<BookingDto> getAllBookings() {
