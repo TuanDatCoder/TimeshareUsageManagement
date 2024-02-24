@@ -47,6 +47,8 @@ private BookingRepository bookingRepository;
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
         bookingEntity.setBookingPrice(booking.getBookingPrice());
+        bookingEntity.setBookingRating(booking.getBookingRating());
+        bookingEntity.setBookingStatus(booking.getBookingStatus());
 
         // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);

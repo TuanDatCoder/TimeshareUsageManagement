@@ -117,7 +117,7 @@ public class ProductController {
     }
 
     // Quý
-    @GetMapping("/")
+    @GetMapping("/viewAll")
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductEntity> productEntities = productService.getAllProducts();
         return ResponseEntity.ok(convertToDtoList(productEntities));
