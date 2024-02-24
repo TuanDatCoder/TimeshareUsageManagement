@@ -19,15 +19,6 @@ public class StaffController {
     @Autowired
     private AccountController accountController;
 
-    @GetMapping("/customer")
-    public ResponseEntity<List<AccountDto>> getCustomerUsers() {
-        return accountController.getCustomerUsers();
-    }
-
-    @GetMapping("/owner")
-    public ResponseEntity<List<AccountDto>> getOwnerUsers() {
-        return accountController.getOwnerUsers();
-    }
 
     @PutMapping("/update-status/{userId}")
     public ResponseEntity<AccountDto> updateAccStatus(@PathVariable int accId, @RequestBody AccountDto accDto) {

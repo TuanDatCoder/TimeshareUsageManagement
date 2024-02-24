@@ -49,4 +49,16 @@ public class ProductService {
             productRepository.deleteById(productID);
         }
     }
+
+//    public List<ProductEntity> searchProductsByName(String name) {
+//        return productRepository.findByProductNameContainingIgnoreCase(name);
+//    }
+public List<ProductEntity> findByProductNameContainingIgnoreCaseAndProductStatus(String productName, String productStatus) {
+    return productRepository.findByProductNameContainingIgnoreCaseAndProductStatus(productName, productStatus);
+}
+
+    public List<String> getAllProductStatuses() {
+        return productRepository.findAllProductStatuses();
+    }
+
 }

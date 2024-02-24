@@ -29,15 +29,25 @@ public class AccountService {
 
 
     // update
-    public AccountEntity updateUserStatus(int userId, String newUserStatus) {
-        AccountEntity userEntity = accountRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+    public AccountEntity updateUserStatus(int accID, String newAccountStatus) {
+        AccountEntity accountEntity = accountRepository.findById(accID)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + accID));
 
         // Cập nhật trạng thái mới cho người dùng
-        userEntity.setAccStatus(newUserStatus);
+        accountEntity.setAccStatus(newAccountStatus);
 
         // Lưu thay đổi vào cơ sở dữ liệu
-        return accountRepository.save(userEntity);
+        return accountRepository.save(accountEntity);
     }
+
+    public int countUsersByRoleName(String roleName) {
+        return accountRepository.countByRoleIDRoleName(roleName);
+    }
+    public List<AccountEntity> getUsersByRoleName(String roleName) {
+        return accountRepository.findByRoleIDRoleName(roleName);
+    }
+//    public List<AccountEntity> findByAccNameContainingIgnoreCaseAndRoleName(String accName, String roleName) {
+//        return accountRepository.findByAccNameContainingIgnoreCaseAndRoleName(accName, roleName);
+//    }
 
 }
