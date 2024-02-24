@@ -1,5 +1,5 @@
 package com.FTimeshare.UsageManagement.services;
-
+import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -61,4 +62,40 @@ public List<ProductEntity> findByProductNameContainingIgnoreCaseAndProductStatus
         return productRepository.findAllProductStatuses();
     }
 
+
+//    public List<BookingDto> getBookingsByBookingId(int bookingID) {
+//        Optional<BookingEntity> bookingEntities = bookingRepository.findById(bookingID);
+//        return bookingEntities.stream()
+//                .map(this::convertToDto)
+//                .collect(Collectors.toList());
+//    }
+
+    public List<ProductDto> getProductByBookingId(int productID) {
+        Optional<ProductEntity> productEntities = productRepository.findById(productID);
+        return productEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private ProductDto convertToDto(ProductEntity productEntity) {
+        // Your existing DTO conversion logic
+        return new ProductDto(
+                productEntity.getProductID(),
+                productEntity.getProductName(),
+                productEntity.getProductDescription(),
+                productEntity.getProductConvenience(),
+                productEntity.getProductArea(),
+                productEntity.getProductPrice(),
+                productEntity.getAvailableStartDate(),
+                productEntity.getAvailableEndDate(),
+                productEntity.getProductStatus(),
+                productEntity.getProductPerson(),
+                productEntity.getProductRating(),
+                productEntity.getProductViewer(),
+                productEntity.getProductStatus(),
+                productEntity.getProjectID().getProjectID(),
+                productEntity.getProductTypeID().getProductTypeID(),
+                productEntity.getAccID().getAccID());
+
+    }
 }
