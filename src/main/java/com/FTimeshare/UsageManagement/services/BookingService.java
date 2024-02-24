@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 public class BookingService {
 @Autowired
 private BookingRepository bookingRepository;
-
+@Autowired
     private  AccountRepository accountRepository;
-
+@Autowired
     private  ProductRepository productRepository;
 
 
