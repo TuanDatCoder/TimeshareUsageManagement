@@ -55,4 +55,39 @@ public class ReportService {
         );
     }
 
-}
+
+    public ReportDto editFeedback(int reportID, ReportDto updatedReport) {
+        // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
+        ReportEntity existingReport = reportRepository.findById(reportID)
+                .orElseThrow(() -> new RuntimeException("Report not found with id: " + reportID));
+
+        // Cập nhật thông tin của phản hồi
+        existingReport.setReportCreateDate(updatedReport.getReportCreateDate());
+        existingReport.setReportDetail(updatedReport.getReportDetail());
+        existingReport.setReportStatus(updatedReport.getReportStatus());
+
+        // Lưu cập nhật vào cơ sở dữ liệu
+        ReportEntity savedReport = reportRepository.save(existingReport);
+
+        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
+        return convertToDto(savedReport);
+    }
+    }
+
+//    public FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback) {
+//        // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
+//        FeedbackEntity existingFeedback = feedbackRepository.findById(feedbackID)
+//                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + feedbackID));
+//
+//        // Cập nhật thông tin của phản hồi
+//        existingFeedback.setFeedbackCreateDate(updatedFeedback.getFeedbackCreateDate());
+//        existingFeedback.setFeedbackDetail(updatedFeedback.getFeedbackDetail());
+//        existingFeedback.setFeedbackStatus(updatedFeedback.getFeedbackStatus());
+//
+//        // Lưu cập nhật vào cơ sở dữ liệu
+//        FeedbackEntity savedFeedback = feedbackRepository.save(existingFeedback);
+//
+//        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
+//        return convertToDto(savedFeedback);
+//    }
+//}

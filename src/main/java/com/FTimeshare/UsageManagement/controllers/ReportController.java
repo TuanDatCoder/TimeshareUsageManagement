@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.controllers;
 
+import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.ReportEntity;
 import com.FTimeshare.UsageManagement.repositories.ReportRepository;
@@ -60,6 +61,13 @@ public class ReportController {
     public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
         ReportDto submittedReport = reportService.submitReport(reportDto);
         return new ResponseEntity<>(submittedReport, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/api/reports/update/{reportID}")
+    public ResponseEntity<?> updateReport(@PathVariable int reportID, @RequestBody ReportDto updatedReport) {
+        ReportDto editedFeedback = reportService.editFeedback(reportID, updatedReport);
+        return ResponseEntity.ok(editedFeedback);
+
     }
 
     // API endpoint để xóa một báo cáo dựa trên reportID
