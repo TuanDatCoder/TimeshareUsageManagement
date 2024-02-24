@@ -3,7 +3,7 @@ package com.FTimeshare.UsageManagement.dtos;
 import lombok.Data;
 
 @Data
-public class LoginDto {
-    private String usernameOrEmail;
+public class AuthRequest {
+    private String email;
     private String password;
 }
