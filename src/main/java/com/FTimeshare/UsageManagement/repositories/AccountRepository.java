@@ -12,5 +12,10 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<AccountEntity, Integer> {
     @Query("SELECT u FROM AccountEntity u WHERE u.roleID.roleID = :roleId")
     List<AccountEntity> findAllByRoleID(@Param("roleId") int roleId);
+
+
+    int countByRoleIDRoleName(String roleName);
+    List<AccountEntity> findByRoleIDRoleName(String roleName);
+    //List<AccountEntity> findByAccNameContainingIgnoreCaseAndRoleName(String accName, String roleName);
 }
 

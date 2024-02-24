@@ -41,6 +41,12 @@ public class ProductEntity {
     @Column(name = "product_status")
     private String productStatus;
 
+    @Column(name = "product_person")
+    private int productPerson;
+
+    @Column(name = "product_rating")
+    private float productRating;
+
     @Column(name = "product_viewer")
     private int productViewer;
 

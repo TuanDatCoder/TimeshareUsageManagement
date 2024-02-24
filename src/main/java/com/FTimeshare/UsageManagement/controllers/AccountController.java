@@ -17,31 +17,20 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    //----------------------- Count Total Account --------------------
+
+    @GetMapping("/staff/count/{roleName}")
+    public ResponseEntity<Integer> countUsersByRoleName(@PathVariable String roleName) {
+        int count = accountService.countUsersByRoleName(roleName);
+        return ResponseEntity.ok(count);
+    }
+
     //-------------------------- View all -----------------------
-    @GetMapping("/admin")
-    public ResponseEntity<List<AccountDto>> getAdminUsers() {
-        List<AccountEntity> userEntities = accountService.getUsersByRole(1);
+    @GetMapping("/{roleName}")
+    public ResponseEntity<List<AccountDto>> getUsersByRoleName(@PathVariable String roleName) {
+        List<AccountEntity> userEntities = accountService.getUsersByRoleName(roleName);
         return ResponseEntity.ok(convertToDtoList(userEntities));
     }
-
-    @GetMapping("/staff")
-    public ResponseEntity<List<AccountDto>> getStaffUsers() {
-        List<AccountEntity> userEntities = accountService.getUsersByRole(4);
-        return ResponseEntity.ok(convertToDtoList(userEntities));
-    }
-
-    @GetMapping("/customer")
-    public ResponseEntity<List<AccountDto>> getCustomerUsers() {
-        List<AccountEntity> userEntities = accountService.getUsersByRole(2);
-        return ResponseEntity.ok(convertToDtoList(userEntities));
-    }
-
-    @GetMapping("/owner")
-    public ResponseEntity<List<AccountDto>> getOwnerUsers() {
-        List<AccountEntity> userEntities = accountService.getUsersByRole(3);
-        return ResponseEntity.ok(convertToDtoList(userEntities));
-    }
-
 
     //-------------------------- delete -------------------------
     //http://localhost:8080/api/users/delete/10

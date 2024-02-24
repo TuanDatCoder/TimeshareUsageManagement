@@ -19,8 +19,10 @@ public class ProductDto {
     private float productArea;
     private float productPrice;
     private LocalDateTime availableStartDate;
-    private  LocalDateTime availableEndDate;
+    private LocalDateTime availableEndDate;
     private String productStatus;
+    private int productPerson;
+    private float productRating;
     private int productViewer;
     private String productPicture;
     private int projectID;
