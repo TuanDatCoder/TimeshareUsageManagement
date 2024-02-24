@@ -1,6 +1,9 @@
 package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
+import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.entities.ProductTypeEntity;
+import com.FTimeshare.UsageManagement.entities.ProjectEntity;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
 
     // Đạt
 
@@ -117,32 +121,80 @@ public class ProductController {
     }
 
     // Quý
-    @GetMapping("/viewAll")
+    @GetMapping("/view_all")
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductEntity> productEntities = productService.getAllProducts();
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
 
-    @GetMapping("/viewById/{productID}")
-    public ResponseEntity<List<ProductDto>> viewProductById(@PathVariable int productID) {
-        List<ProductDto> product = productService.getProductByBookingId(productID);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+    //Goi cac danh sach san pham tang dan theo view
+    @GetMapping("/view/by_viewer/ascending")
+    public ResponseEntity<List<ProductDto>> getProductsByViewerAscending() {
+        List<ProductEntity> productEntities = productService.getAllProductsAscendingByView();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
     }
+
+    //Goi cac danh sach san pham giam dan theo view
+    @GetMapping("/view/by_viewer/descending")
+    public ResponseEntity<List<ProductDto>> getProductsByViewerDescending() {
+        List<ProductEntity> productEntities = productService.getAllProductsDescendingByView();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    @GetMapping("/view/by_area/ascending")
+    public ResponseEntity<List<ProductDto>> getProductsByAreaAscending() {
+        List<ProductEntity> productEntities = productService.getAllProductsAscendingByArea();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    //Goi cac danh sach san pham giam dan theo view
+    @GetMapping("/view/by_area/descending")
+    public ResponseEntity<List<ProductDto>> getProductsByAreaDescending() {
+        List<ProductEntity> productEntities = productService.getAllProductsDescendingByArea();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    @GetMapping("/view/by_price/ascending")
+    public ResponseEntity<List<ProductDto>> getProductsByPriceAscending() {
+        List<ProductEntity> productEntities = productService.getAllProductsAscendingByPrice();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
+    //Goi cac danh sach san pham giam dan theo view
+    @GetMapping("/view/by_price/descending")
+    public ResponseEntity<List<ProductDto>> getProductsByPriceDescending() {
+        List<ProductEntity> productEntities = productService.getAllProductsDescendingByPrice();
+        return ResponseEntity.ok(convertToDtoList(productEntities));
+    }
+
     @GetMapping("/{user_id}")
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
         List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
+    @PostMapping("/add")
+    public ResponseEntity<ProductDto> addNewProduct(@RequestBody ProductDto productDto) {
+        ProductEntity productEntity = convertToEntity(productDto);
+        productEntity = productService.addNewProduct(productEntity);
+        ProductDto responseDto = convertToDto(productEntity);
+        return ResponseEntity.ok(responseDto);
+    }
 
+    //Delete product, truyền vào userID của customer, nếu đúng là chủ của product thì đc sửa
+    @PutMapping("/edit/{product_id}/{user_id}")
+    public ResponseEntity<?> editProducts(@PathVariable int product_id, @PathVariable int user_id, @RequestBody  ProductDto updateProduct) {
+        ProductDto editProduct = productService.editProduct(product_id, user_id, updateProduct);
+        return ResponseEntity.ok(editProduct);
+    }
+
+    //Delete product, truyền vào userID của customer, nếu đúng là chủ của product và product đang ko có booking thì đc xóa
+    //Tra ve product sau khi sua
     @PostMapping("/delete/{productID}/{user_id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("productID") int productID, @PathVariable("user_id") int user_id){
-        try {
-            productService.deleteProduct(productID, user_id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            // Log the exception and handle it appropriately
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public List<ProductEntity> deleteProduct(@PathVariable("productID") int productID, @PathVariable("user_id") int user_id){
+
+        productService.deleteProduct(productID, user_id);
+        return productService.getAllProducts();
+
     }
     private List<ProductDto> convertToDtoList(List<ProductEntity> productEntities) {
         return productEntities.stream()
@@ -150,7 +202,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    private ProductDto convertToDto(ProductEntity productEntity) {
+    public ProductDto convertToDto(ProductEntity productEntity) {
         ProductDto productDto = new ProductDto();
         productDto.setProductID(productEntity.getProductID());
         productDto.setProductName(productEntity.getProductName());
@@ -161,6 +213,7 @@ public class ProductController {
         productDto.setAvailableEndDate(productEntity.getAvailableEndDate());
         productDto.setAvailableStartDate(productEntity.getAvailableStartDate());
         productDto.setProductStatus(productEntity.getProductStatus());
+//        productDto.setProductPicture(productEntity.getProductPicture());
         productDto.setProductPerson(productEntity.getProductPerson());
         productDto.setProductRating(productEntity.getProductRating());
         productDto.setProductViewer(productEntity.getProductViewer());
@@ -170,5 +223,31 @@ public class ProductController {
         return productDto;
     }
 
+    public ProductEntity convertToEntity(ProductDto productDto) {
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setProductID(productDto.getProductID());
+        productEntity.setProductName(productDto.getProductName());
+        productEntity.setProductDescription(productDto.getProductDescription());
+        productEntity.setProductConvenience(productDto.getProductConvenience());
+        productEntity.setProductArea(productDto.getProductArea());
+        productEntity.setProductPrice(productDto.getProductPrice());
+        productEntity.setAvailableEndDate(productDto.getAvailableEndDate());
+        productEntity.setAvailableStartDate(productDto.getAvailableStartDate());
+//        productEntity.setProductPicture(productDto.getProductPicture());
+        productEntity.setProductPerson(productDto.getProductPerson());
+        productEntity.setProductRating(productDto.getProductRating());
+        productEntity.setProductStatus(productDto.getProductStatus());
+        productEntity.setProductViewer(productDto.getProductViewer());
+        ProjectEntity pj = new ProjectEntity();
+        pj.setProjectID(productDto.getProjectID());
+        productEntity.setProjectID(pj);
+        AccountEntity ac = new AccountEntity();
+        ac.setAccID(productDto.getAccID());
+        productEntity.setAccID(ac);
+        ProductTypeEntity pdt = new ProductTypeEntity();
+        pdt.setProductTypeID(productDto.getProductTypeID());
+        productEntity.setProductTypeID(pdt);
+        return productEntity;
+    }
 
 }
