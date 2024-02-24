@@ -3,6 +3,7 @@ package com.FTimeshare.UsageManagement.config.jwt;
 import com.FTimeshare.UsageManagement.config.CustomUserDetails;
 import com.FTimeshare.UsageManagement.config.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.Filter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
