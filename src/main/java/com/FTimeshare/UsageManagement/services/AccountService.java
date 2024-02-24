@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.entities.RoleEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,12 @@ public class AccountService {
         return accountRepository.findByAccEmail(acc_email);
     }
 
-//    public AccountEntity saveUser(AccountEntity A) {
-//        RoleEntity userRole = roleEntityRepository.findByName("ROLE_CUSTOMER");
-//        userEntity.setRoleEntity(userRole);
-//        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-//        return userEntityRepository.save(userEntity);
-//    }
+    public AccountEntity saveUser(AccountEntity account) {
+        RoleEntity userRole = roleRepository.findByRoleName("ROLE_CUSTOMER");
+        account.setRoleID(userRole);
+        account.setAccPassword(passwordEncoder.encode(account.getAccPassword()));
+        return accountRepository.save(account);
+    }
 
     public AccountEntity findByEmailAndPassword(String email, String password){
         AccountEntity account = findByAccountEmail(email);

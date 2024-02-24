@@ -19,15 +19,14 @@ public class AuthController {
     @Autowired
     private JwtProvider jwtProvider;
 
-//    @Autowired
-//    private AccountController accountController;
-//    @PostMapping("/register")
-//    public String registerAccount(@RequestBody @Valid AccountDto accountDto) {
-//        AccountEntity account = new AccountEntity();
-//        accountController.convertToEntity(accountDto);
-//        accountService;
-//        return "OK";
-//    }
+    @Autowired
+    private AccountController accountController;
+    @PostMapping("/register")
+    public String registerAccount(@RequestBody @Valid AccountDto accountDto) {
+        AccountEntity account = new AccountEntity();
+        accountService.saveUser(accountController.convertToEntity(accountDto));
+        return "OK";
+    }
 
     @PostMapping("/auth")
     public AuthResponse auth(@RequestBody AuthRequest request) {
