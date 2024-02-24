@@ -33,6 +33,7 @@ private BookingRepository bookingRepository;
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
+                        bookingEntity.getBookingRating(),
                         bookingEntity.getBookingStatus(),
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
@@ -74,9 +75,11 @@ private BookingRepository bookingRepository;
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
+                bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
+
     }
     public BookingDto deleteBooking(int bookingID) {
         // Tìm đặt phòng theo ID

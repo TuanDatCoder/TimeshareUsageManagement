@@ -26,6 +26,9 @@ public class BookingEntity {
     @Column(name = "booking_price")
     private float bookingPrice;
 
+    @Column(name = "booking_rating")
+    private float bookingRating;
+
     @Column(name = "booking_status")
     private String bookingStatus;
 
@@ -33,7 +36,7 @@ public class BookingEntity {
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
     private AccountEntity accID;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
 }

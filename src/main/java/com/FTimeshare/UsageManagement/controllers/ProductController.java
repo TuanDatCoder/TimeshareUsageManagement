@@ -18,6 +18,26 @@ public class ProductController {
 
     // Đạt
 
+    @GetMapping("/statuses")
+    public ResponseEntity<List<String>> getAllProductStatuses() {
+        List<String> productStatuses = productService.getAllProductStatuses();
+        return ResponseEntity.ok(productStatuses);
+    }
+    // search
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDto>> searchProductsByNameAndStatus(
+            @RequestParam("productName") String productName,
+            @RequestParam("productStatus") String productStatus) {
+        List<ProductEntity> products = productService.findByProductNameContainingIgnoreCaseAndProductStatus(productName, productStatus);
+        List<ProductDto> productDtos = products.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(productDtos);
+    }
+
+
+
     // Change Status
 
     @PutMapping("staff/close/{productID}")
@@ -135,6 +155,8 @@ public class ProductController {
         productDto.setAvailableEndDate(productEntity.getAvailableEndDate());
         productDto.setAvailableStartDate(productEntity.getAvailableStartDate());
         productDto.setProductStatus(productEntity.getProductStatus());
+        productDto.setProductPerson(productEntity.getProductPerson());
+        productDto.setProductRating(productEntity.getProductRating());
         productDto.setProductViewer(productEntity.getProductViewer());
         productDto.setProjectID(productEntity.getProjectID().getProjectID());
         productDto.setAccID(productEntity.getAccID().getAccID());
