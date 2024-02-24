@@ -14,8 +14,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     @Query("SELECT u FROM AccountEntity u WHERE u.roleID.roleID = :roleId")
     List<AccountEntity> findAllByRoleID(@Param("roleId") int roleId);
 
-    Optional<AccountEntity> findByAccEmail(String accEmail);
-    Optional<AccountEntity> findByAccName(String username);
+    AccountEntity findByAccEmail(String accEmail);
+    AccountEntity findByAccName(String username);
     Optional<AccountEntity> findByAccNameOrAccEmail(String accName, String accEmail);
     Boolean existsByAccName(String accName);
     Boolean existsByAccEmail(String accEmail);

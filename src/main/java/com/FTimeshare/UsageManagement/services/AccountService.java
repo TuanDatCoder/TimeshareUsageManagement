@@ -2,7 +2,9 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
+import com.FTimeshare.UsageManagement.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,11 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public List<AccountEntity> getAllUsers() {
         return accountRepository.findAll();
     }
@@ -21,22 +28,39 @@ public class AccountService {
         return accountRepository.findAllByRoleID(roleId);
     }
 
+    public AccountEntity findByAccountEmail(String acc_email){
+        return accountRepository.findByAccEmail(acc_email);
+    }
+
+//    public AccountEntity saveUser(AccountEntity A) {
+//        RoleEntity userRole = roleEntityRepository.findByName("ROLE_CUSTOMER");
+//        userEntity.setRoleEntity(userRole);
+//        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+//        return userEntityRepository.save(userEntity);
+//    }
+
+    public AccountEntity findByEmailAndPassword(String email, String password){
+        AccountEntity account = findByAccountEmail(email);
+        if (account!=null){
+            if(passwordEncoder.matches(password, account.getAccPassword()))
+                return account;
+        }
+        return null;
+    }
 
     //delete
     public void deleteUserById(int userId) {
         accountRepository.deleteById(userId);
     }
 
+    //save user
+
 
     // update
     public AccountEntity updateUserStatus(int userId, String newUserStatus) {
         AccountEntity userEntity = accountRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
-        // Cập nhật trạng thái mới cho người dùng
         userEntity.setAccStatus(newUserStatus);
-
-        // Lưu thay đổi vào cơ sở dữ liệu
         return accountRepository.save(userEntity);
     }
 
