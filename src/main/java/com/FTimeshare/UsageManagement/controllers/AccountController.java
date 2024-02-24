@@ -4,6 +4,7 @@ import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,13 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+
+    @GetMapping("/statuses")
+    public ResponseEntity<List<String>> getAllStatus() {
+        List<String> statuses = accountService.getAllStatus();
+        return new ResponseEntity<>(statuses, HttpStatus.OK);
+    }
 
     //----------------------- Count Total Account --------------------
 

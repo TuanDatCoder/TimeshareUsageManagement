@@ -44,26 +44,18 @@ public class ReportController {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
     }
 
-    // API endpoint để cập nhật một báo cáo đã tồn tại
-    @PutMapping("update/{reportID}")
-    public ReportEntity updateReport(@PathVariable int reportID, @RequestBody ReportEntity updatedReport) {
-        return reportRepository.findById(reportID)
-                .map(report -> {
-                    report.setReportDetail(updatedReport.getReportDetail());
-                    report.setReportStatus(updatedReport.getReportStatus());
-                    // Cập nhật các trường khác nếu cần
-                    return reportRepository.save(report);
-                })
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
+    @GetMapping("/statuses")
+    public ResponseEntity<List<String>> getAllStatus() {
+        List<String> statuses = reportService.getAllStatus();
+        return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
-
     @PostMapping("/customer/submitreport")
     public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
         ReportDto submittedReport = reportService.submitReport(reportDto);
         return new ResponseEntity<>(submittedReport, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/reports/update/{reportID}")
+    @PutMapping("update/{reportID}")
     public ResponseEntity<?> updateReport(@PathVariable int reportID, @RequestBody ReportDto updatedReport) {
         ReportDto editedFeedback = reportService.editFeedback(reportID, updatedReport);
         return ResponseEntity.ok(editedFeedback);

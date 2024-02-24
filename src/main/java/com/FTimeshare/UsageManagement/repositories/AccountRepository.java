@@ -17,5 +17,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     int countByRoleIDRoleName(String roleName);
     List<AccountEntity> findByRoleIDRoleName(String roleName);
     //List<AccountEntity> findByAccNameContainingIgnoreCaseAndRoleName(String accName, String roleName);
+    @Query("SELECT DISTINCT a.accStatus FROM AccountEntity a")
+    List<String> findAllStatus();
+
 }
 

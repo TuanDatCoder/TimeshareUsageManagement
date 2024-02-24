@@ -17,6 +17,12 @@ public class ReportService {
         return reportRepository.findAll();
     }
 
+    public List<String> getAllStatus() {
+        return reportRepository.findAllStatus();
+    }
+
+
+
     public ReportDto submitReport(ReportDto reportDto) {
         ReportEntity reportEntity = convertToEntity(reportDto);
         ReportEntity savedReport = reportRepository.save(reportEntity);

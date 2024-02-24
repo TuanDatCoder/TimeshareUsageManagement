@@ -50,4 +50,9 @@ public class AccountService {
 //        return accountRepository.findByAccNameContainingIgnoreCaseAndRoleName(accName, roleName);
 //    }
 
+    public List<String> getAllStatus() {
+        return accountRepository.findAllStatus();
+    }
+
+
 }
