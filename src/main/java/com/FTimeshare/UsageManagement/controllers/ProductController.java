@@ -122,6 +122,12 @@ public class ProductController {
         List<ProductEntity> productEntities = productService.getAllProducts();
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
+
+    @GetMapping("/viewById/{productID}")
+    public ResponseEntity<List<ProductDto>> viewProductById(@PathVariable int productID) {
+        List<ProductDto> product = productService.getProductByBookingId(productID);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
     @GetMapping("/{user_id}")
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
         List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);
