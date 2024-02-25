@@ -4,6 +4,7 @@ import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.entities.ProductTypeEntity;
 import com.FTimeshare.UsageManagement.entities.ProjectEntity;
+import com.FTimeshare.UsageManagement.services.BookingService;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-
+    @Autowired
+    private BookingService bookingService;
     // Đạt
 
     @GetMapping("/statuses")
@@ -195,6 +197,16 @@ public class ProductController {
         productService.deleteProduct(productID, user_id);
         return productService.getAllProducts();
 
+    }
+
+    @GetMapping("/sum/{user_id}")
+    public float getSumOfAllProductByUserID( @PathVariable("user_id") int user_id){
+        List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);
+        float sum = 0;
+        for(int i = 0; i<productEntities.size(); i++){
+            sum+= (float) bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());
+        }
+        return sum;
     }
     private List<ProductDto> convertToDtoList(List<ProductEntity> productEntities) {
         return productEntities.stream()
