@@ -129,6 +129,11 @@ public class ProductController {
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
 
+    @GetMapping("/viewById/{productID}")
+    public ResponseEntity<List<ProductDto>> viewProductById(@PathVariable int productID) {
+        List<ProductDto> product = productService.getProductByBookingId(productID);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
     //Goi cac danh sach san pham tang dan theo view
     @GetMapping("/view/by_viewer/ascending")
     public ResponseEntity<List<ProductDto>> getProductsByViewerAscending() {

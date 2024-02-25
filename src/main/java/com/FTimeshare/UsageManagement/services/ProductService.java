@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -103,7 +104,12 @@ public class ProductService {
     public List<String> getAllProductStatuses() {
         return productRepository.findAllProductStatuses();
     }
-
+    public List<ProductDto> getProductByBookingId(int productID) {
+        Optional<ProductEntity> productEntities = productRepository.findById(productID);
+        return productEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
     public ProductDto editProduct(int productID, int userID, ProductDto productDto) {
 
@@ -118,7 +124,27 @@ public class ProductService {
         return null;
 
     }
+    private ProductDto convertToDto(ProductEntity productEntity) {
+        // Your existing DTO conversion logic
+        return new ProductDto(
+                productEntity.getProductID(),
+                productEntity.getProductName(),
+                productEntity.getProductDescription(),
+                productEntity.getProductConvenience(),
+                productEntity.getProductArea(),
+                productEntity.getProductPrice(),
+                productEntity.getAvailableStartDate(),
+                productEntity.getAvailableEndDate(),
+                productEntity.getProductStatus(),
+                productEntity.getProductPerson(),
+                productEntity.getProductRating(),
+                productEntity.getProductViewer(),
+                productEntity.getProductStatus(),
+                productEntity.getProjectID().getProjectID(),
+                productEntity.getProductTypeID().getProductTypeID(),
+                productEntity.getAccID().getAccID());
 
+    }
     public ProductEntity addNewProduct(ProductEntity productEntity) {
         return productRepository.save(productEntity);
     }
