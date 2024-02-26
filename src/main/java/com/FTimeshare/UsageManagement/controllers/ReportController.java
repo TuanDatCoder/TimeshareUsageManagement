@@ -1,6 +1,5 @@
 package com.FTimeshare.UsageManagement.controllers;
 
-import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.ReportEntity;
 import com.FTimeshare.UsageManagement.repositories.ReportRepository;
@@ -26,6 +25,14 @@ public class ReportController {
         this.reportService = reportService;
         this.reportRepository = reportRepository;
     }
+
+
+    @GetMapping("/viewByProductId/{productID}")
+    public ResponseEntity<List<ReportDto>> viewPictureByProductID(@PathVariable int productID) {
+        List<ReportDto> reports = reportService.viewReportByProductID(productID);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
 
     @GetMapping("/viewAll")
     public ResponseEntity<List<ReportDto>> getAllReport() {

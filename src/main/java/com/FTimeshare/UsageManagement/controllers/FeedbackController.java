@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin("http://localhost:8080")
 @RestController
 @RequestMapping("/api/feedback")
 public class FeedbackController {

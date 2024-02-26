@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.dtos.PictureDto;
 import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.*;
 import com.FTimeshare.UsageManagement.repositories.ReportRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -21,6 +23,12 @@ public class ReportService {
         return reportRepository.findAllStatus();
     }
 
+    public List<ReportDto> viewReportByProductID(int productID) {
+        List<ReportEntity> pictureEntities = reportRepository.findByProductID_ProductID(productID);
+        return pictureEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
 
     public ReportDto submitReport(ReportDto reportDto) {
@@ -80,20 +88,4 @@ public class ReportService {
     }
     }
 
-//    public FeedbackDto editFeedback(int feedbackID, FeedbackDto updatedFeedback) {
-//        // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
-//        FeedbackEntity existingFeedback = feedbackRepository.findById(feedbackID)
-//                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + feedbackID));
-//
-//        // Cập nhật thông tin của phản hồi
-//        existingFeedback.setFeedbackCreateDate(updatedFeedback.getFeedbackCreateDate());
-//        existingFeedback.setFeedbackDetail(updatedFeedback.getFeedbackDetail());
-//        existingFeedback.setFeedbackStatus(updatedFeedback.getFeedbackStatus());
-//
-//        // Lưu cập nhật vào cơ sở dữ liệu
-//        FeedbackEntity savedFeedback = feedbackRepository.save(existingFeedback);
-//
-//        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
-//        return convertToDto(savedFeedback);
-//    }
-//}
+
