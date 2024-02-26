@@ -33,7 +33,7 @@ public class AccountService {
         return accountRepository.findByAccEmail(acc_email);
     }
 
-    public AccountEntity saveUser(AccountEntity account) {
+    public AccountEntity saveAccount(AccountEntity account) {
         RoleEntity userRole = roleRepository.findByRoleName("ROLE_CUSTOMER");
         account.setRoleID(userRole);
         account.setAccPassword(passwordEncoder.encode(account.getAccPassword()));

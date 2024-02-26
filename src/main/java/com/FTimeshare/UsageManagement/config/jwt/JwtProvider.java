@@ -3,8 +3,6 @@ package com.FTimeshare.UsageManagement.config.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.Value;
-
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +16,10 @@ public class JwtProvider {
 
     private final String jwtSecret = "FTimeShare";
 
-    public String generateToken(String login) {
+    public String generateToken(String email) {
         Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
-                .setSubject(login)
+                .setSubject(email)
                 .setExpiration(date)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

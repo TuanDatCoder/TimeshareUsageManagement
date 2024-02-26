@@ -24,7 +24,7 @@ public class AuthController {
     @PostMapping("/register")
     public String registerAccount(@RequestBody @Valid AccountDto accountDto) {
         AccountEntity account = new AccountEntity();
-        accountService.saveUser(accountController.convertToEntity(accountDto));
+        accountService.saveAccount(accountController.convertToEntity(accountDto));
         return "OK";
     }
 
