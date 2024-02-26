@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,39 +16,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfig  {
 
     @Autowired
     private JwtFilter jwtFilter;
 
 
+
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .httpBasic().disable()
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/api/users/admin/**").hasRole("ADMIN")
-//                .antMatchers("/api/users/customer/**").hasRole("CUSTOMER")
-//                .antMatchers("/api/products/**").permitAll()
-//                .antMatchers("/register", "/auth").permitAll()
-//                .and()
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/users/customer/**").hasRole("CUSTOMER")
+                                .requestMatchers("/api/users/admin").hasRole("ADMIN")
+                                .requestMatchers("/api/users/customer").hasRole("CUSTOMER")
                                 .requestMatchers("/api/products/**").permitAll()
-                                .requestMatchers("/register", "/auth").permitAll()
+                                .requestMatchers("/register").permitAll()
+                                .requestMatchers(("/auth")).permitAll()
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
-                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
+                .csrf(AbstractHttpConfigurer::disable);
 
 
     }
