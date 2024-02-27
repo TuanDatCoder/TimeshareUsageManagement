@@ -150,5 +150,8 @@ public class ProductService {
     public ProductEntity addNewProduct(ProductEntity productEntity) {
         return productRepository.save(productEntity);
     }
-
+    public ProductEntity getProductById(int productID) {
+        Optional<ProductEntity> productOptional = productRepository.findById(productID);
+        return productOptional.orElse(null);
+    }
 }
