@@ -54,10 +54,14 @@ public class BookingController {
         }
     }
 
-    @PutMapping("staff/pending/{bookingID}")
-    public ResponseEntity<String> pendingProduct(@PathVariable int bookingID) {
-        bookingService.closeBooking(bookingID,"Pending");
-        return ResponseEntity.ok("Done");
+    @GetMapping("/view-booking-price/{productID}")
+    public ResponseEntity<List<Float>> viewBookingPricesByProductId(@PathVariable int productID) {
+        List<Float> bookingPrices = bookingService.getBookingPricesByProductId(productID);
+        return new ResponseEntity<>(bookingPrices, HttpStatus.OK);
     }
-
+    @GetMapping("/total-booking-price/{productID}")
+    public ResponseEntity<Float> getTotalBookingPriceByProductId(@PathVariable int productID) {
+        Float totalBookingPrice = bookingService.getTotalBookingPriceByProductId(productID);
+        return new ResponseEntity<>(totalBookingPrice, HttpStatus.OK);
+    }
 }

@@ -147,4 +147,18 @@ private BookingRepository bookingRepository;
                 .collect(Collectors.toList());
     }
 
+    public List<Float> getBookingPricesByProductId(int productID) {
+        List<BookingEntity> bookings = bookingRepository.findByProductID_ProductID(productID);
+
+        return bookings.stream()
+                .map(BookingEntity::getBookingPrice)
+                .collect(Collectors.toList());
+    }
+
+    public Float getTotalBookingPriceByProductId(int productId) {
+        List<Float> bookingPrices = bookingRepository.findBookingPricesByProductID(productId);
+        return (float) bookingPrices.stream().mapToDouble(Float::doubleValue).sum();
+    }
 }
+
+

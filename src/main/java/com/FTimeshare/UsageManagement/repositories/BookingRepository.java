@@ -16,4 +16,11 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
     @Query("SELECT b FROM BookingEntity b where b.productID.productID= :productID")
     List<BookingEntity> findByProductID(@Param("productID") int productID);
+
+    List<BookingEntity> findByProductID_ProductID(int productID);
+
+
+
+    @Query("SELECT b.bookingPrice FROM BookingEntity b WHERE b.productID.productID = :productID")
+    List<Float> findBookingPricesByProductID(int productID);
 }
