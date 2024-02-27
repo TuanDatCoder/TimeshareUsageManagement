@@ -42,4 +42,8 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
+
+    @OneToOne
+    @JoinColumn(name = "trans_id", referencedColumnName = "id")
+    private TransactionEntity transID;
 }
