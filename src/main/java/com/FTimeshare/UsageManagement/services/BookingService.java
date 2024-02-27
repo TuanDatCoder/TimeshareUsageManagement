@@ -37,7 +37,9 @@ private BookingRepository bookingRepository;
                         bookingEntity.getBookingRating(),
                         bookingEntity.getBookingStatus(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID()))
+                        bookingEntity.getProductID().getProductID(),
+                        bookingEntity.getTransID().getId()))
+
                 .collect(Collectors.toList());
     }
 
@@ -83,7 +85,9 @@ private BookingRepository bookingRepository;
                 bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getTransID().getId());
+
 
     }
     public BookingDto deleteBooking(int bookingID) {

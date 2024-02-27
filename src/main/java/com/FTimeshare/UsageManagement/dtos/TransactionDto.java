@@ -17,4 +17,5 @@ public class TransactionDto {
     private String imageBanking;
     private int accId;
 
+
 }
