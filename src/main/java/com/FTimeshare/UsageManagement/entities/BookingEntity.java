@@ -26,6 +26,9 @@ public class BookingEntity {
     @Column(name = "booking_price")
     private float bookingPrice;
 
+    @Column(name = "payment_methods")
+    private String paymentMethods;
+
     @Column(name = "booking_rating")
     private float bookingRating;
 
