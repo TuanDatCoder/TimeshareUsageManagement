@@ -20,14 +20,17 @@ public class ProductEntity {
     @Column(name = "product_name")
     private String productName;
 
+    @Column(name = "product_area")
+    private float productArea;
+
+    @Column(name = "product_address")
+    private String productAddress;
+
     @Column(name = "product_description")
     private String productDescription;
 
     @Column(name = "product_convenience")
     private String productConvenience;
-
-    @Column(name = "product_area")
-    private float productArea;
 
     @Column(name = "product_price")
     private float productPrice;
@@ -46,6 +49,9 @@ public class ProductEntity {
 
     @Column(name = "product_rating")
     private float productRating;
+
+    @Column(name = "product_sale")
+    private int productSale;
 
     @Column(name = "product_viewer")
     private int productViewer;

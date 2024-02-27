@@ -33,10 +33,13 @@ private BookingRepository bookingRepository;
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
+                        bookingEntity.getPaymentMethods(),
                         bookingEntity.getBookingRating(),
                         bookingEntity.getBookingStatus(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID()))
+                        bookingEntity.getProductID().getProductID(),
+                        bookingEntity.getTransID().getId()))
+
                 .collect(Collectors.toList());
     }
 
@@ -47,6 +50,7 @@ private BookingRepository bookingRepository;
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
         bookingEntity.setBookingPrice(booking.getBookingPrice());
+        bookingEntity.setPaymentMethods(booking.getPaymentMethods());
         bookingEntity.setBookingRating(booking.getBookingRating());
         bookingEntity.setBookingStatus(booking.getBookingStatus());
 
@@ -77,10 +81,13 @@ private BookingRepository bookingRepository;
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
+                bookingEntity.getPaymentMethods(),
                 bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getTransID().getId());
+
 
     }
     public BookingDto deleteBooking(int bookingID) {
