@@ -3,9 +3,11 @@ package com.FTimeshare.UsageManagement.services;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
+import com.FTimeshare.UsageManagement.entities.PaymentEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
+import com.FTimeshare.UsageManagement.repositories.PaymentRepository;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ private BookingRepository bookingRepository;
     private  AccountRepository accountRepository;
 @Autowired
     private  ProductRepository productRepository;
+@Autowired
+private PaymentRepository paymentRepository;
 
     public float getSumPriceByProductId(int productID){
         return bookingRepository.sumPriceByProductID(productID);
@@ -72,10 +76,12 @@ private BookingRepository bookingRepository;
         // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
+        PaymentEntity paymentEntity = paymentRepository.findById(booking.getPaymentID()).orElse(null);
 
-        if (accountEntity != null && productEntity != null) {
+        if (accountEntity != null && productEntity != null && paymentEntity != null ) {
             bookingEntity.setAccID(accountEntity);
             bookingEntity.setProductID(productEntity);
+            bookingEntity.setPaymentID(paymentEntity);
             // Set other properties as needed
 
             // Save the bookingEntity
@@ -102,9 +108,8 @@ private BookingRepository bookingRepository;
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID(),
                 bookingEntity.getPaymentID().getPaymentID());
-
-
     }
+
     public BookingDto deleteBooking(int bookingID) {
         // Tìm đặt phòng theo ID
         Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(bookingID);
