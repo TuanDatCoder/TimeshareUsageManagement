@@ -22,6 +22,4 @@ public class AccountDto {
     private String accStatus;
     private Date accBirthday;
     private int roleID;
-
-
 }
