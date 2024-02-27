@@ -22,5 +22,5 @@ public class BookingDto {
     private String bookingStatus;
     private int accID;
     private int productID;
-    private int transID;
+    private int paymentID;
 }

@@ -34,8 +34,12 @@ public class AccountEntity {
     @Column(name="acc_birthday")
     private Date accBirthday;
 
-    @Column(name="acc_img")
-    private String accImg;
+    @Column(name="img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name="img_data")
+    private byte[] imgData;
 
     @Column(name="acc_status")
     private String accStatus;

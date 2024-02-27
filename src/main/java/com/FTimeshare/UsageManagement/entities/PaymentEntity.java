@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Transaction")
-public class TransactionEntity {
+@Table(name="Payment")
+public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private int id;
+    @Column(name="payment_id")
+    private int paymentID;
 
     @Column(name="account_name")
     private String accountName;
@@ -26,8 +26,9 @@ public class TransactionEntity {
     @Column(name="account_number")
     private String accountNumber;
 
-    @Column(name="image_banking")
-    private String imageBanking;
+    @Lob
+    @Column(name="image_banking",length = 1000)
+    private byte[] imageBanking;
 
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")

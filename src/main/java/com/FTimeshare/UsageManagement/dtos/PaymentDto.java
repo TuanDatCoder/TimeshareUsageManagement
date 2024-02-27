@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransactionDto {
-    private int id;
+public class PaymentDto {
+    private int paymentID;
     private String accountName;
     private String banking;
     private String accountNumber;
-    private String imageBanking;
+    private byte[] imageBanking;
     private int accId;
 
 

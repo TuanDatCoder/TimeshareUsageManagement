@@ -20,8 +20,9 @@ public class PictureEntity {
     @Column(name="img_name")
     private String imgName;
 
-    @Column(name="img_url")
-    private String imgUrl;
+    @Lob
+    @Column(name="img_data")
+    private byte[] imgData;
 
     @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")

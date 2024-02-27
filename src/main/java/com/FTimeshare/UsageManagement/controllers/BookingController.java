@@ -53,4 +53,11 @@ public class BookingController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("staff/pending/{bookingID}")
+    public ResponseEntity<String> pendingProduct(@PathVariable int bookingID) {
+        bookingService.closeBooking(bookingID,"Pending");
+        return ResponseEntity.ok("Done");
+    }
+
 }

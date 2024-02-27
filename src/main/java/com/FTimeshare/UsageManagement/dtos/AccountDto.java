@@ -17,7 +17,8 @@ public class AccountDto {
     private String accPhone;
     private String accEmail;
     private String accPassword;
-    private String accImg;
+    private String imgName;
+    private byte[] imgData;
     private String accStatus;
     private Date accBirthday;
     private int roleID;
