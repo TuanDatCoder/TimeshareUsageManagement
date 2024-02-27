@@ -25,8 +25,12 @@ public class NewsEntity {
     @Column(name = "news_content")
     private String newsContent;
 
-    @Column(name = "news_picture")
-    private String newsPicture;
+    @Column(name = "img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name = "img_data")
+    private byte[] imgData;
 
     @Column(name = "news_viewer")
     private int newsViewer;

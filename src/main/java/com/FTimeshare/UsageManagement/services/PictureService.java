@@ -29,7 +29,7 @@ public class PictureService {
         return new PictureDto(
                 pictureEntity.getImgID(),
                 pictureEntity.getImgName(),
-                pictureEntity.getImgUrl(),
+                pictureEntity.getImgData(),
                 pictureEntity.getProductID().getProductID());
     }
 
@@ -39,7 +39,7 @@ public class PictureService {
                 .map(pictureEntity -> new PictureDto(
                         pictureEntity.getImgID(),
                         pictureEntity.getImgName(),
-                        pictureEntity.getImgUrl(),
+                        pictureEntity.getImgData(),
                         pictureEntity.getProductID().getProductID()))
                 .collect(Collectors.toList());
     }

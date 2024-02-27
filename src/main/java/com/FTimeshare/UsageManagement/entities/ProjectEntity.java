@@ -31,8 +31,12 @@ public class ProjectEntity {
     @Column(name = "project_status")
     private String projectStatus;
 
-    @Column(name = "project_picture")
-    private String projectPicture;
+    @Column(name = "img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name = "img_data")
+    private byte[] imgData;
 
     @ManyToOne
     @JoinColumn(name = "contractor_id", referencedColumnName = "contractor_id")

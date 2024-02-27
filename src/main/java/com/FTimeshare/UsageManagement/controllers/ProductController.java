@@ -223,9 +223,10 @@ public class ProductController {
         ProductDto productDto = new ProductDto();
         productDto.setProductID(productEntity.getProductID());
         productDto.setProductName(productEntity.getProductName());
+        productDto.setProductArea(productEntity.getProductArea());
+        productDto.setProductAddress(productEntity.getProductAddress());
         productDto.setProductDescription(productEntity.getProductDescription());
         productDto.setProductConvenience(productEntity.getProductConvenience());
-        productDto.setProductArea(productEntity.getProductArea());
         productDto.setProductPrice(productEntity.getProductPrice());
         productDto.setAvailableEndDate(productEntity.getAvailableEndDate());
         productDto.setAvailableStartDate(productEntity.getAvailableStartDate());
@@ -233,6 +234,7 @@ public class ProductController {
 //        productDto.setProductPicture(productEntity.getProductPicture());
         productDto.setProductPerson(productEntity.getProductPerson());
         productDto.setProductRating(productEntity.getProductRating());
+        productDto.setProductSale(productEntity.getProductSale());
         productDto.setProductViewer(productEntity.getProductViewer());
         productDto.setProjectID(productEntity.getProjectID().getProjectID());
         productDto.setAccID(productEntity.getAccID().getAccID());
@@ -244,15 +246,17 @@ public class ProductController {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setProductID(productDto.getProductID());
         productEntity.setProductName(productDto.getProductName());
+        productEntity.setProductArea(productDto.getProductArea());
+        productEntity.setProductAddress(productDto.getProductAddress());
         productEntity.setProductDescription(productDto.getProductDescription());
         productEntity.setProductConvenience(productDto.getProductConvenience());
-        productEntity.setProductArea(productDto.getProductArea());
         productEntity.setProductPrice(productDto.getProductPrice());
         productEntity.setAvailableEndDate(productDto.getAvailableEndDate());
         productEntity.setAvailableStartDate(productDto.getAvailableStartDate());
 //        productEntity.setProductPicture(productDto.getProductPicture());
         productEntity.setProductPerson(productDto.getProductPerson());
         productEntity.setProductRating(productDto.getProductRating());
+        productEntity.setProductSale(productDto.getProductSale());
         productEntity.setProductStatus(productDto.getProductStatus());
         productEntity.setProductViewer(productDto.getProductViewer());
         ProjectEntity pj = new ProjectEntity();

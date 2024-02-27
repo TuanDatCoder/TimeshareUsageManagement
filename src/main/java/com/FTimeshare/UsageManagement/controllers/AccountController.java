@@ -63,7 +63,8 @@ public class AccountController {
         accountDto.setAccEmail(accountEntity.getAccEmail());
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
-
+        accountDto.setImgName(accountEntity.getImgName());
+        accountDto.setImgData(accountEntity.getImgData());
         int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
         if (accountEntity.getRoleID() != null) {
             // Lấy ID của vai trò từ đối tượng RoleEntity và gán cho roleID

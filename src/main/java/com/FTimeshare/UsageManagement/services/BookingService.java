@@ -25,6 +25,19 @@ private BookingRepository bookingRepository;
 
 
 
+    public void closeBooking(int bookingID, String Status) {
+        Optional<BookingEntity> optionalBooking = bookingRepository.findById(bookingID);
+        if (optionalBooking.isPresent()) {
+            BookingEntity booking = optionalBooking.get();
+            booking.setBookingStatus(Status);
+            bookingRepository.save(booking);
+        } else {
+            throw new RuntimeException("Sản phẩm không tồn tại với ID: " + bookingID);
+        }
+    }
+
+
+
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
         return bookings.stream()
@@ -33,10 +46,13 @@ private BookingRepository bookingRepository;
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
+                        bookingEntity.getPaymentMethods(),
                         bookingEntity.getBookingRating(),
                         bookingEntity.getBookingStatus(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID()))
+                        bookingEntity.getProductID().getProductID(),
+                        bookingEntity.getPaymentID().getPaymentID()))
+
                 .collect(Collectors.toList());
     }
 
@@ -47,6 +63,7 @@ private BookingRepository bookingRepository;
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
         bookingEntity.setBookingPrice(booking.getBookingPrice());
+        bookingEntity.setPaymentMethods(booking.getPaymentMethods());
         bookingEntity.setBookingRating(booking.getBookingRating());
         bookingEntity.setBookingStatus(booking.getBookingStatus());
 
@@ -77,10 +94,13 @@ private BookingRepository bookingRepository;
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
+                bookingEntity.getPaymentMethods(),
                 bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getPaymentID().getPaymentID());
+
 
     }
     public BookingDto deleteBooking(int bookingID) {

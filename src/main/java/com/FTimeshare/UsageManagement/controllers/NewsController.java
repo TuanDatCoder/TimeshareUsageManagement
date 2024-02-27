@@ -62,7 +62,8 @@ public class NewsController {
         newsDto.setNewsTitle(newsEntity.getNewsTitle());
         newsDto.setNewsPost(newsEntity.getNewsPost());
         newsDto.setNewsContent(newsEntity.getNewsContent());
-        newsDto.setNewsPicture(newsEntity.getNewsPicture());
+        newsDto.setImgName(newsEntity.getImgName());
+        newsDto.setImgData(newsEntity.getImgData());
         newsDto.setNewsViewer(newsEntity.getNewsViewer());
         newsDto.setNewsStatus(newsEntity.getNewsStatus());
 
@@ -80,7 +81,8 @@ public class NewsController {
         newsEntity.setNewsTitle(newsDto.getNewsTitle());
         newsEntity.setNewsPost(newsDto.getNewsPost());
         newsEntity.setNewsContent(newsDto.getNewsContent());
-        newsEntity.setNewsPicture(newsDto.getNewsPicture());
+        newsEntity.setImgName(newsDto.getImgName());
+        newsEntity.setImgData(newsDto.getImgData());
         newsEntity.setNewsViewer(newsDto.getNewsViewer());
         newsEntity.setNewsStatus(newsDto.getNewsStatus());
 

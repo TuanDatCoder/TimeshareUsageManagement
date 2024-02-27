@@ -23,7 +23,8 @@ public class ProjectService {
                         projectEntity.getProjectBuildDate(),
                         projectEntity.getProjectArea(),
                         projectEntity.getProjectStatus(),
-                        projectEntity.getProjectPicture(),
+                        projectEntity.getImgName(),
+                        projectEntity.getImgData(),
                         projectEntity.getContractorID().getContractorID(),
                         projectEntity.getProjectTypeID().getProjectTypeID()))
                 .collect(Collectors.toList());

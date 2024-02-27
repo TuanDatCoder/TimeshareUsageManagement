@@ -17,8 +17,10 @@ public class BookingDto {
     private LocalDateTime startDate;
     private  LocalDateTime endDate;
     private float bookingPrice;
+    private String paymentMethods;
     private float bookingRating;
     private String bookingStatus;
     private int accID;
     private int productID;
+    private int paymentID;
 }
