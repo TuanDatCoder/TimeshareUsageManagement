@@ -1,37 +1,61 @@
 package com.FTimeshare.UsageManagement.controllers;
 
-import com.FTimeshare.UsageManagement.config.jwt.JwtProvider;
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
-import com.FTimeshare.UsageManagement.dtos.AuthRequest;
-import com.FTimeshare.UsageManagement.dtos.AuthResponse;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.exceptions.UserAlreadyExistsException;
+import com.FTimeshare.UsageManagement.request.LoginRequest;
+import com.FTimeshare.UsageManagement.response.JwtResponse;
+import com.FTimeshare.UsageManagement.security.jwt.JwtUtils;
+import com.FTimeshare.UsageManagement.security.user.TimeshareUserDetails;
 import com.FTimeshare.UsageManagement.services.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
+import java.util.List;
 @RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private JwtProvider jwtProvider;
+    private final AccountService accountService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private AccountController accountController;
-    @PostMapping("/register")
-    public String registerAccount(@RequestBody @Valid AccountDto accountDto) {
-        AccountEntity account = new AccountEntity();
-        accountService.saveAccount(accountController.convertToEntity(accountDto));
-        return "OK";
+    @PostMapping("/register-user")
+    public ResponseEntity<?> registerUser(@RequestBody AccountEntity accountEntity){
+        try{
+            accountService.registerAccount(accountEntity);
+            return ResponseEntity.ok("Registration successful!");
+
+        }catch (UserAlreadyExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 
-    @PostMapping("/auth")
-    public AuthResponse auth(@RequestBody AuthRequest request) {
-        AccountEntity account = accountService.findByEmailAndPassword(request.getEmail(), request.getPassword());
-        String token = jwtProvider.generateToken(account.getAccEmail());
-        return new AuthResponse(token);
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request){
+        Authentication authentication =
+                authenticationManager
+                        .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtTokenForUser(authentication);
+        TimeshareUserDetails userDetails = (TimeshareUserDetails) authentication.getPrincipal();
+        String roles = userDetails.getAuthorities().toString();
+        return ResponseEntity.ok(new JwtResponse(
+                userDetails.getId(),
+                userDetails.getEmail(),
+                jwt,
+                roles));
     }
 }
