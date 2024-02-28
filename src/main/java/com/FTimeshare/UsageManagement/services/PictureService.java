@@ -48,7 +48,18 @@ public class PictureService {
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
 
-
+    public String updateImage(int pictureId, String imgName, byte[] imgData) {
+        Optional<PictureEntity> pictureOptional = pictureRepository.findById(pictureId);
+        if (pictureOptional.isPresent()) {
+            PictureEntity pictureEntity = pictureOptional.get();
+            pictureEntity.setImgName(imgName);
+            pictureEntity.setImgData(imgData);
+            pictureRepository.save(pictureEntity);
+            return "Image updated successfully.";
+        } else {
+            return "Image with id " + pictureId + " not found.";
+        }
+    }
 
     private PictureDto convertToDto(PictureEntity pictureEntity) {
         return new PictureDto(
