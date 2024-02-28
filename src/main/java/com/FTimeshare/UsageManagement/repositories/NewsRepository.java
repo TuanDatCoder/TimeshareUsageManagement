@@ -8,7 +8,4 @@ import java.util.Optional;
 
 public interface NewsRepository extends JpaRepository<NewsEntity, Integer> {
 
-
-    Optional<NewsEntity> findByImgName(String imgName);
-
 }

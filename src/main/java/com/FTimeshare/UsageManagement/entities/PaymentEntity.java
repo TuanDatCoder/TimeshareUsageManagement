@@ -27,7 +27,7 @@ public class PaymentEntity {
     private String accountNumber;
 
     @Lob
-    @Column(name="image_banking",length = 1000)
+    @Column(name="image_banking")
     private byte[] imageBanking;
 
     @ManyToOne

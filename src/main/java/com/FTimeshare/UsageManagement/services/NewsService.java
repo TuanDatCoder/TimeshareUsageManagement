@@ -72,6 +72,10 @@ public class NewsService {
         return "File uploaded successfully: " + file.getOriginalFilename();
     }
 
+    public byte[] downloadImage(String fileName){
+        Optional<NewsEntity> dbImageData = newsRepository.findByImgName(fileName);
+        return ImageService.decompressImage(dbImageData.get().getImgData());
+    }
 
 
     public byte[] downloadImage(String imgName) {

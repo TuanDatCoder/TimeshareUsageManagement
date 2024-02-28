@@ -51,13 +51,19 @@ public class NewsController {
         newsService.deleteNewsById(newsId);
         return ResponseEntity.ok("News with ID " + newsId + " has been deleted successfully.");
     }
+    @GetMapping("/{fileName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+        byte[] imageData=newsService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
 
+    }
     @PostMapping
     public ResponseEntity<?> uploadImage(@RequestParam("news") MultipartFile file,
                                          @RequestParam String newsTitle,
                                          @RequestParam String newsPost,
                                          @RequestParam String newsContent,
-                                         //@RequestParam String imgName,
                                          @RequestParam int newsViewer,
                                          @RequestParam String newsStatus,
                                          @RequestParam int accID) throws IOException {
