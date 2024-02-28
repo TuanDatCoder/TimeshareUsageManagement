@@ -68,6 +68,16 @@ public class NewsController {
                 .body(uploadImage);
     }
 
+    @GetMapping("/{imgName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String imgName){
+        byte[] imageData=newsService.downloadImage(imgName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+
+    }
+
+
     // Helper method to convert Entity to DTO
     private NewsDto convertToDto(NewsEntity newsEntity) {
         NewsDto newsDto = new NewsDto();

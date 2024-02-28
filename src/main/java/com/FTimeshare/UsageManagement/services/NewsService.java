@@ -2,7 +2,6 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
-import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ public class NewsService {
 
     @Autowired
     private NewsRepository newsRepository;
-
-
 
 
     // Get all news
@@ -42,8 +39,8 @@ public class NewsService {
         return newsRepository.findById(newsId).orElse(null);
     }
 
-    @Autowired
-    private NewsService newsService;
+
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -75,5 +72,14 @@ public class NewsService {
         return "File uploaded successfully: " + file.getOriginalFilename();
     }
 
+
+
+    public byte[] downloadImage(String imgName) {
+        Optional<NewsEntity> dbImageData = newsRepository.findByImgName(imgName);
+        return ImageService.decompressImage(dbImageData.get().getImgData());
+    }
+
+
+    
 
 }
