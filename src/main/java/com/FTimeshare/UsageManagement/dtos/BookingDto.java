@@ -23,4 +23,5 @@ public class BookingDto {
     private int accID;
     private int productID;
     private int paymentID;
+
 }

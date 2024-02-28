@@ -46,4 +46,6 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     private PaymentEntity paymentID;
+
+
 }

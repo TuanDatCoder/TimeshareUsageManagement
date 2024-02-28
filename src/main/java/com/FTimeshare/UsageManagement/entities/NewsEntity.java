@@ -7,13 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+@Builder
+@Entity
+@Table(name = "News")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Builder
-@Table(name = "News")
 public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,20 @@ public class NewsEntity {
     @Column(name = "news_content")
     private String newsContent;
 
+    @Column(name = "img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name = "img_data")
+    private byte[] imgData;
+
+    @Column(name = "news_viewer")
+    private int newsViewer;
+
+    @Column(name = "news_status")
+    private String newsStatus;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private UserEntity Userid;
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
 }
