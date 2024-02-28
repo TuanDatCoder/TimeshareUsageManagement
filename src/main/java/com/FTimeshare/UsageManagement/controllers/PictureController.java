@@ -2,6 +2,7 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.PictureDto;
+import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.services.PictureService;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +46,17 @@ public class PictureController {
                     .body("Product not found with ID: " + productID);
         }
 
-        // Gọi phương thức uploadImage của PictureService với productID được truyền từ frontend
         String uploadImage = service.uploadImage(file, productID);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
+    }
+    @PutMapping("updateImg/{pictureId}")
+    public ResponseEntity<?> updateImage(@PathVariable int pictureId,
+                                         @RequestParam String imgName,
+                                         @RequestParam byte[] imgData) {
+        String response = pictureService.updateImage(pictureId, imgName, imgData);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{fileName}")
