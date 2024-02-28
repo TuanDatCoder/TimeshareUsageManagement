@@ -44,4 +44,6 @@ public class NewsEntity {
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
     private AccountEntity accID;
+
+
 }
