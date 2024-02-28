@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +50,23 @@ public class AccountController {
     public ResponseEntity<String> deleteUser(@PathVariable int userId) {
         accountService.deleteUserById(userId);
         return ResponseEntity.ok("User with ID " + userId + " has been deleted successfully.");
+    }
+
+
+    @PostMapping
+    public ResponseEntity<?> uploadImage(@RequestParam("Avatar") MultipartFile file,
+                                         @RequestParam String accName,
+                                         @RequestParam String accPhone,
+                                         @RequestParam String accEmail,
+                                         @RequestParam String accPassword,
+                                         @RequestParam String accStatus,
+                                         @RequestParam Date accBirthday,
+                                         @RequestParam int roleID) throws IOException {
+
+        String uploadImage = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
     }
 
 

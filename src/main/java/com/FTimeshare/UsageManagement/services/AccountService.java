@@ -1,13 +1,8 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.RoleEntity;
-import com.FTimeshare.UsageManagement.exceptions.UserAlreadyExistsException;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
-import com.FTimeshare.UsageManagement.repositories.RoleRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +13,9 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    public List<AccountEntity> getAllUsers() {
+        return accountRepository.findAll();
+    }
 
     public List<AccountEntity> getUsersByRole(int roleId) {
         return accountRepository.findAllByRoleID(roleId);
@@ -58,6 +54,36 @@ public class AccountService {
         return accountRepository.findAllStatus();
     }
 
+
+    public String uploadImage(MultipartFile file,
+                              String accName,
+                              String accPhone,
+                              String accEmail,
+                              String accPassword,
+                              String accStatus,
+                              Date accBirthday,
+                              int roleID) throws IOException {
+
+        byte[] imgData = file.getBytes();
+
+        RoleEntity roleEntity = roleRepository.findById(roleID)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found with ID: " +roleID));
+
+
+        AccountEntity accountEntity = accountRepository.save(AccountEntity.builder()
+                .accName(accName)
+                .accPhone(accPhone)
+                .accEmail(accEmail)
+                .accPassword(accPassword)
+                .imgName(file.getOriginalFilename())
+                .imgData(imgData)
+                .accStatus(accStatus)
+                .accBirthday(accBirthday)
+                .roleID(roleEntity)
+                .build());
+
+        return "File uploaded successfully: " + file.getOriginalFilename();
+    }
 
 
     @Autowired
