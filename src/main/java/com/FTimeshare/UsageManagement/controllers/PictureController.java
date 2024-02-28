@@ -5,6 +5,7 @@ import com.FTimeshare.UsageManagement.dtos.PictureDto;
 import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.services.PictureService;
 import com.FTimeshare.UsageManagement.services.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pictures")
@@ -45,18 +47,9 @@ public class PictureController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Product not found with ID: " + productID);
         }
-
         String uploadImage = service.uploadImage(file, productID);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
-    }
-    @PutMapping("updateImg/{pictureId}")
-    public ResponseEntity<?> updateImage(@PathVariable int pictureId,
-                                         @RequestParam String imgName,
-                                         @RequestParam byte[] imgData) {
-        String response = pictureService.updateImage(pictureId, imgName, imgData);
-        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{fileName}")
@@ -67,5 +60,20 @@ public class PictureController {
                 .body(imageData);
 
     }
+
+    @PutMapping("/updateImg/{imgID}")
+    public ResponseEntity<?> updateImage(@PathVariable int imgID, @RequestParam("pictures") MultipartFile file) {
+        try {
+            ResponseEntity<?> response = pictureService.updateImage(file, imgID);
+            return response;
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating image: " + e.getMessage());
+        }
+    }
+
 
 }

@@ -6,9 +6,13 @@ import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.PictureRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,14 +36,24 @@ public class PictureService {
     private ProductService productService; // Đảm bảo đã inject ProductService vào đây
 
     public String uploadImage(MultipartFile file, int productID) throws IOException {
-        ProductEntity product = productService.getProductById(productID);
+        if (productService.getProductById(productID) == null) {
+            System.out.println("Product not found with ID: " + productID);
+            return "Product not found with ID: " + productID;
+        }
 
+        // Kiểm tra xem tên ảnh đã tồn tại trong cơ sở dữ liệu chưa
+        Optional<PictureEntity> existingPicture = pictureRepository.findByImgName(file.getOriginalFilename());
+        if (existingPicture.isPresent()) {
+            System.out.println("Image with name " + file.getOriginalFilename() + " already exists.");
+            return "Image with name " + file.getOriginalFilename() + " already exists.";
+        }
+
+        // Lưu ảnh vào cơ sở dữ liệu nếu không trùng tên
         PictureEntity imageData = pictureRepository.save(PictureEntity.builder()
                 .imgName(file.getOriginalFilename())
                 .imgData(ImageService.compressImage(file.getBytes()))
-                .productID(product)
+                .productID(productService.getProductById(productID))
                 .build());
-
         return "File uploaded successfully: " + file.getOriginalFilename();
     }
 
@@ -48,17 +62,27 @@ public class PictureService {
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
 
-    public String updateImage(int pictureId, String imgName, byte[] imgData) {
-        Optional<PictureEntity> pictureOptional = pictureRepository.findById(pictureId);
-        if (pictureOptional.isPresent()) {
-            PictureEntity pictureEntity = pictureOptional.get();
-            pictureEntity.setImgName(imgName);
-            pictureEntity.setImgData(imgData);
-            pictureRepository.save(pictureEntity);
-            return "Image updated successfully.";
-        } else {
-            return "Image with id " + pictureId + " not found.";
+    public ResponseEntity<?> updateImage(MultipartFile file, int imgID) throws IOException {
+        Optional<PictureEntity> existingPicture = pictureRepository.findById(imgID);
+        if (!existingPicture.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Picture not found with ID: " + imgID);
         }
+
+        // Kiểm tra xem tên ảnh đã tồn tại trong cơ sở dữ liệu chưa
+        Optional<PictureEntity> existingPictureWithName = pictureRepository.findByImgName(file.getOriginalFilename());
+        if (existingPictureWithName.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Image with name " + file.getOriginalFilename() + " already exists.");
+        }
+
+        PictureEntity picture = existingPicture.get();
+        picture.setImgName(file.getOriginalFilename());
+        picture.setImgData(ImageService.compressImage(file.getBytes()));
+        pictureRepository.save(picture);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Image updated successfully.");
     }
 
     private PictureDto convertToDto(PictureEntity pictureEntity) {
