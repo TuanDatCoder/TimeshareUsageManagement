@@ -6,6 +6,7 @@ import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,14 +43,7 @@ public class NewsController {
         }
     }
 
-    // Add news
-    @PostMapping("/add")
-    public ResponseEntity<NewsDto> addNews(@RequestBody NewsDto newsDto) {
-        NewsEntity newsEntity = convertToEntity(newsDto);
-        newsEntity = newsService.addNews(newsEntity);
-        NewsDto responseDto = convertToDto(newsEntity);
-        return ResponseEntity.ok(responseDto);
-    }
+
 
     // Delete news
     @DeleteMapping("/delete/{newsId}")
@@ -112,6 +106,7 @@ public class NewsController {
         // You can map other fields here if needed
         return newsEntity;
     }
+
 
 
 }
