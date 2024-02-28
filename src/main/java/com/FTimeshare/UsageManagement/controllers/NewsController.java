@@ -3,15 +3,16 @@ package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
-import com.FTimeshare.UsageManagement.services.ImageService;
 import com.FTimeshare.UsageManagement.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +45,27 @@ public class NewsController {
 
 
 
-
     // Delete news
     @DeleteMapping("/delete/{newsId}")
     public ResponseEntity<String> deleteNews(@PathVariable int newsId) {
         newsService.deleteNewsById(newsId);
         return ResponseEntity.ok("News with ID " + newsId + " has been deleted successfully.");
+    }
+
+    @PostMapping
+    public ResponseEntity<?> uploadImage(@RequestParam("news") MultipartFile file,
+                                         @RequestParam String newsTitle,
+                                         @RequestParam String newsPost,
+                                         @RequestParam String newsContent,
+                                         //@RequestParam String imgName,
+                                         @RequestParam int newsViewer,
+                                         @RequestParam String newsStatus,
+                                         @RequestParam int accID) throws IOException {
+        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost);
+        String uploadImage = newsService.uploadImage(file, newsTitle, parsedNewsPost, newsContent, newsViewer, newsStatus, accID);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
     }
 
     // Helper method to convert Entity to DTO
@@ -90,4 +106,7 @@ public class NewsController {
         // You can map other fields here if needed
         return newsEntity;
     }
+
+
+
 }
