@@ -61,7 +61,10 @@ private PaymentRepository paymentRepository;
     }
 
 
+
     public BookingDto createBooking(BookingDto booking) {
+
+
         BookingEntity bookingEntity = new BookingEntity();
         // Set properties of bookingEntity from bookingRequest
         bookingEntity.setStartDate(booking.getStartDate());
@@ -164,6 +167,8 @@ private PaymentRepository paymentRepository;
         List<Float> bookingPrices = bookingRepository.findBookingPricesByProductID(productId);
         return (float) bookingPrices.stream().mapToDouble(Float::doubleValue).sum();
     }
+
 }
+
 
 

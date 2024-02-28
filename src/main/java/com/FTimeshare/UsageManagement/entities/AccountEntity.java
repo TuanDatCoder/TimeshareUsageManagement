@@ -3,6 +3,7 @@ package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @Entity
 @Table(name="Account")
+@Builder
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
