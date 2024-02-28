@@ -3,12 +3,15 @@ package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
+import com.FTimeshare.UsageManagement.services.ImageService;
 import com.FTimeshare.UsageManagement.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,14 +42,8 @@ public class NewsController {
         }
     }
 
-    // Add news
-    @PostMapping("/add")
-    public ResponseEntity<NewsDto> addNews(@RequestBody NewsDto newsDto) {
-        NewsEntity newsEntity = convertToEntity(newsDto);
-        newsEntity = newsService.addNews(newsEntity);
-        NewsDto responseDto = convertToDto(newsEntity);
-        return ResponseEntity.ok(responseDto);
-    }
+
+
 
     // Delete news
     @DeleteMapping("/delete/{newsId}")

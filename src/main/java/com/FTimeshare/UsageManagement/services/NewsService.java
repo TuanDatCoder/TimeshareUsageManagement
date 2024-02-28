@@ -1,11 +1,17 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.dtos.NewsDto;
+import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
+import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.repositories.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsService {
@@ -31,5 +37,8 @@ public class NewsService {
     public NewsEntity getNewsById(int newsId) {
         return newsRepository.findById(newsId).orElse(null);
     }
+
+
+
 
 }

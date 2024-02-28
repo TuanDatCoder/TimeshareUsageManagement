@@ -1,15 +1,19 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "News")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Builder
+@Table(name = "News")
 public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -33,7 +33,7 @@ public class PictureService {
 
     // upload and downLoad
     @Autowired
-    private ProductService productService; // Đảm bảo đã inject ProductService vào đây
+    private ProductService productService;
 
     public String uploadImage(MultipartFile file, int productID) throws IOException {
         if (productService.getProductById(productID) == null) {
