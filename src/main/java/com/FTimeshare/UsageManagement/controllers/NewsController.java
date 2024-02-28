@@ -57,7 +57,6 @@ public class NewsController {
                                          @RequestParam String newsTitle,
                                          @RequestParam String newsPost,
                                          @RequestParam String newsContent,
-                                         //@RequestParam String imgName,
                                          @RequestParam int newsViewer,
                                          @RequestParam String newsStatus,
                                          @RequestParam int accID) throws IOException {
