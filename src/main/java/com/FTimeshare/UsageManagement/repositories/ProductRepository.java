@@ -22,7 +22,4 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query("SELECT DISTINCT p.productStatus FROM ProductEntity p")
     List<String> findAllProductStatuses();
 
-
-
-
 }
