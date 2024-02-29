@@ -141,7 +141,6 @@ public class ProductService {
                 productEntity.getProductRating(),
                 productEntity.getProductSale(),
                 productEntity.getProductViewer(),
-                productEntity.getProductStatus(),
                 productEntity.getProjectID().getProjectID(),
                 productEntity.getProductTypeID().getProductTypeID(),
                 productEntity.getAccID().getAccID());
