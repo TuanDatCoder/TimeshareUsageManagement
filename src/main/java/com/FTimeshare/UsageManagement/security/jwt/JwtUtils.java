@@ -18,7 +18,7 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     private String jwtSecret = "FTimeshare";
-    private int jwtExpirationMs = 3600000;
+    private int jwtExpirationMs = 360000000;
 
     public String generateJwtTokenForUser(Authentication authentication){
         TimeshareUserDetails userPrincipal = (TimeshareUserDetails) authentication.getPrincipal();
