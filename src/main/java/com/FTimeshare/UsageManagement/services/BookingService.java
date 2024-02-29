@@ -50,9 +50,11 @@ private PaymentRepository paymentRepository;
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
-                        bookingEntity.getPaymentMethods(),
+                        bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingRating(),
                         bookingEntity.getBookingStatus(),
+                        bookingEntity.getImgName(),
+                        bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID(),
                         bookingEntity.getPaymentID().getPaymentID()))
@@ -70,10 +72,11 @@ private PaymentRepository paymentRepository;
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
         bookingEntity.setBookingPrice(booking.getBookingPrice());
-        bookingEntity.setPaymentMethods(booking.getPaymentMethods());
+        bookingEntity.setBookingPerson(booking.getBookingPerson());
         bookingEntity.setBookingRating(booking.getBookingRating());
         bookingEntity.setBookingStatus(booking.getBookingStatus());
-
+        bookingEntity.setImgName(booking.getImgName());
+        bookingEntity.setImgData(booking.getImgData());
         // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
@@ -103,9 +106,11 @@ private PaymentRepository paymentRepository;
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
-                bookingEntity.getPaymentMethods(),
+                bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
+                bookingEntity.getImgName(),
+                bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID(),
                 bookingEntity.getPaymentID().getPaymentID());
