@@ -1,19 +1,18 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.entities.RoleEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -56,9 +55,7 @@ public class AccountService {
     public List<AccountEntity> getUsersByRoleName(String roleName) {
         return accountRepository.findByRoleIDRoleName(roleName);
     }
-//    public List<AccountEntity> findByAccNameContainingIgnoreCaseAndRoleName(String accName, String roleName) {
-//        return accountRepository.findByAccNameContainingIgnoreCaseAndRoleName(accName, roleName);
-//    }
+
 
     public List<String> getAllStatus() {
         return accountRepository.findAllStatus();
@@ -93,6 +90,11 @@ public class AccountService {
                 .build());
 
         return "File uploaded successfully: " + file.getOriginalFilename();
+    }
+
+    public byte[] downloadImage(String fileName){
+        Optional<AccountEntity> dbImageData = accountRepository.findByImgName(fileName);
+        return ImageService.decompressImage(dbImageData.get().getImgData());
     }
 
 }

@@ -5,6 +5,7 @@ import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,7 +69,14 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
+    @GetMapping("/viewImg/{fileName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+        byte[] imageData=accountService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
 
+    }
 
     private List<AccountDto> convertToDtoList(List<AccountEntity> userEntities) {
         return userEntities.stream()
