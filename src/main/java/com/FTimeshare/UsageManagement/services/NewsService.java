@@ -60,7 +60,6 @@ public class NewsService {
         AccountEntity accountEntity = accountRepository.findById(accID)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " + accID));
 
-
         NewsEntity newsEntity = newsRepository.save(NewsEntity.builder()
                 .newsTitle(newsTitle)
                 .newsPost(newsPost)
