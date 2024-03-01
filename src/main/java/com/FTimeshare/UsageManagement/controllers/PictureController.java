@@ -52,7 +52,7 @@ public class PictureController {
                 .body(uploadImage);
     }
 
-    @GetMapping("/{fileName}")
+    @GetMapping("imgView/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
         byte[] imageData=service.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
