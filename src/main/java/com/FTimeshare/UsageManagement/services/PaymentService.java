@@ -1,10 +1,7 @@
 package com.FTimeshare.UsageManagement.services;
 
-import com.FTimeshare.UsageManagement.dtos.AccountDto;
-import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.PaymentDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.PaymentEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.PaymentRepository;
@@ -25,10 +22,6 @@ public class PaymentService {
 
     @Autowired
     private AccountRepository accountRepository;
-
-
-
-
     public String createPayment(MultipartFile file,
                                 String accountName,
                                 String banking,
@@ -89,7 +82,27 @@ public class PaymentService {
                 new byte[0],
                 paymentEntity.getAccID().getAccID());
     }
-}
 
+    public PaymentDto editPayment(int paymentID, PaymentDto updatedPayment, MultipartFile file) throws IOException {
+        PaymentEntity existingPayment = paymentRepository.findById(paymentID)
+                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + paymentID));
+
+
+        existingPayment.setAccountName(updatedPayment.getAccountName());
+        existingPayment.setBanking(updatedPayment.getBanking());
+        existingPayment.setAccountNumber(updatedPayment.getAccountNumber());
+        existingPayment.setImgName(file.getOriginalFilename());
+        existingPayment.setImgData(ImageService.compressImage(file.getBytes()));
+
+        // Lưu cập nhật vào cơ sở dữ liệu
+        PaymentEntity savedPayment = paymentRepository.save(existingPayment);
+
+        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
+        return convertToDto(savedPayment);
+    }
+
+
+
+}
 
 
