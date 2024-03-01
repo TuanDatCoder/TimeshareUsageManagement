@@ -16,7 +16,7 @@ public class PaymentDto {
     private String accountNumber;
     private String imgName;
     private byte[] imgData;
-    private int accId;
+    private int accID;
 
 
 }

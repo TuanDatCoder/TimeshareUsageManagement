@@ -40,7 +40,7 @@ public class PaymentService {
                     .accountNumber(accountNumber)
                     .imgName(file.getOriginalFilename())
                     .imgData(ImageService.compressImage(file.getBytes()))
-                    .accId(accountEntity)
+                    .accID(accountEntity)
                     .build());
 
             return "File uploaded successfully: " + file.getOriginalFilename();
@@ -54,13 +54,6 @@ public class PaymentService {
     }
 
 
-
-//    public byte[] downloadImage(String fileName){
-//        Optional<AccountEntity> dbImageData = accountRepository.findByImgName(fileName);
-//        return ImageService.decompressImage(dbImageData.get().getImgData());
-//    }
-//
-//}
 
 
 
