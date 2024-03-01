@@ -1,11 +1,16 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
+import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
+import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.entities.RoleEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -103,6 +108,30 @@ public class AccountService {
         return accountOptional.orElse(null);
     }
 
+
+    //edit feedback
+    public AccountDto editAccount(int accountID, AccountDto updatedAccount, MultipartFile file) throws IOException {
+        AccountEntity existingAccount = accountRepository.findById(accountID)
+                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + accountID));
+
+
+        existingAccount.setAccName(updatedAccount.getAccName());
+        existingAccount.setAccPhone(updatedAccount.getAccPhone());
+        existingAccount.setAccEmail(updatedAccount.getAccEmail());
+        existingAccount.setAccPassword(updatedAccount.getAccPassword());
+        existingAccount.setImgName(file.getOriginalFilename());
+        existingAccount.setImgData(ImageService.compressImage(file.getBytes()));
+        existingAccount.setAccStatus(updatedAccount.getAccStatus());
+        existingAccount.setAccBirthday(updatedAccount.getAccBirthday());
+
+        // Lưu cập nhật vào cơ sở dữ liệu
+        AccountEntity savedAccount = accountRepository.save(existingAccount);
+
+        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
+        return convertToDto(savedAccount);
+    }
+
+
     public List<AccountDto> getAllAccounts() {
             List<AccountEntity> accounts = accountRepository.findAll();
             return accounts.stream()
@@ -118,7 +147,25 @@ public class AccountService {
                             accountEntity.getAccBirthday(),
                             accountEntity.getRoleID().getRoleID()))
                     .collect(Collectors.toList());
+    }
+
+    public AccountDto convertToDto(AccountEntity accountEntity) {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAccID(accountEntity.getAccID());
+        accountDto.setAccName(accountEntity.getAccName());
+        accountDto.setAccPhone(accountEntity.getAccPhone());
+        accountDto.setAccEmail(accountEntity.getAccEmail());
+        accountDto.setAccPassword(accountEntity.getAccPassword());
+        accountDto.setAccBirthday(accountEntity.getAccBirthday());
+        accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
+        accountDto.setImgData(new byte[0]);
+        int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
+        if (accountEntity.getRoleID() != null) {
+            // Lấy ID của vai trò từ đối tượng RoleEntity và gán cho roleID
+            roleID = accountEntity.getRoleID().getRoleID(); // Giả sử ID của vai trò là một số nguyên
         }
+        accountDto.setRoleID(roleID);
 
-
+        return accountDto;
+    }
 }
