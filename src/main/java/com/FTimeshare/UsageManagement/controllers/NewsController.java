@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.controllers;
 
+import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,13 +68,45 @@ public class NewsController {
                                          @RequestParam int newsViewer,
                                          @RequestParam String newsStatus,
                                          @RequestParam int accID) throws IOException {
-        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
         String uploadImage = newsService.uploadImage(file, newsTitle, parsedNewsPost, newsContent, newsViewer, newsStatus, accID);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
 
+
+    @PutMapping("/edit/{NewsID}")
+    public ResponseEntity<?> editNews(
+            @PathVariable int NewsID,
+            @RequestParam("news") MultipartFile file,
+            @RequestParam String newsTitle,
+            @RequestParam String newsPost,
+            @RequestParam String newsContent,
+            @RequestParam int newsViewer,
+            @RequestParam String newsStatus,
+            @RequestParam int accID) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
+        NewsDto updateNews =  NewsDto.builder()
+                .newsTitle(newsTitle)
+                .newsPost(parsedNewsPost)
+                .newsContent(newsContent)
+                .newsViewer(newsViewer)
+                .newsStatus(newsStatus)
+                .accID(accID)
+                .build();
+        try {
+            NewsDto editedNews = newsService.editNews(NewsID, updateNews, file);
+            return ResponseEntity.ok(editedNews);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating news: " + e.getMessage());
+        }
+    }
 
 
     // Helper method to convert Entity to DTO

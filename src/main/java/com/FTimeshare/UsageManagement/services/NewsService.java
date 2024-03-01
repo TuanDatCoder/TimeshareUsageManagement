@@ -1,5 +1,7 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.dtos.AccountDto;
+import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
@@ -79,6 +81,39 @@ public class NewsService {
     }
 
 
+    public NewsDto editNews(int newsID, NewsDto updatedNews, MultipartFile file) throws IOException {
+        NewsEntity existingNews = newsRepository.findById(newsID)
+                .orElseThrow(() -> new RuntimeException("News not found with id: " + newsID));
+
+        existingNews.setNewsTitle(updatedNews.getNewsTitle());
+        existingNews.setNewsPost(updatedNews.getNewsPost());
+        existingNews.setNewsContent(updatedNews.getNewsContent());
+        existingNews.setImgName(file.getOriginalFilename());
+        existingNews.setImgData(ImageService.compressImage(file.getBytes()));
+        existingNews.setNewsViewer(updatedNews.getNewsViewer());
+        existingNews.setNewsStatus(updatedNews.getNewsStatus());
+
+        NewsEntity savedNews = newsRepository.save(existingNews);
+        return convertToDto(savedNews);
+    }
+
+    private NewsDto convertToDto(NewsEntity newsEntity) {
+        NewsDto newsDto = new NewsDto();
+        newsDto.setNewsID(newsEntity.getNewsID());
+        newsDto.setNewsTitle(newsEntity.getNewsTitle());
+        newsDto.setNewsPost(newsEntity.getNewsPost());
+        newsDto.setNewsContent(newsEntity.getNewsContent());
+        newsDto.setImgName("http://localhost:8080/api/news/imgView/"+newsEntity.getImgName());
+        newsDto.setImgData(new byte[0]);
+        newsDto.setNewsViewer(newsEntity.getNewsViewer());
+        newsDto.setNewsStatus(newsEntity.getNewsStatus());
+
+        if (newsEntity.getAccID() != null) {
+            newsDto.setAccID(newsEntity.getAccID().getAccID());
+        }
+
+        return newsDto;
+    }
     
 
 }

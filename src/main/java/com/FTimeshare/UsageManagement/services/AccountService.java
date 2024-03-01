@@ -167,8 +167,7 @@ public class AccountService {
     //edit feedback
     public AccountDto editAccount(int accountID, AccountDto updatedAccount, MultipartFile file) throws IOException {
         AccountEntity existingAccount = accountRepository.findById(accountID)
-                .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + accountID));
-
+                .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountID));
 
         existingAccount.setAccName(updatedAccount.getAccName());
         existingAccount.setAccPhone(updatedAccount.getAccPhone());
@@ -179,10 +178,7 @@ public class AccountService {
         existingAccount.setAccStatus(updatedAccount.getAccStatus());
         existingAccount.setAccBirthday(updatedAccount.getAccBirthday());
 
-        // Lưu cập nhật vào cơ sở dữ liệu
         AccountEntity savedAccount = accountRepository.save(existingAccount);
-
-        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
         return convertToDto(savedAccount);
     }
 
