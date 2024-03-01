@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
+import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,38 @@ public class AccountController {
                 .body(imageData);
 
     }
+
+    @PutMapping("/edit/{accountID}")
+    public ResponseEntity<?> editFeedback(
+            @PathVariable int accountID,
+            @RequestParam("Avatar") MultipartFile file,
+            @RequestParam String accName,
+            @RequestParam String accPhone,
+            @RequestParam String accEmail,
+            @RequestParam String accPassword,
+            @RequestParam String accStatus,
+            @RequestParam Date accBirthday,
+            @RequestParam int roleID) {
+
+        AccountDto updatedAccount = AccountDto.builder()
+                .accName(accName)
+                .accPhone(accPhone)
+                .accEmail(accEmail)
+                .accPassword(accPassword)
+                .accStatus(accStatus)
+                .accBirthday(accBirthday)
+                .roleID(roleID)
+                .build();
+
+        try {
+            AccountDto editedAccount = accountService.editAccount(accountID, updatedAccount, file);
+            return ResponseEntity.ok(editedAccount);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating account: " + e.getMessage());
+        }
+    }
+
 
     private List<AccountDto> convertToDtoList(List<AccountEntity> userEntities) {
         return userEntities.stream()
