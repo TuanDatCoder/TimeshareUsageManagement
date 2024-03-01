@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,11 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
+    @GetMapping("/staffview")
+    public ResponseEntity<List<AccountDto>> getAllBookings() {
+        List<AccountDto> accounts = accountService.getAllAccounts();
+        return ResponseEntity.ok(accounts);
+    }
 
     @GetMapping("/statuses")
     public ResponseEntity<List<String>> getAllStatus() {
