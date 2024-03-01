@@ -21,6 +21,5 @@ public class ProjectDto {
     private String imgName;
     private byte[] imgData;
     private int contractorID;
-    private int projectTypeID;
 
 }

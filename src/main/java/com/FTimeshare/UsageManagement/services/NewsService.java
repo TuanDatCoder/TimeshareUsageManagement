@@ -63,7 +63,7 @@ public class NewsService {
                 .newsPost(newsPost)
                 .newsContent(newsContent)
                 .imgName(file.getOriginalFilename())
-                .imgData(imgData)
+                .imgData(ImageService.compressImage(file.getBytes()))
                 .newsViewer(newsViewer)
                 .newsStatus(newsStatus)
                 .accID(accountEntity)

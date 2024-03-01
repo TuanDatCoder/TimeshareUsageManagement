@@ -26,9 +26,12 @@ public class PaymentEntity {
     @Column(name="account_number")
     private String accountNumber;
 
+    @Column(name="img_name")
+    private String imgName;
+
     @Lob
-    @Column(name="image_banking")
-    private byte[] imageBanking;
+    @Column(name="img_data")
+    private byte[] imgData;
 
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
