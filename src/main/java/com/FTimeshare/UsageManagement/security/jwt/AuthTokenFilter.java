@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.security.jwt;
 
+import com.FTimeshare.UsageManagement.repositories.TokenBlacklist;
 import com.FTimeshare.UsageManagement.security.user.TimeshareUserDetails;
 import com.FTimeshare.UsageManagement.security.user.TimeshareUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -31,6 +32,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private TimeshareUserDetailsService userDetailsService;
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -38,6 +41,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try{
             String jwt = parseJwt(request);
+            if (jwt != null && !tokenBlacklist.isBlacklisted(jwt)) {
+                // Token is valid and not blacklisted
+                // Proceed with request processing
+                filterChain.doFilter(request, response);
+            } else {
+                // Token is blacklisted or expired, deny access
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
             if (jwt != null && jwtUtils.validateToken(jwt)){
                 String email = jwtUtils.getUserNameFromToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
@@ -52,7 +63,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String parseJwt(HttpServletRequest request) {
+    public String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
             return headerAuth.substring(7);

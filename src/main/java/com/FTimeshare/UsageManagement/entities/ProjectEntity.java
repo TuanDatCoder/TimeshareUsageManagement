@@ -41,9 +41,6 @@ public class ProjectEntity {
     @ManyToOne
     @JoinColumn(name = "contractor_id", referencedColumnName = "contractor_id")
     private ContractorEntity contractorID;
-
-    @ManyToOne
-    @JoinColumn(name = "project_type_id", referencedColumnName = "project_type_id")
-    private ProjectTypeEntity projectTypeID;
+    
 
 }

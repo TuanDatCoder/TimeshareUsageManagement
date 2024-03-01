@@ -62,6 +62,7 @@ public class WebSecurityConfig{
 //                        .requestMatchers("/api/products/**").permitAll()
                         .requestMatchers("/auth/register-user").permitAll()
                         .requestMatchers(("/auth/login")).permitAll()
+                        .requestMatchers(("/api/products/**")).hasRole("CUSTOMER")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
