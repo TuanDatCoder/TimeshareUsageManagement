@@ -97,4 +97,8 @@ public class AccountService {
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
 
+    public AccountEntity getAccountById(int accID) {
+        Optional<AccountEntity> accountOptional = accountRepository.findById(accID);
+        return accountOptional.orElse(null);
+    }
 }
