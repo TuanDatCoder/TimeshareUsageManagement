@@ -156,6 +156,10 @@ public class AccountService {
         Optional<AccountEntity> dbImageData = accountRepository.findByImgName(fileName);
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
+    public AccountEntity getAccountById(int accID) {
+        Optional<AccountEntity> accountOptional = accountRepository.findById(accID);
+        return accountOptional.orElse(null);
+    }
 
     public List<AccountDto> getAllAccounts() {
             List<AccountEntity> accounts = accountRepository.findAll();
