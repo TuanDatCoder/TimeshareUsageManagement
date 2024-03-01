@@ -155,13 +155,11 @@ public class BookingController {
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
-                bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(),
-                bookingEntity.getPaymentID().getPaymentID());
+                bookingEntity.getProductID().getProductID());
     }
 
 }

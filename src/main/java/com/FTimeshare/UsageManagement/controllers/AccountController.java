@@ -30,6 +30,18 @@ public class AccountController {
         return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
 
+    @GetMapping("viewDetail/{accID}")
+    public ResponseEntity<AccountDto> getAccountById(@PathVariable int accID) {
+        AccountEntity accountEntity = accountService.getAccountById(accID);
+        if (accountEntity != null) {
+            AccountDto accountDto = convertToDto(accountEntity);
+            return ResponseEntity.ok(accountDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     //----------------------- Count Total Account --------------------
 
     @GetMapping("/staff/count/{roleName}")
@@ -92,8 +104,8 @@ public class AccountController {
         accountDto.setAccEmail(accountEntity.getAccEmail());
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
-        accountDto.setImgName(accountEntity.getImgName());
-        accountDto.setImgData(accountEntity.getImgData());
+       accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
+        accountDto.setImgData(new byte[0]);
         int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
         if (accountEntity.getRoleID() != null) {
             // Lấy ID của vai trò từ đối tượng RoleEntity và gán cho roleID
