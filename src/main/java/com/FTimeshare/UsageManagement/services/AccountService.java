@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.RoleEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
@@ -13,6 +14,7 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -97,8 +99,22 @@ public class AccountService {
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
 
-    public AccountEntity getAccountById(int accID) {
-        Optional<AccountEntity> accountOptional = accountRepository.findById(accID);
-        return accountOptional.orElse(null);
-    }
+    public List<AccountDto> getAllAccounts() {
+            List<AccountEntity> accounts = accountRepository.findAll();
+            return accounts.stream()
+                    .map(accountEntity -> new AccountDto(
+                            accountEntity.getAccID(),
+                            accountEntity.getAccName(),
+                            accountEntity.getAccPhone(),
+                            accountEntity.getAccEmail(),
+                            accountEntity.getAccPassword(),
+                            "http://localhost:8080/api/users/viewImg/" + accountEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                            new byte[0],
+                            accountEntity.getAccStatus(),
+                            accountEntity.getAccBirthday(),
+                            accountEntity.getRoleID().getRoleID()))
+                    .collect(Collectors.toList());
+        }
+
+
 }

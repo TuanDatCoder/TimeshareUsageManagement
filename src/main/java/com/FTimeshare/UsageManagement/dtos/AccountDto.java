@@ -23,5 +23,5 @@ public class AccountDto {
     private Date accBirthday;
     private int roleID;
 
+    }
 
-}
