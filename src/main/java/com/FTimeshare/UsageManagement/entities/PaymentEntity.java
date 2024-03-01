@@ -37,5 +37,5 @@ public class PaymentEntity {
 
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
-    private  AccountEntity accId;
+    private  AccountEntity accID;
 }
