@@ -1,6 +1,8 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 
+import com.FTimeshare.UsageManagement.dtos.BookingDto;
+import com.FTimeshare.UsageManagement.dtos.PaymentDto;
 import com.FTimeshare.UsageManagement.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -38,5 +41,18 @@ public class PaymentController {
                 .body(imageData);
 
     }
+
+    @GetMapping("/viewAll")
+    public ResponseEntity<List<PaymentDto>> getAllBookings() {
+        List<PaymentDto> payments = paymentService.getAllBookings();
+        return ResponseEntity.ok(payments);
+    }
+
+    @GetMapping("/payment/{accId}")
+    public ResponseEntity<List<PaymentDto>> viewPaymentsByAccountId(@PathVariable int accId) {
+        List<PaymentDto> payments = paymentService.getBookingsByAccountId(accId);
+        return new ResponseEntity<>(payments, HttpStatus.OK);
+    }
+
 
 }
