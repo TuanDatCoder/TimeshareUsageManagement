@@ -15,6 +15,8 @@ public class FeedbackDto {
     private int feedbackID;
     private LocalDateTime feedbackCreateDate;
     private String feedbackDetail;
-    private boolean feedbackStatus;
+    private String feedbackStatus;
+    private float feedbackRating;
     private int bookingID;
+    private int productID;
 }

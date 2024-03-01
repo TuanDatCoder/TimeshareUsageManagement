@@ -43,8 +43,6 @@ public class NewsController {
         }
     }
 
-
-
     // Delete news
     @DeleteMapping("/delete/{newsId}")
     public ResponseEntity<String> deleteNews(@PathVariable int newsId) {

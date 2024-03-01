@@ -29,9 +29,6 @@ public class BookingEntity {
     @Column(name = "booking_person")
     private int bookingPerson;
 
-    @Column(name = "booking_rating")
-    private float bookingRating;
-
     @Column(name = "booking_status")
     private String bookingStatus;
 
