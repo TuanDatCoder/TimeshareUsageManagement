@@ -3,11 +3,9 @@ package com.FTimeshare.UsageManagement.services;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
-import com.FTimeshare.UsageManagement.entities.PaymentEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
-import com.FTimeshare.UsageManagement.repositories.PaymentRepository;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +16,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
-@Autowired
-private BookingRepository bookingRepository;
-@Autowired
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
     private  AccountRepository accountRepository;
-@Autowired
+    @Autowired
     private  ProductRepository productRepository;
-@Autowired
-private PaymentRepository paymentRepository;
 
     public float getSumPriceByProductId(int productID){
         return bookingRepository.sumPriceByProductID(productID);
@@ -57,8 +53,7 @@ private PaymentRepository paymentRepository;
                         bookingEntity.getImgName(),
                         bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID(),
-                        bookingEntity.getPaymentID().getPaymentID()))
+                        bookingEntity.getProductID().getProductID()))
 
                 .collect(Collectors.toList());
     }
@@ -80,12 +75,10 @@ private PaymentRepository paymentRepository;
         // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
-        PaymentEntity paymentEntity = paymentRepository.findById(booking.getPaymentID()).orElse(null);
 
-        if (accountEntity != null && productEntity != null && paymentEntity != null ) {
+        if (accountEntity != null && productEntity != null  ) {
             bookingEntity.setAccID(accountEntity);
             bookingEntity.setProductID(productEntity);
-            bookingEntity.setPaymentID(paymentEntity);
             // Set other properties as needed
 
             // Save the bookingEntity
@@ -111,8 +104,7 @@ private PaymentRepository paymentRepository;
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(),
-                bookingEntity.getPaymentID().getPaymentID());
+                bookingEntity.getProductID().getProductID());
     }
 
     public BookingDto deleteBooking(int bookingID) {
