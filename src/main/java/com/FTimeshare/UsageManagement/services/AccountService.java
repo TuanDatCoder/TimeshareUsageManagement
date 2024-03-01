@@ -86,7 +86,7 @@ public class AccountService {
                 .accEmail(accEmail)
                 .accPassword(accPassword)
                 .imgName(file.getOriginalFilename())
-                .imgData(imgData)
+                .imgData(ImageService.compressImage(file.getBytes()))
                 .accStatus(accStatus)
                 .accBirthday(accBirthday)
                 .roleID(roleEntity)
