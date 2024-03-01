@@ -58,7 +58,7 @@ public class PaymentController {
     }
 
     @PutMapping("/edit/{paymentID}")
-    public ResponseEntity<?> editFeedback(@PathVariable int paymentID,
+    public ResponseEntity<?> editPayment(@PathVariable int paymentID,
                                           @RequestParam("ImgBanking") MultipartFile file,
                                           @RequestParam String accountName,
                                           @RequestParam String banking,
