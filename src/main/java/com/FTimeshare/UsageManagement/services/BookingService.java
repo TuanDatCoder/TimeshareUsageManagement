@@ -51,7 +51,6 @@ private PaymentRepository paymentRepository;
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
-                        bookingEntity.getBookingRating(),
                         bookingEntity.getBookingStatus(),
                         bookingEntity.getImgName(),
                         bookingEntity.getImgData(),
@@ -73,7 +72,6 @@ private PaymentRepository paymentRepository;
         bookingEntity.setEndDate(booking.getEndDate());
         bookingEntity.setBookingPrice(booking.getBookingPrice());
         bookingEntity.setBookingPerson(booking.getBookingPerson());
-        bookingEntity.setBookingRating(booking.getBookingRating());
         bookingEntity.setBookingStatus(booking.getBookingStatus());
         bookingEntity.setImgName(booking.getImgName());
         bookingEntity.setImgData(booking.getImgData());
@@ -107,7 +105,6 @@ private PaymentRepository paymentRepository;
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
-                bookingEntity.getBookingRating(),
                 bookingEntity.getBookingStatus(),
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
