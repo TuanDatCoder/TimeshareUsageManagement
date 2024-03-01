@@ -95,7 +95,7 @@ public class AccountController {
     }
 
     @PutMapping("/edit/{accountID}")
-    public ResponseEntity<?> editFeedback(
+    public ResponseEntity<?> editAccount(
             @PathVariable int accountID,
             @RequestParam("Avatar") MultipartFile file,
             @RequestParam String accName,
