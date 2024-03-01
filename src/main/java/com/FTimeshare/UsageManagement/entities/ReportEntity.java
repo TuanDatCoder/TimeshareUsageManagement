@@ -30,6 +30,7 @@ public class ReportEntity {
     private AccountEntity accID;
 
     @ManyToOne
-    @JoinColumn(name = "productID", referencedColumnName = "productID")
+    @JoinColumn(name="productID", referencedColumnName = "productID")
     private ProductEntity productID;
+
 }

@@ -3,20 +3,18 @@ package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Account", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"acc_name"}),
-        @UniqueConstraint(columnNames = {"acc_email"})
-})
+@Table(name="Account")
+@Builder
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +36,12 @@ public class AccountEntity {
     @Column(name="acc_birthday")
     private Date accBirthday;
 
-    @Column(name="acc_img")
-    private String accImg;
+    @Column(name="img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name="img_data")
+    private byte[] imgData;
 
     @Column(name="acc_status")
     private String accStatus;
@@ -47,6 +49,5 @@ public class AccountEntity {
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private RoleEntity roleID;
-
 
 }

@@ -5,21 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class NewsDto {
-    private int newsID;
-    private String newsTitle;
-    private LocalDateTime newsPost;
-    private String newsContent;
+public class PaymentDto {
+    private int paymentID;
+    private String accountName;
+    private String banking;
+    private String accountNumber;
     private String imgName;
     private byte[] imgData;
-    private int newsViewer;
-    private String newsStatus;
     private int accID;
+
 
 }

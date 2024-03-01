@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
     private ProductController productController;
+
     //Đạt
     public List<ProductEntity> getProductsByStatus(String status) {
         return productRepository.findByProductStatus(status);
@@ -25,7 +29,7 @@ public class ProductService {
 //        return (int) productRepository.count();
 //    }
 
-    public void closeProduct(int productID, String Status) {
+    public void statusProduct(int productID, String Status) {
         Optional<ProductEntity> optionalProduct = productRepository.findById(productID);
         if (optionalProduct.isPresent()) {
             ProductEntity product = optionalProduct.get();
@@ -38,10 +42,25 @@ public class ProductService {
 
 
     // Quý
-    //Goi tat ca san pham
     public List<ProductEntity> getAllProducts() {
         return productRepository.findAll();
     }
+
+    public List<ProductEntity> getProductsByUserID(int userID) {
+
+        return productRepository.findByUserID(userID);
+    }
+
+    public void deleteProduct(int productID, int acc_id) {
+        Optional<ProductEntity> product = productRepository.findById(productID);
+        if (product.isPresent() && !product.get().getProductStatus().equalsIgnoreCase("active_booked ") && product.get().getAccID().getAccID() == acc_id) {
+            productRepository.deleteById(productID);
+        }
+    }
+
+    // Quý
+    //Goi tat ca san pham
+
 
     //Goi cac danh sach san pham tang dan theo view
     public List<ProductEntity> getAllProductsAscendingByView() {
@@ -74,29 +93,73 @@ public class ProductService {
     }
 
     //Tinh tong tien
-    public List<ProductEntity> getProductsByUserID(int userID) {
 
-        return productRepository.findByUserID(userID);
-    }
-    public ProductDto editProduct(int productID, ProductDto productDto) {
-
-        ProductEntity productEntity = productRepository.findByProductID(productID)
-                .orElseThrow(() -> new RuntimeException("Prodcut not found with id: " + productID));
-
-        productEntity = productController.convertToEntity(productDto);
-
-        ProductEntity savedProduct = productRepository.save(productEntity);
-
-        return productController.convertToDto(savedProduct);
+    //    public List<ProductEntity> searchProductsByName(String name) {
+//        return productRepository.findByProductNameContainingIgnoreCase(name);
+//    }
+    public List<ProductEntity> findByProductNameContainingIgnoreCaseAndProductStatus(String productName, String productStatus) {
+        return productRepository.findByProductNameContainingIgnoreCaseAndProductStatus(productName, productStatus);
     }
 
+    public List<String> getAllProductStatuses() {
+        return productRepository.findAllProductStatuses();
+    }
+    public List<ProductDto> getProductByBookingId(int productID) {
+        Optional<ProductEntity> productEntities = productRepository.findById(productID);
+        return productEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public ProductDto editProduct(int productID, int userID, ProductDto productDto) {
+
+        ProductEntity productEntity = productRepository.findByProductID(productID);
+        if(productEntity.getAccID().getAccID()==userID){
+
+            productEntity = productController.convertToEntity(productDto);
+            deleteProduct(productID, userID);
+            ProductEntity savedProduct = productRepository.save(productEntity);
+            return productController.convertToDto(savedProduct);
+        }
+        return null;
+
+    }
+    private ProductDto convertToDto(ProductEntity productEntity) {
+        // Your existing DTO conversion logic
+        return new ProductDto(
+                productEntity.getProductID(),
+                productEntity.getProductName(),
+                productEntity.getProductArea(),
+                productEntity.getProductAddress(),
+                productEntity.getProductDescription(),
+                productEntity.getProductConvenience(),
+                productEntity.getProductPrice(),
+                productEntity.getAvailableStartDate(),
+                productEntity.getAvailableEndDate(),
+                productEntity.getProductStatus(),
+                productEntity.getProductPerson(),
+                productEntity.getProductRating(),
+                productEntity.getProductSale(),
+                productEntity.getProductViewer(),
+                productEntity.getProjectID().getProjectID(),
+                productEntity.getProductTypeID().getProductTypeID(),
+                productEntity.getAccID().getAccID());
+
+    }
     public ProductEntity addNewProduct(ProductEntity productEntity) {
         return productRepository.save(productEntity);
     }
-    public void deleteProduct(int productID, int acc_id) {
-        Optional<ProductEntity> product = productRepository.findById(productID);
-        if(product.isPresent()&&!product.get().getProductStatus().equalsIgnoreCase("active_booked ")&&product.get().getAccID().getAccID() == acc_id){
-            productRepository.deleteById(productID);
-        }
+    public ProductEntity getProductById(int productID) {
+        Optional<ProductEntity> productOptional = productRepository.findById(productID);
+        return productOptional.orElse(null);
     }
+
+    public List<ProductDto> getProductByProductTypeId(int productTypeID) {
+       List<ProductEntity> productEntities = productRepository.findByProductTypeID_ProductTypeID(productTypeID);
+        return productEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+
+    }
+
 }

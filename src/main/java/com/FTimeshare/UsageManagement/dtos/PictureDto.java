@@ -14,7 +14,7 @@ public class PictureDto {
 
     private int imgID;
     private String imgName;
-    private String imgUrl;
+    private byte[] imgData;
     private int productID;
 
 

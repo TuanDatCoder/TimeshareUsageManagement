@@ -1,14 +1,21 @@
 package com.FTimeshare.UsageManagement.controllers;
 
+import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,21 +46,68 @@ public class NewsController {
         }
     }
 
-    // Add news
-    @PostMapping("/add")
-    public ResponseEntity<NewsDto> addNews(@RequestBody NewsDto newsDto) {
-        NewsEntity newsEntity = convertToEntity(newsDto);
-        newsEntity = newsService.addNews(newsEntity);
-        NewsDto responseDto = convertToDto(newsEntity);
-        return ResponseEntity.ok(responseDto);
-    }
-
     // Delete news
     @DeleteMapping("/delete/{newsId}")
     public ResponseEntity<String> deleteNews(@PathVariable int newsId) {
         newsService.deleteNewsById(newsId);
         return ResponseEntity.ok("News with ID " + newsId + " has been deleted successfully.");
     }
+    @GetMapping("imgView/{fileName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+        byte[] imageData=newsService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+
+    }
+    @PostMapping
+    public ResponseEntity<?> uploadImage(@RequestParam("news") MultipartFile file,
+                                         @RequestParam String newsTitle,
+                                         @RequestParam String newsPost,
+                                         @RequestParam String newsContent,
+                                         @RequestParam int newsViewer,
+                                         @RequestParam String newsStatus,
+                                         @RequestParam int accID) throws IOException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
+        String uploadImage = newsService.uploadImage(file, newsTitle, parsedNewsPost, newsContent, newsViewer, newsStatus, accID);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
+    }
+
+
+    @PutMapping("/edit/{NewsID}")
+    public ResponseEntity<?> editNews(
+            @PathVariable int NewsID,
+            @RequestParam("news") MultipartFile file,
+            @RequestParam String newsTitle,
+            @RequestParam String newsPost,
+            @RequestParam String newsContent,
+            @RequestParam int newsViewer,
+            @RequestParam String newsStatus,
+            @RequestParam int accID) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
+        NewsDto updateNews =  NewsDto.builder()
+                .newsTitle(newsTitle)
+                .newsPost(parsedNewsPost)
+                .newsContent(newsContent)
+                .newsViewer(newsViewer)
+                .newsStatus(newsStatus)
+                .accID(accID)
+                .build();
+        try {
+            NewsDto editedNews = newsService.editNews(NewsID, updateNews, file);
+            return ResponseEntity.ok(editedNews);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating news: " + e.getMessage());
+        }
+    }
+
 
     // Helper method to convert Entity to DTO
     private NewsDto convertToDto(NewsEntity newsEntity) {
@@ -62,7 +116,8 @@ public class NewsController {
         newsDto.setNewsTitle(newsEntity.getNewsTitle());
         newsDto.setNewsPost(newsEntity.getNewsPost());
         newsDto.setNewsContent(newsEntity.getNewsContent());
-        newsDto.setNewsPicture(newsEntity.getNewsPicture());
+        newsDto.setImgName("http://localhost:8080/api/news/imgView/"+newsEntity.getImgName());
+        newsDto.setImgData(new byte[0]);
         newsDto.setNewsViewer(newsEntity.getNewsViewer());
         newsDto.setNewsStatus(newsEntity.getNewsStatus());
 
@@ -73,22 +128,6 @@ public class NewsController {
         return newsDto;
     }
 
-    // Helper method to convert DTO to Entity
-    private NewsEntity convertToEntity(NewsDto newsDto) {
-        NewsEntity newsEntity = new NewsEntity();
-        newsEntity.setNewsID(newsDto.getNewsID());
-        newsEntity.setNewsTitle(newsDto.getNewsTitle());
-        newsEntity.setNewsPost(newsDto.getNewsPost());
-        newsEntity.setNewsContent(newsDto.getNewsContent());
-        newsEntity.setNewsPicture(newsDto.getNewsPicture());
-        newsEntity.setNewsViewer(newsDto.getNewsViewer());
-        newsEntity.setNewsStatus(newsDto.getNewsStatus());
 
-        AccountEntity accountEntity = new AccountEntity();
-        accountEntity.setAccID(newsDto.getAccID());
 
-        newsEntity.setAccID(accountEntity);
-        // You can map other fields here if needed
-        return newsEntity;
-    }
 }

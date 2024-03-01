@@ -26,6 +26,14 @@ public class ReportController {
         this.reportRepository = reportRepository;
     }
 
+
+    @GetMapping("/viewByProductId/{productID}")
+    public ResponseEntity<List<ReportDto>> viewPictureByProductID(@PathVariable int productID) {
+        List<ReportDto> reports = reportService.viewReportByProductID(productID);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
+
     @GetMapping("/viewAll")
     public ResponseEntity<List<ReportDto>> getAllReport() {
         List<ReportEntity> reportEntities = reportService.getAllReport();
@@ -37,36 +45,35 @@ public class ReportController {
 
 
     // API endpoint để lấy một báo cáo dựa trên reportID
-//    @GetMapping("viewDetail/{reportID}")
-//    public ReportEntity getReportById(@PathVariable int reportID) {
-//        return reportRepository.findById(reportID)
-//                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
-//    }
-//
-//    // API endpoint để cập nhật một báo cáo đã tồn tại
-//    @PutMapping("update/{reportID}")
-//    public ReportEntity updateReport(@PathVariable int reportID, @RequestBody ReportEntity updatedReport) {
-//        return reportRepository.findById(reportID)
-//                .map(report -> {
-//                    report.setReportDetail(updatedReport.getReportDetail());
-//                    report.setReportStatus(updatedReport.getReportStatus());
-//                    // Cập nhật các trường khác nếu cần
-//                    return reportRepository.save(report);
-//                })
-//                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
-//    }
+    @GetMapping("viewDetail/{reportID}")
+    public ReportEntity getReportById(@PathVariable int reportID) {
+        return reportRepository.findById(reportID)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy báo cáo với ID = " + reportID));
+    }
 
+    @GetMapping("/statuses")
+    public ResponseEntity<List<String>> getAllStatus() {
+        List<String> statuses = reportService.getAllStatus();
+        return new ResponseEntity<>(statuses, HttpStatus.OK);
+    }
     @PostMapping("/customer/submitreport")
     public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
         ReportDto submittedReport = reportService.submitReport(reportDto);
         return new ResponseEntity<>(submittedReport, HttpStatus.CREATED);
     }
 
+    @PutMapping("update/{reportID}")
+    public ResponseEntity<?> updateReport(@PathVariable int reportID, @RequestBody ReportDto updatedReport) {
+        ReportDto editedFeedback = reportService.editFeedback(reportID, updatedReport);
+        return ResponseEntity.ok(editedFeedback);
+
+    }
+
     // API endpoint để xóa một báo cáo dựa trên reportID
-//    @DeleteMapping("delete/{reportID}")
-//    public void deleteReport(@PathVariable int reportID) {
-//        reportRepository.deleteById(reportID);
-//    }
+    @DeleteMapping("delete/{reportID}")
+    public void deleteReport(@PathVariable int reportID) {
+        reportRepository.deleteById(reportID);
+    }
 
 
 

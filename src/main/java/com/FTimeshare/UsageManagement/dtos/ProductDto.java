@@ -1,9 +1,5 @@
 package com.FTimeshare.UsageManagement.dtos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,16 +14,20 @@ import java.time.LocalDateTime;
 public class ProductDto {
     private int productID;
     private String productName;
+    private float productArea;
+    private String productAddress;
     private String productDescription;
     private String productConvenience;
-    private float productArea;
     private float productPrice;
     private LocalDateTime availableStartDate;
-    private  LocalDateTime availableEndDate;
+    private LocalDateTime availableEndDate;
     private String productStatus;
+    private int productPerson;
+    private float productRating;
+    private int productSale;
     private int productViewer;
-    private String productPicture;
     private int projectID;
     private int productTypeID;
     private int accID;
+
 }

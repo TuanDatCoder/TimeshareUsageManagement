@@ -26,14 +26,27 @@ public class BookingEntity {
     @Column(name = "booking_price")
     private float bookingPrice;
 
+    @Column(name = "booking_person")
+    private int bookingPerson;
+
     @Column(name = "booking_status")
     private String bookingStatus;
+
+    @Column(name = "img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name = "img_data")
+    private byte[] imgData;
 
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
     private AccountEntity accID;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
+
+
+
 }

@@ -18,21 +18,25 @@ import java.util.stream.Collectors;
 public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
-
     @Autowired
     private  AccountRepository accountRepository;
-
     @Autowired
     private  ProductRepository productRepository;
 
-    public double getSumPriceByProductId(int productID){
-        float sum = 0;
-        List<BookingEntity> bookingEntities = bookingRepository.findByProductID(productID);
-        for(int i = 0; i<bookingEntities.size(); i++){
-            sum+=bookingEntities.get(i).getBookingPrice();
+
+
+    public void statusBooking(int bookingID, String Status) {
+        Optional<BookingEntity> optionalBooking = bookingRepository.findById(bookingID);
+        if (optionalBooking.isPresent()) {
+            BookingEntity booking = optionalBooking.get();
+            booking.setBookingStatus(Status);
+            bookingRepository.save(booking);
+        } else {
+            throw new RuntimeException("Sản phẩm không tồn tại với ID: " + bookingID);
         }
-        return sum;
     }
+
+
 
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
@@ -42,25 +46,35 @@ public class BookingService {
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
+                        bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
+                        bookingEntity.getImgName(),
+                        bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
+
                 .collect(Collectors.toList());
     }
 
 
+
     public BookingDto createBooking(BookingDto booking) {
+
+
         BookingEntity bookingEntity = new BookingEntity();
         // Set properties of bookingEntity from bookingRequest
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
         bookingEntity.setBookingPrice(booking.getBookingPrice());
-
+        bookingEntity.setBookingPerson(booking.getBookingPerson());
+        bookingEntity.setBookingStatus(booking.getBookingStatus());
+        bookingEntity.setImgName(booking.getImgName());
+        bookingEntity.setImgData(booking.getImgData());
         // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
 
-        if (accountEntity != null && productEntity != null) {
+        if (accountEntity != null && productEntity != null  ) {
             bookingEntity.setAccID(accountEntity);
             bookingEntity.setProductID(productEntity);
             // Set other properties as needed
@@ -83,10 +97,14 @@ public class BookingService {
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
+                bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
+                bookingEntity.getImgName(),
+                bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
+
     public BookingDto deleteBooking(int bookingID) {
         // Tìm đặt phòng theo ID
         Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(bookingID);
@@ -108,13 +126,21 @@ public class BookingService {
     }
 
 
-//    public List<BookingDto> getBookingsByAccountId(int accID) {
-//        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
-//        return bookingEntities.stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//    }
+    public List<BookingDto> getBookingsByAccountId(int accID) {
+        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
+        return bookingEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
+    public float getSumPriceByProductId(int productID){
+        float sum = 0;
+        List<BookingEntity> bookingEntities = bookingRepository.findByProductID(productID);
+        for(int i = 0; i<bookingEntities.size(); i++){
+            sum+=bookingEntities.get(i).getBookingPrice();
+        }
+        return sum;
+    }
 
     public List<BookingDto> getBookingsByBookingId(int bookingID) {
         Optional<BookingEntity> bookingEntities = bookingRepository.findById(bookingID);
@@ -123,4 +149,23 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    public List<Float> getBookingPricesByProductId(int productID) {
+        List<BookingEntity> bookings = bookingRepository.findByProductID_ProductID(productID);
+
+        return bookings.stream()
+                .map(BookingEntity::getBookingPrice)
+                .collect(Collectors.toList());
+    }
+
+    public Float getTotalBookingPriceByProductId(int productId) {
+        List<Float> bookingPrices = bookingRepository.findBookingPricesByProductID(productId);
+        return (float) bookingPrices.stream().mapToDouble(Float::doubleValue).sum();
+    }
+
+    public List<BookingEntity> getBookingsByStatus(String status) {
+        return bookingRepository.findByBookingStatus(status);
+    }
 }
+
+
+

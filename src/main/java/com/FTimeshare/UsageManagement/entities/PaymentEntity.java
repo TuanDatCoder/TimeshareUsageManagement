@@ -6,18 +6,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
-@Table(name="Picture")
-public class PictureEntity {
+@Table(name="Payment")
+public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="img_id")
-    private int imgID;
+    @Column(name="payment_id")
+    private int paymentID;
+
+    @Column(name="account_name")
+    private String accountName;
+
+    @Column(name="banking")
+    private String banking;
+
+    @Column(name="account_number")
+    private String accountNumber;
 
     @Column(name="img_name")
     private String imgName;
@@ -27,8 +36,6 @@ public class PictureEntity {
     private byte[] imgData;
 
     @ManyToOne
-    @JoinColumn(name = "productID", referencedColumnName = "productID")
-    private ProductEntity productID;
-
-
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private  AccountEntity accID;
 }

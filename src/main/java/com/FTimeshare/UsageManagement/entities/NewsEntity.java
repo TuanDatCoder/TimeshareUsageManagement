@@ -1,15 +1,18 @@
 package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+@Builder
 @Entity
 @Table(name = "News")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,12 @@ public class NewsEntity {
     @Column(name = "news_content")
     private String newsContent;
 
-    @Column(name = "news_picture")
-    private String newsPicture;
+    @Column(name = "img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name = "img_data")
+    private byte[] imgData;
 
     @Column(name = "news_viewer")
     private int newsViewer;

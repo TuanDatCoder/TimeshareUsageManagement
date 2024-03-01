@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin("http://localhost:8080")
 @RestController
 @RequestMapping("/api/feedback")
 public class FeedbackController {
@@ -27,20 +27,20 @@ public class FeedbackController {
         return new ResponseEntity<>(submittedFeedback, HttpStatus.CREATED);
     }
 
-//    @PutMapping("/api/feedbacks/edit/{feedbackID}")
-//    public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
-//        FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);
-//        return ResponseEntity.ok(editedFeedback);
-//    }
-//
-//    @DeleteMapping("/delete-feedback/{feedbackID}")
-//    public ResponseEntity<?> deleteFeedback(@PathVariable int feedbackID) {
-//        FeedbackDto deletedFeedback = feedbackService.deleteFeedback(feedbackID);
-//
-//        if (deletedFeedback != null) {
-//            return ResponseEntity.ok(deletedFeedback);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @PutMapping("/api/feedbacks/edit/{feedbackID}")
+    public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
+        FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);
+        return ResponseEntity.ok(editedFeedback);
+    }
+
+    @DeleteMapping("/delete-feedback/{feedbackID}")
+    public ResponseEntity<?> deleteFeedback(@PathVariable int feedbackID) {
+        FeedbackDto deletedFeedback = feedbackService.deleteFeedback(feedbackID);
+
+        if (deletedFeedback != null) {
+            return ResponseEntity.ok(deletedFeedback);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

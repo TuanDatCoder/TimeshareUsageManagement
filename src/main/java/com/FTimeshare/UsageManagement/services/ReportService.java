@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.dtos.PictureDto;
 import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.*;
 import com.FTimeshare.UsageManagement.repositories.ReportRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -16,6 +18,18 @@ public class ReportService {
     public List<ReportEntity> getAllReport() {
         return reportRepository.findAll();
     }
+
+    public List<String> getAllStatus() {
+        return reportRepository.findAllStatus();
+    }
+
+    public List<ReportDto> viewReportByProductID(int productID) {
+        List<ReportEntity> pictureEntities = reportRepository.findByProductID_ProductID(productID);
+        return pictureEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
 
     public ReportDto submitReport(ReportDto reportDto) {
         ReportEntity reportEntity = convertToEntity(reportDto);
@@ -55,4 +69,23 @@ public class ReportService {
         );
     }
 
-}
+
+    public ReportDto editFeedback(int reportID, ReportDto updatedReport) {
+        // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
+        ReportEntity existingReport = reportRepository.findById(reportID)
+                .orElseThrow(() -> new RuntimeException("Report not found with id: " + reportID));
+
+        // Cập nhật thông tin của phản hồi
+        existingReport.setReportCreateDate(updatedReport.getReportCreateDate());
+        existingReport.setReportDetail(updatedReport.getReportDetail());
+        existingReport.setReportStatus(updatedReport.getReportStatus());
+
+        // Lưu cập nhật vào cơ sở dữ liệu
+        ReportEntity savedReport = reportRepository.save(existingReport);
+
+        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
+        return convertToDto(savedReport);
+    }
+    }
+
+

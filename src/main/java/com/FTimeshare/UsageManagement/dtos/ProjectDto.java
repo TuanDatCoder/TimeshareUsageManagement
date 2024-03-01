@@ -18,8 +18,8 @@ public class ProjectDto {
     private LocalDateTime projectBuildDate;
     private String projectArea;
     private String projectStatus;
-    private String projectPicture;
+    private String imgName;
+    private byte[] imgData;
     private int contractorID;
-    private int projectTypeID;
 
 }
