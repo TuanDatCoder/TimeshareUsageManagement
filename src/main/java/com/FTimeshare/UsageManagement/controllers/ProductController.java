@@ -24,6 +24,8 @@ public class ProductController {
     private BookingService bookingService;
     // Đạt
 
+
+    // Làm Select Option
     @GetMapping("/statuses")
     public ResponseEntity<List<String>> getAllProductStatuses() {
         List<String> productStatuses = productService.getAllProductStatuses();
@@ -48,22 +50,22 @@ public class ProductController {
 
     @PutMapping("staff/close/{productID}")
     public ResponseEntity<String> closeProduct(@PathVariable int productID) {
-        productService.closeProduct(productID,"Closed");
+        productService.statusProduct(productID,"Closed");
         return ResponseEntity.ok("Done");
     }
     @PutMapping("staff/active/{productID}")
     public ResponseEntity<String> activeProduct(@PathVariable int productID) {
-        productService.closeProduct(productID,"Active");
+        productService.statusProduct(productID,"Active");
         return ResponseEntity.ok("Done");
     }
     @PutMapping("staff/reject/{productID}")
     public ResponseEntity<String> rejectProduct(@PathVariable int productID) {
-        productService.closeProduct(productID,"Rejected");
+        productService.statusProduct(productID,"Rejected");
         return ResponseEntity.ok("Done");
     }
     @PutMapping("staff/pending/{productID}")
     public ResponseEntity<String> pendingProduct(@PathVariable int productID) {
-        productService.closeProduct(productID,"Pending");
+        productService.statusProduct(productID,"Pending");
         return ResponseEntity.ok("Done");
     }
 

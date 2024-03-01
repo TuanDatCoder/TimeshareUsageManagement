@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.repositories;
 
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
+import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
     @Query("SELECT b.bookingPrice FROM BookingEntity b WHERE b.productID.productID = :productID")
     List<Float> findBookingPricesByProductID(int productID);
+
+    List<BookingEntity> findByBookingStatus(String status);
 }

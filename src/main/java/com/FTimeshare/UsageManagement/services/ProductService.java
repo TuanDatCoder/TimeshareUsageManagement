@@ -29,7 +29,7 @@ public class ProductService {
 //        return (int) productRepository.count();
 //    }
 
-    public void closeProduct(int productID, String Status) {
+    public void statusProduct(int productID, String Status) {
         Optional<ProductEntity> optionalProduct = productRepository.findById(productID);
         if (optionalProduct.isPresent()) {
             ProductEntity product = optionalProduct.get();
