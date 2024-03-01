@@ -43,8 +43,6 @@ public class NewsController {
         }
     }
 
-
-
     // Delete news
     @DeleteMapping("/delete/{newsId}")
     public ResponseEntity<String> deleteNews(@PathVariable int newsId) {
@@ -73,6 +71,8 @@ public class NewsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
+
+
 
     // Helper method to convert Entity to DTO
     private NewsDto convertToDto(NewsEntity newsEntity) {

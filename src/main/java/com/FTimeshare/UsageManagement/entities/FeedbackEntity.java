@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,7 +26,14 @@ public class FeedbackEntity {
     @Column(name = "feedback_status")
     private String feedbackStatus;
 
+    @Column(name = "feedback_rating")
+    private float feedbackRating;
+
     @OneToOne
     @JoinColumn(name = "bookingID", referencedColumnName = "bookingID")
     private BookingEntity bookingID;
+
+    @ManyToOne
+    @JoinColumn(name = "productID", referencedColumnName = "productID")
+    private ProductEntity productID;
 }
