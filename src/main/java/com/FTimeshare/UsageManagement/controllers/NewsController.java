@@ -49,7 +49,7 @@ public class NewsController {
         newsService.deleteNewsById(newsId);
         return ResponseEntity.ok("News with ID " + newsId + " has been deleted successfully.");
     }
-    @GetMapping("/{fileName}")
+    @GetMapping("imgView/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
         byte[] imageData=newsService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
@@ -81,8 +81,8 @@ public class NewsController {
         newsDto.setNewsTitle(newsEntity.getNewsTitle());
         newsDto.setNewsPost(newsEntity.getNewsPost());
         newsDto.setNewsContent(newsEntity.getNewsContent());
-        newsDto.setImgName(newsEntity.getImgName());
-        newsDto.setImgData(newsEntity.getImgData());
+        newsDto.setImgName("http://localhost:8080/api/news/imgView/"+newsEntity.getImgName());
+        newsDto.setImgData(new byte[0]);
         newsDto.setNewsViewer(newsEntity.getNewsViewer());
         newsDto.setNewsStatus(newsEntity.getNewsStatus());
 
@@ -91,26 +91,6 @@ public class NewsController {
         }
 
         return newsDto;
-    }
-
-    // Helper method to convert DTO to Entity
-    private NewsEntity convertToEntity(NewsDto newsDto) {
-        NewsEntity newsEntity = new NewsEntity();
-        newsEntity.setNewsID(newsDto.getNewsID());
-        newsEntity.setNewsTitle(newsDto.getNewsTitle());
-        newsEntity.setNewsPost(newsDto.getNewsPost());
-        newsEntity.setNewsContent(newsDto.getNewsContent());
-        newsEntity.setImgName(newsDto.getImgName());
-        newsEntity.setImgData(newsDto.getImgData());
-        newsEntity.setNewsViewer(newsDto.getNewsViewer());
-        newsEntity.setNewsStatus(newsDto.getNewsStatus());
-
-        AccountEntity accountEntity = new AccountEntity();
-        accountEntity.setAccID(newsDto.getAccID());
-
-        newsEntity.setAccID(accountEntity);
-        // You can map other fields here if needed
-        return newsEntity;
     }
 
 
