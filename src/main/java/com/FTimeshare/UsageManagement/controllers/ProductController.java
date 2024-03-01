@@ -134,12 +134,21 @@ public class ProductController {
         List<ProductDto> product = productService.getProductByBookingId(productID);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
+
+    @GetMapping("/viewByProductTypeId/{productTypeID}")
+    public ResponseEntity<List<ProductDto>> viewProductByProductTypeId(@PathVariable int productTypeID) {
+        List<ProductDto> products = productService.getProductByProductTypeId(productTypeID);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+
     //Goi cac danh sach san pham tang dan theo view
     @GetMapping("/view/by_viewer/ascending")
     public ResponseEntity<List<ProductDto>> getProductsByViewerAscending() {
         List<ProductEntity> productEntities = productService.getAllProductsAscendingByView();
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
+
 
     //Goi cac danh sach san pham giam dan theo view
     @GetMapping("/view/by_viewer/descending")
@@ -231,7 +240,6 @@ public class ProductController {
         productDto.setAvailableEndDate(productEntity.getAvailableEndDate());
         productDto.setAvailableStartDate(productEntity.getAvailableStartDate());
         productDto.setProductStatus(productEntity.getProductStatus());
-//        productDto.setProductPicture(productEntity.getProductPicture());
         productDto.setProductPerson(productEntity.getProductPerson());
         productDto.setProductRating(productEntity.getProductRating());
         productDto.setProductSale(productEntity.getProductSale());
@@ -253,7 +261,6 @@ public class ProductController {
         productEntity.setProductPrice(productDto.getProductPrice());
         productEntity.setAvailableEndDate(productDto.getAvailableEndDate());
         productEntity.setAvailableStartDate(productDto.getAvailableStartDate());
-//        productEntity.setProductPicture(productDto.getProductPicture());
         productEntity.setProductPerson(productDto.getProductPerson());
         productEntity.setProductRating(productDto.getProductRating());
         productEntity.setProductSale(productDto.getProductSale());
