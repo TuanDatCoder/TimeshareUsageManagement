@@ -31,7 +31,7 @@ private PaymentRepository paymentRepository;
         return bookingRepository.sumPriceByProductID(productID);
     }
 
-    public void closeBooking(int bookingID, String Status) {
+    public void statusBooking(int bookingID, String Status) {
         Optional<BookingEntity> optionalBooking = bookingRepository.findById(bookingID);
         if (optionalBooking.isPresent()) {
             BookingEntity booking = optionalBooking.get();
@@ -175,6 +175,9 @@ private PaymentRepository paymentRepository;
         return (float) bookingPrices.stream().mapToDouble(Float::doubleValue).sum();
     }
 
+    public List<BookingEntity> getBookingsByStatus(String status) {
+        return bookingRepository.findByBookingStatus(status);
+    }
 }
 
 
