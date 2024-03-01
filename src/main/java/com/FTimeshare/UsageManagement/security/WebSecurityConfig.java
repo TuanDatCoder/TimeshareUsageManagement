@@ -57,11 +57,9 @@ public class WebSecurityConfig{
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/users/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/users/customer").hasRole("CUSTOMER")
-//                        .requestMatchers("/api/products/**").permitAll()
                         .requestMatchers("/auth/register-user").permitAll()
                         .requestMatchers(("/auth/login")).permitAll()
+                        .requestMatchers(("/api/products/**")).hasRole("CUSTOMER")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
