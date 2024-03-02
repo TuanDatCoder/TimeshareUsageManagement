@@ -65,8 +65,8 @@ public class ReportController {
 
     @PutMapping("update/{reportID}")
     public ResponseEntity<?> updateReport(@PathVariable int reportID, @RequestBody ReportDto updatedReport) {
-        LocalDateTime date = LocalDateTime.now();
-        updatedReport.setReportCreateDate(date);
+        LocalDateTime now = LocalDateTime.now();
+        updatedReport.setReportCreateDate(now);
         ReportDto editedFeedback = reportService.editFeedback(reportID, updatedReport);
         return ResponseEntity.ok(editedFeedback);
 
