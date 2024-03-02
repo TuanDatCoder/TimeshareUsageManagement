@@ -63,15 +63,15 @@ public class NewsController {
     @PostMapping
     public ResponseEntity<?> uploadImage(@RequestParam("news") MultipartFile file,
                                          @RequestParam String newsTitle,
-                                         @RequestParam String newsPost,
                                          @RequestParam String newsContent,
                                          @RequestParam int newsViewer,
                                          @RequestParam String newsStatus,
                                          @RequestParam int accID) throws IOException {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
-        String uploadImage = newsService.uploadImage(file, newsTitle, parsedNewsPost, newsContent, newsViewer, newsStatus, accID);
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+       // LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
+        LocalDateTime newsPost = LocalDateTime.now();
+        String uploadImage = newsService.uploadImage(file, newsTitle, newsPost, newsContent, newsViewer, newsStatus, accID);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
