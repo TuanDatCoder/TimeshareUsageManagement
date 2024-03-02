@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity, Integer> {
@@ -31,14 +32,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     @Query("SELECT DISTINCT a.accStatus FROM AccountEntity a")
     List<String> findAllStatus();
 
-
-
-
-    @Query("SELECT u FROM AccountEntity u WHERE u.accEmail = :email")
-    AccountEntity findByAccEmail(String email);
-    AccountEntity findByAccName(String username);
-//    Optional<AccountEntity> findByAccNameOrAccEmail(String accName, String accEmail);
-    void deleteByAccEmail(String email);
-
+    Optional<AccountEntity> findByImgName(String fileName);
 }
 

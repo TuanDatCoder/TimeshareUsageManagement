@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +45,17 @@ public class BookingController {
     public ResponseEntity<?> createBooking(@RequestBody BookingDto booking) {
         BookingDto createdBooking = bookingService.createBooking(booking);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
+    }
+
+    //người thuê đăng hóa đơn chuyển khoản
+    @PostMapping("/submit_payment/{bookingID}")
+    public ResponseEntity<?> uploadImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
+        if (bookingService.getBookingsByBookingId(bookingID) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Booking not found with ID: " + bookingID);
+        }
+
+        return bookingService.uploadBookingPaymentPicture(file, bookingID);
     }
 
     @DeleteMapping("/customer/deletebooking/{bookingID}")
