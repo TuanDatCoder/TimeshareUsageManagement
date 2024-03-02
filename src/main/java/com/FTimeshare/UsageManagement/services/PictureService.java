@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +36,42 @@ public class PictureService {
     @Autowired
     private ProductService productService;
 
+//    public String uploadImage(MultipartFile file, int productID) throws IOException {
+//        if (productService.getProductById(productID) == null) {
+//            System.out.println("Product not found with ID: " + productID);
+//            return "Product not found with ID: " + productID;
+//        }
+//
+//        // Kiểm tra xem tên ảnh đã tồn tại trong cơ sở dữ liệu chưa
+//        Optional<PictureEntity> existingPicture = pictureRepository.findByImgName(file.getOriginalFilename());
+//        if (existingPicture.isPresent()) {
+//            System.out.println("Image with name " + file.getOriginalFilename() + " already exists.");
+//            return "Image with name " + file.getOriginalFilename() + " already exists.";
+//        }
+//
+//        // Lưu ảnh vào cơ sở dữ liệu nếu không trùng tên
+//        PictureEntity imageData = pictureRepository.save(PictureEntity.builder()
+//                .imgName(file.getOriginalFilename())
+//                .imgData(ImageService.compressImage(file.getBytes()))
+//                .productID(productService.getProductById(productID))
+//                .build());
+//        return "File uploaded successfully: " + file.getOriginalFilename();
+//    }
+
+
+
+
+    public List<String> uploadImages(MultipartFile[] files, int productID) throws IOException {
+        List<String> uploadResults = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String uploadResult = uploadImage(file, productID);
+            uploadResults.add(uploadResult);
+        }
+
+        return uploadResults;
+    }
+
     public String uploadImage(MultipartFile file, int productID) throws IOException {
         if (productService.getProductById(productID) == null) {
             System.out.println("Product not found with ID: " + productID);
@@ -51,11 +88,22 @@ public class PictureService {
         // Lưu ảnh vào cơ sở dữ liệu nếu không trùng tên
         PictureEntity imageData = pictureRepository.save(PictureEntity.builder()
                 .imgName(file.getOriginalFilename())
-                .imgData(ImageService.compressImage(file.getBytes()))
+                .imgData(compressImage(file.getBytes()))
                 .productID(productService.getProductById(productID))
                 .build());
         return "File uploaded successfully: " + file.getOriginalFilename();
     }
+
+    // Hàm nén ảnh
+    private byte[] compressImage(byte[] imageData) {
+        // Thực hiện nén ảnh ở đây nếu cần thiết
+        return imageData;
+    }
+
+
+
+
+
 
     public byte[] downloadImage(String fileName){
         Optional<PictureEntity> dbImageData = pictureRepository.findByImgName(fileName);
