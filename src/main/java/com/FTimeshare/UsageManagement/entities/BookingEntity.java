@@ -46,7 +46,10 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
+    @Column(name = "payment_id")
+    private int paymentID;
 
-
-
+    @Lob
+    @Column(name = "respond_payment_img")
+    private byte[] respondPaymentImg;
 }
