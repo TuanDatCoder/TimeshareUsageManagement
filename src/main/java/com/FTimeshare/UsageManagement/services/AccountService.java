@@ -52,10 +52,10 @@ public class AccountService {
     }
 
     public int countUsersByRoleName(String roleName) {
-        return accountRepository.countByRoleIDRoleName(roleName);
+        return accountRepository.countByRoleName(roleName);
     }
     public List<AccountEntity> getUsersByRoleName(String roleName) {
-        return accountRepository.findByRoleIDRoleName(roleName);
+        return accountRepository.findByRoleName(roleName);
     }
 
 
