@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class FeedbackDto {
     private int feedbackID;
-    private LocalDateTime feedbackCreateDate;
+    private LocalDateTime feedbackCreateDate ;
     private String feedbackDetail;
     private String feedbackStatus;
     private float feedbackRating;

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin("http://localhost:8080")
@@ -23,12 +24,16 @@ public class FeedbackController {
 
     @PostMapping("/customer/submitfeedback")
     public ResponseEntity<FeedbackDto> submitFeedback(@RequestBody FeedbackDto feedbackDto) {
+        LocalDateTime date = LocalDateTime.now();
+        feedbackDto.setFeedbackCreateDate(date);
         FeedbackDto submittedFeedback = feedbackService.submitFeedback(feedbackDto);
         return new ResponseEntity<>(submittedFeedback, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/feedbacks/edit/{feedbackID}")
     public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
+        LocalDateTime date = LocalDateTime.now();
+        updatedFeedback.setFeedbackCreateDate(date);
         FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);
         return ResponseEntity.ok(editedFeedback);
     }

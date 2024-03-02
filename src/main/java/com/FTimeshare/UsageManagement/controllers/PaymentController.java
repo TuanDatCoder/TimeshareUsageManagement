@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -80,5 +79,4 @@ public class PaymentController {
                     .body("Error updating account: " + e.getMessage());
         }
     }
-
 }

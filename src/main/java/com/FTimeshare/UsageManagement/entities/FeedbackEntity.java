@@ -18,7 +18,7 @@ public class FeedbackEntity {
     private int feedbackID;
 
     @Column(name = "feedback_create_date")
-    private LocalDateTime feedbackCreateDate;
+    private LocalDateTime feedbackCreateDate = LocalDateTime.now() ;
 
     @Column(name = "feedback_detail")
     private String feedbackDetail;
