@@ -88,22 +88,11 @@ public class PictureService {
         // Lưu ảnh vào cơ sở dữ liệu nếu không trùng tên
         PictureEntity imageData = pictureRepository.save(PictureEntity.builder()
                 .imgName(file.getOriginalFilename())
-                .imgData(compressImage(file.getBytes()))
+                .imgData(ImageService.compressImage(file.getBytes()))
                 .productID(productService.getProductById(productID))
                 .build());
         return "File uploaded successfully: " + file.getOriginalFilename();
     }
-
-    // Hàm nén ảnh
-    private byte[] compressImage(byte[] imageData) {
-        // Thực hiện nén ảnh ở đây nếu cần thiết
-        return imageData;
-    }
-
-
-
-
-
 
     public byte[] downloadImage(String fileName){
         Optional<PictureEntity> dbImageData = pictureRepository.findByImgName(fileName);
