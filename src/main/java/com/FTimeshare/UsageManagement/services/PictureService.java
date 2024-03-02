@@ -57,6 +57,7 @@ public class PictureService {
         return "File uploaded successfully: " + file.getOriginalFilename();
     }
 
+
     public byte[] downloadImage(String fileName){
         Optional<PictureEntity> dbImageData = pictureRepository.findByImgName(fileName);
         return ImageService.decompressImage(dbImageData.get().getImgData());

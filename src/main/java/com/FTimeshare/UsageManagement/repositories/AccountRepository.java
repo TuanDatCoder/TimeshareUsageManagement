@@ -14,12 +14,17 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     @Query("SELECT u FROM AccountEntity u WHERE u.roleID.roleID = :roleId")
     List<AccountEntity> findAllByRoleID(@Param("roleId") int roleId);
 
-    int countByRoleName(String roleName);
-    List<AccountEntity> findByRoleName(String roleName);
+    int countByRoleIDRoleName(String roleName);
+    List<AccountEntity> findByRoleIDRoleName(String roleName);
 
     @Query("SELECT DISTINCT a.accStatus FROM AccountEntity a")
     List<String> findAllStatus();
-
+    @Query("SELECT u FROM AccountEntity u WHERE u.accEmail = :email")
+    AccountEntity findByAccEmail(String email);
+    AccountEntity findByAccName(String username);
+    void deleteByAccEmail(String email);
+    Boolean existsByAccName(String accName);
+    Boolean existsByAccEmail(String accEmail);
     Optional<AccountEntity> findByImgName(String fileName);
 }
 

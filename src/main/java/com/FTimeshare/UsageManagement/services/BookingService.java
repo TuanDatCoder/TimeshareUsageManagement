@@ -8,8 +8,12 @@ import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,6 +94,17 @@ public class BookingService {
         }
     }
 
+    public ResponseEntity<?> uploadBookingPaymentPicture(MultipartFile file, int bookingID) throws IOException {
+        BookingEntity booking = getBookingByBookingIDV2(bookingID);
+
+        booking.setImgName(file.getOriginalFilename());
+        booking.setImgData(ImageService.compressImage(file.getBytes()));
+        booking.setBookingStatus("Wait to confirm");
+        bookingRepository.save(booking);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Booking Payment Picture submit successfully.");
+    }
+
     private BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
         return new BookingDto(
@@ -149,6 +164,10 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    public BookingEntity getBookingByBookingIDV2(int bookingID){
+        BookingEntity bookingEntity = bookingRepository.findBookingEntityByBookingID(bookingID);
+        return  bookingEntity;
+    }
     public List<Float> getBookingPricesByProductId(int productID) {
         List<BookingEntity> bookings = bookingRepository.findByProductID_ProductID(productID);
 
