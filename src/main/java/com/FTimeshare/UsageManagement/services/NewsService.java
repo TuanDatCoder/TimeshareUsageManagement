@@ -54,7 +54,7 @@ public class NewsService {
                               String newsStatus,
                               int accID) throws IOException {
 
-        byte[] imgData = file.getBytes();
+//        byte[] imgData = file.getBytes();
 
         AccountEntity accountEntity = accountRepository.findById(accID)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " + accID));
