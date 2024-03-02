@@ -26,13 +26,14 @@ public class FeedbackController {
     public ResponseEntity<FeedbackDto> submitFeedback(@RequestBody FeedbackDto feedbackDto) {
         LocalDateTime now = LocalDateTime.now();
         feedbackDto.setFeedbackCreateDate(now);
-
         FeedbackDto submittedFeedback = feedbackService.submitFeedback(feedbackDto);
         return new ResponseEntity<>(submittedFeedback, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/feedbacks/edit/{feedbackID}")
     public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
+        LocalDateTime now = LocalDateTime.now();
+        updatedFeedback.setFeedbackCreateDate(now);
         FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);
         return ResponseEntity.ok(editedFeedback);
     }
