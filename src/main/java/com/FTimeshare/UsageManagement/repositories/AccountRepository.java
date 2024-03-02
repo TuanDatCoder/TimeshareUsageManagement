@@ -14,8 +14,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     @Query("SELECT u FROM AccountEntity u WHERE u.roleID.roleID = :roleId")
     List<AccountEntity> findAllByRoleID(@Param("roleId") int roleId);
 
-    int countByRoleIDRoleName(String roleName);
-    List<AccountEntity> findByRoleIDRoleName(String roleName);
+    int countByRoleName(String roleName);
+    List<AccountEntity> findByRoleName(String roleName);
 
     @Query("SELECT DISTINCT a.accStatus FROM AccountEntity a")
     List<String> findAllStatus();
