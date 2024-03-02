@@ -7,6 +7,7 @@ import com.FTimeshare.UsageManagement.repositories.MailboxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +17,21 @@ public class MailboxService {
 
     @Autowired
     private MailboxRepository mailboxRepository;
+
+
+    public List<MailboxEntity> getAllMailbox() {
+        return mailboxRepository.findAll();
+    }
+
+    public List<MailboxEntity> getMailboxByAccIdSend(int userID) {
+
+        return mailboxRepository.findByAccIdSend(userID);
+    }
+    public List<MailboxEntity> getMailboxByAccIdReceive(int userID) {
+
+        return mailboxRepository.findByAccIdReceive(userID);
+    }
+
 
 
     public MailboxDto submitMail(MailboxDto mailbox) {
