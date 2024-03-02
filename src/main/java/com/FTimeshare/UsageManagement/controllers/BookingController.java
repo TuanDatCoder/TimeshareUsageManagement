@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,14 +43,15 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    //Khach hang create booking, booking Entity duoc tao ra voi status Pending
     @PostMapping("/customer/createbooking")
     public ResponseEntity<?> createBooking(@RequestBody BookingDto booking) {
         BookingDto createdBooking = bookingService.createBooking(booking);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
 
-    //người thuê đăng hóa đơn chuyển khoản
-    @PostMapping("/submit_payment/{bookingID}")
+    //người thuê đăng hóa đơn chuyển khoản, status chuyen thanh "Wait to confirm"
+    @PostMapping("/customer/submit_payment/{bookingID}")
     public ResponseEntity<?> uploadImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
         if (bookingService.getBookingsByBookingId(bookingID) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -58,6 +61,45 @@ public class BookingController {
         return bookingService.uploadBookingPaymentPicture(file, bookingID);
     }
 
+    //chu nha check chuyen khoan va confirm
+    @PutMapping("/confirm_booking/{bookingID}")
+    public ResponseEntity<String> confirmBooking(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Active");
+        return ResponseEntity.ok("Done");
+    }
+
+    //khứa khách hủy đặt phòng trước hoặc hơn 3 ngày trước ngày check-in thì trả lại 100%, dưới 3 ngày thì 50%
+    @PostMapping("/cancel/{bookingID}")
+    public ResponseEntity<?> cancelBookingV2(@PathVariable int bookingID){
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        LocalDateTime current = LocalDateTime.now();
+        Duration duration = Duration.between(current, booking.getStartDate());
+        long days = duration.toDays();
+        if(days>=3){
+            bookingService.statusBooking(bookingID,"Waiting respond payment (100%)");
+        }else{
+            bookingService.statusBooking(bookingID,"Waiting respond payment (50%%)");
+        }
+        return ResponseEntity.ok("Submit cancel request");
+    }
+
+    //khứa chủ trả lại tiền đã chuyển
+    @PostMapping("/customer/submit_respond_payment/{bookingID}")
+    public ResponseEntity<?> uploadRespondPaymentImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
+        if (bookingService.getBookingsByBookingId(bookingID) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Booking not found with ID: " + bookingID);
+        }
+
+        return bookingService.uploadBookingRespondPaymentPicture(file, bookingID);
+    }
+
+    //khách hàng nhận lại tiền chuyển và xác nhận
+    @PutMapping("/confirm_booking_respond_payment/{bookingID}")
+    public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Canceled");
+        return ResponseEntity.ok("Done");
+    }
     @DeleteMapping("/customer/deletebooking/{bookingID}")
     public ResponseEntity<?> deleteBooking(@PathVariable int bookingID) {
         BookingDto deletedBooking = bookingService.deleteBooking(bookingID);
@@ -68,6 +110,7 @@ public class BookingController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @GetMapping("/view-booking-price/{productID}")
     public ResponseEntity<List<Float>> viewBookingPricesByProductId(@PathVariable int productID) {
@@ -172,7 +215,9 @@ public class BookingController {
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getPaymentID(),
+                bookingEntity.getRespondPaymentImg());
     }
 
 }
