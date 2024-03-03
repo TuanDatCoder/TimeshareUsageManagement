@@ -36,41 +36,7 @@ public class PictureController {
         return ResponseEntity.ok(pictures);
     }
 
-    @Autowired
-    private PictureService service;
 
-    @Autowired
-    private ProductService productService; // Đảm bảo đã inject ProductService vào đây
-
-//    @PostMapping("/{productID}")
-//    public ResponseEntity<?> uploadImage(@PathVariable int productID, @RequestParam("pictures") MultipartFile file) throws IOException {
-//        if (productService.getProductById(productID) == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("Product not found with ID: " + productID);
-//        }
-//        String uploadImage = service.uploadImage(file, productID);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(uploadImage);
-//    }
-
-
-//@PostMapping("/{productID}")
-//public ResponseEntity<?> uploadImages(@PathVariable int productID, @RequestParam("pictures") MultipartFile[] files) throws IOException {
-//    if (productService.getProductById(productID) == null) {
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                .body("Product not found with ID: " + productID);
-//    }
-//
-//    List<String> uploadResults = new ArrayList<>();
-//
-//    for (MultipartFile file : files) {
-//        String uploadResult = service.uploadImage(file, productID);
-//        uploadResults.add(uploadResult);
-//    }
-//
-//    return ResponseEntity.status(HttpStatus.OK)
-//            .body(uploadResults);
-//}
 
     @PostMapping("/{productID}")
     public ResponseEntity<?> uploadImages(@PathVariable int productID, @RequestParam("pictures") MultipartFile[] files) throws IOException {
@@ -80,7 +46,7 @@ public class PictureController {
 
     @GetMapping("imgView/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
-        byte[] imageData=service.downloadImage(fileName);
+        byte[] imageData=pictureService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
