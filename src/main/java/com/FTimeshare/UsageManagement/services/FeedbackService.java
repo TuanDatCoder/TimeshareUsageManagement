@@ -1,9 +1,11 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
+import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.entities.ReportEntity;
 import com.FTimeshare.UsageManagement.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,13 @@ public class FeedbackService {
 
     public List<FeedbackDto> getAllFeedback() {
         List<FeedbackEntity> feedbackEntities = feedbackRepository.findAll();
+        return feedbackEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<FeedbackDto> viewFeedbackByProductID(int productID) {
+        List<FeedbackEntity> feedbackEntities = feedbackRepository.findByProductID_ProductID(productID);
         return feedbackEntities.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

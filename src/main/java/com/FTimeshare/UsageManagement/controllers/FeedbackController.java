@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
+import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,11 @@ public class FeedbackController {
         return new ResponseEntity<>(submittedFeedback, HttpStatus.CREATED);
     }
 
+    @GetMapping("/viewByProductId/{productID}")
+    public ResponseEntity<List<FeedbackDto>> viewFeedbackByProductID(@PathVariable int productID) {
+        List<FeedbackDto> feedback = feedbackService.viewFeedbackByProductID(productID);
+        return new ResponseEntity<>(feedback, HttpStatus.OK);
+    }
 //    @PutMapping("/api/feedbacks/edit/{feedbackID}")
 //    public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
 //        FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);

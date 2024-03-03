@@ -24,8 +24,8 @@ public class ReportService {
     }
 
     public List<ReportDto> viewReportByProductID(int productID) {
-        List<ReportEntity> pictureEntities = reportRepository.findByProductID_ProductID(productID);
-        return pictureEntities.stream()
+        List<ReportEntity> reportEntities = reportRepository.findByProductID_ProductID(productID);
+        return reportEntities.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

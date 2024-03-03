@@ -28,7 +28,7 @@ public class ReportController {
 
 
     @GetMapping("/viewByProductId/{productID}")
-    public ResponseEntity<List<ReportDto>> viewPictureByProductID(@PathVariable int productID) {
+    public ResponseEntity<List<ReportDto>> viewReportByProductID(@PathVariable int productID) {
         List<ReportDto> reports = reportService.viewReportByProductID(productID);
         return new ResponseEntity<>(reports, HttpStatus.OK);
     }
