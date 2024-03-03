@@ -56,7 +56,7 @@ public class AuthController {
 
         return ResponseEntity.ok("Logged out successfully");
     }
-//    @PostMapping("/logout")
+    //    @PostMapping("/logout")
 //    public ResponseEntity<?> logout(HttpServletRequest request) {
 //        // Get the current authenticated user
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

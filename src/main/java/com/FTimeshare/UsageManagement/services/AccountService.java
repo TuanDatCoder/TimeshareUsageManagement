@@ -182,21 +182,21 @@ public class AccountService {
 
 
     public List<AccountDto> getAllAccounts() {
-            List<AccountEntity> accounts = accountRepository.findAll();
-            return accounts.stream()
-                    .map(accountEntity -> new AccountDto(
-                            accountEntity.getAccID(),
-                            accountEntity.getAccName(),
-                            accountEntity.getAccPhone(),
-                            accountEntity.getAccEmail(),
-                            accountEntity.getAccPassword(),
-                            "http://localhost:8080/api/users/viewImg/" + accountEntity.getImgName(),  // Thêm imgName vào đường dẫn
-                            new byte[0],
-                            accountEntity.getAccStatus(),
-                            accountEntity.getAccBirthday(),
-                            accountEntity.getRoleID().getRoleID()))
-                    .collect(Collectors.toList());
-        }
+        List<AccountEntity> accounts = accountRepository.findAll();
+        return accounts.stream()
+                .map(accountEntity -> new AccountDto(
+                        accountEntity.getAccID(),
+                        accountEntity.getAccName(),
+                        accountEntity.getAccPhone(),
+                        accountEntity.getAccEmail(),
+                        accountEntity.getAccPassword(),
+                        "http://localhost:8080/api/users/viewImg/" + accountEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        new byte[0],
+                        accountEntity.getAccStatus(),
+                        accountEntity.getAccBirthday(),
+                        accountEntity.getRoleID().getRoleID()))
+                .collect(Collectors.toList());
+    }
 
     public AccountDto convertToDto(AccountEntity accountEntity) {
         AccountDto accountDto = new AccountDto();
