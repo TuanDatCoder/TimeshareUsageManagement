@@ -1,12 +1,12 @@
 package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
-import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin("http://localhost:8080")
@@ -24,29 +24,28 @@ public class FeedbackController {
 
     @PostMapping("/customer/submitfeedback")
     public ResponseEntity<FeedbackDto> submitFeedback(@RequestBody FeedbackDto feedbackDto) {
+        LocalDateTime now = LocalDateTime.now();
+        feedbackDto.setFeedbackCreateDate(now);
         FeedbackDto submittedFeedback = feedbackService.submitFeedback(feedbackDto);
         return new ResponseEntity<>(submittedFeedback, HttpStatus.CREATED);
     }
 
-    @GetMapping("/viewByProductId/{productID}")
-    public ResponseEntity<List<FeedbackDto>> viewFeedbackByProductID(@PathVariable int productID) {
-        List<FeedbackDto> feedback = feedbackService.viewFeedbackByProductID(productID);
-        return new ResponseEntity<>(feedback, HttpStatus.OK);
+    @PutMapping("/api/feedbacks/edit/{feedbackID}")
+    public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
+        LocalDateTime now = LocalDateTime.now();
+        updatedFeedback.setFeedbackCreateDate(now);
+        FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);
+        return ResponseEntity.ok(editedFeedback);
     }
-//    @PutMapping("/api/feedbacks/edit/{feedbackID}")
-//    public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
-//        FeedbackDto editedFeedback = feedbackService.editFeedback(feedbackID, updatedFeedback);
-//        return ResponseEntity.ok(editedFeedback);
-//    }
-//
-//    @DeleteMapping("/delete-feedback/{feedbackID}")
-//    public ResponseEntity<?> deleteFeedback(@PathVariable int feedbackID) {
-//        FeedbackDto deletedFeedback = feedbackService.deleteFeedback(feedbackID);
-//
-//        if (deletedFeedback != null) {
-//            return ResponseEntity.ok(deletedFeedback);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+
+    @DeleteMapping("/delete-feedback/{feedbackID}")
+    public ResponseEntity<?> deleteFeedback(@PathVariable int feedbackID) {
+        FeedbackDto deletedFeedback = feedbackService.deleteFeedback(feedbackID);
+
+        if (deletedFeedback != null) {
+            return ResponseEntity.ok(deletedFeedback);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

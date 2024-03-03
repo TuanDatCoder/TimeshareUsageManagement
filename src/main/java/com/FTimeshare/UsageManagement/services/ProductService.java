@@ -25,9 +25,6 @@ public class ProductService {
         return productRepository.findByProductStatus(status);
     }
 
-//    public int getTotalProductCount() {
-//        return (int) productRepository.count();
-//    }
 
     public void statusProduct(int productID, String Status) {
         Optional<ProductEntity> optionalProduct = productRepository.findById(productID);

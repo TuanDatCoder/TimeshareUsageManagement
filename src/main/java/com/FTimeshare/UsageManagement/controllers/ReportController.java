@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,12 +59,16 @@ public class ReportController {
     }
     @PostMapping("/customer/submitreport")
     public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
+        LocalDateTime now = LocalDateTime.now();
+        reportDto.setReportCreateDate(now);
         ReportDto submittedReport = reportService.submitReport(reportDto);
         return new ResponseEntity<>(submittedReport, HttpStatus.CREATED);
     }
 
     @PutMapping("update/{reportID}")
     public ResponseEntity<?> updateReport(@PathVariable int reportID, @RequestBody ReportDto updatedReport) {
+        LocalDateTime now = LocalDateTime.now();
+        updatedReport.setReportCreateDate(now);
         ReportDto editedFeedback = reportService.editFeedback(reportID, updatedReport);
         return ResponseEntity.ok(editedFeedback);
 
@@ -77,6 +82,7 @@ public class ReportController {
     }
 
 
+    LocalDateTime now = LocalDateTime.now();
 
 private ReportDto convertToDto(ReportEntity reportEntity) {
     ReportDto reportDto = new ReportDto();

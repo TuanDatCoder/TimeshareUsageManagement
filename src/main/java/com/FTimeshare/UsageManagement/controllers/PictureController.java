@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,15 +42,40 @@ public class PictureController {
     @Autowired
     private ProductService productService; // Đảm bảo đã inject ProductService vào đây
 
+//    @PostMapping("/{productID}")
+//    public ResponseEntity<?> uploadImage(@PathVariable int productID, @RequestParam("pictures") MultipartFile file) throws IOException {
+//        if (productService.getProductById(productID) == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body("Product not found with ID: " + productID);
+//        }
+//        String uploadImage = service.uploadImage(file, productID);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(uploadImage);
+//    }
+
+
+//@PostMapping("/{productID}")
+//public ResponseEntity<?> uploadImages(@PathVariable int productID, @RequestParam("pictures") MultipartFile[] files) throws IOException {
+//    if (productService.getProductById(productID) == null) {
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                .body("Product not found with ID: " + productID);
+//    }
+//
+//    List<String> uploadResults = new ArrayList<>();
+//
+//    for (MultipartFile file : files) {
+//        String uploadResult = service.uploadImage(file, productID);
+//        uploadResults.add(uploadResult);
+//    }
+//
+//    return ResponseEntity.status(HttpStatus.OK)
+//            .body(uploadResults);
+//}
+
     @PostMapping("/{productID}")
-    public ResponseEntity<?> uploadImage(@PathVariable int productID, @RequestParam("pictures") MultipartFile file) throws IOException {
-        if (productService.getProductById(productID) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Product not found with ID: " + productID);
-        }
-        String uploadImage = service.uploadImage(file, productID);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
+    public ResponseEntity<?> uploadImages(@PathVariable int productID, @RequestParam("pictures") MultipartFile[] files) throws IOException {
+        List<String> uploadResults = pictureService.uploadImages(files, productID);
+        return ResponseEntity.status(HttpStatus.OK).body(uploadResults);
     }
 
     @GetMapping("imgView/{fileName}")
