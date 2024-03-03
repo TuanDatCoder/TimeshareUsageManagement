@@ -3,12 +3,14 @@ package com.FTimeshare.UsageManagement.services;
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.RoleEntity;
+import com.FTimeshare.UsageManagement.exceptions.UserAlreadyExistsException;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -52,10 +54,10 @@ public class AccountService {
     }
 
     public int countUsersByRoleName(String roleName) {
-        return accountRepository.countByRoleName(roleName);
+        return accountRepository.countByRoleIDRoleName(roleName);
     }
     public List<AccountEntity> getUsersByRoleName(String roleName) {
-        return accountRepository.findByRoleName(roleName);
+        return accountRepository.findByRoleIDRoleName(roleName);
     }
 
 
@@ -97,10 +99,6 @@ public class AccountService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    public List<AccountEntity> getAllUsers() {
-        return accountRepository.findAll();
-    }
-
 
     public AccountEntity findByAccountEmail(String acc_email){
         return accountRepository.findByAccEmail(acc_email);
@@ -208,7 +206,7 @@ public class AccountService {
         accountDto.setAccEmail(accountEntity.getAccEmail());
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
-        accountDto.setImgName("http://localhost:8080/api/users/viewImg/" + accountEntity.getImgName());
+        accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
         accountDto.setImgData(new byte[0]);
         int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
         if (accountEntity.getRoleID() != null) {
@@ -216,5 +214,7 @@ public class AccountService {
             roleID = accountEntity.getRoleID().getRoleID(); // Giả sử ID của vai trò là một số nguyên
         }
         accountDto.setRoleID(roleID);
+
+        return accountDto;
     }
 }

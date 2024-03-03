@@ -28,9 +28,7 @@ public class BookingService {
     @Autowired
     private  ProductRepository productRepository;
 
-    public float getSumPriceByProductId(int productID){
-        return bookingRepository.sumPriceByProductID(productID);
-    }
+
 
     public void statusBooking(int bookingID, String Status) {
         Optional<BookingEntity> optionalBooking = bookingRepository.findById(bookingID);
@@ -160,12 +158,12 @@ public class BookingService {
     }
 
 
-//    public List<BookingDto> getBookingsByAccountId(int accID) {
-//        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
-//        return bookingEntities.stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//    }
+    public List<BookingDto> getBookingsByAccountId(int accID) {
+        List<BookingEntity> bookingEntities = bookingRepository.findByAccID_AccID(accID);
+        return bookingEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
     public float getSumPriceByProductId(int productID){
         float sum = 0;
@@ -204,6 +202,3 @@ public class BookingService {
         return bookingRepository.findByBookingStatus(status);
     }
 }
-
-
-

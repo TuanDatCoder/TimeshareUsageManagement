@@ -155,7 +155,7 @@ public class BookingController {
         return doneBooking.size();
     }
 
-// làm change status
+    // làm change status
     @PutMapping("staff/active/{bookingID}")
     public ResponseEntity<String> activeBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Active");

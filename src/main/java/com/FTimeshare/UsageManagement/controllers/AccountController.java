@@ -140,7 +140,7 @@ public class AccountController {
         accountDto.setAccEmail(accountEntity.getAccEmail());
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
-       accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
+        accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
         accountDto.setImgData(new byte[0]);
         int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
         if (accountEntity.getRoleID() != null) {
@@ -152,24 +152,5 @@ public class AccountController {
         return accountDto;
     }
 
-    public AccountEntity convertToEntity(AccountDto accountDto) {
-        AccountEntity accountEntity = new AccountEntity();
-        accountEntity.setAccName(accountDto.getAccName());
-        accountEntity.setAccPhone(accountDto.getAccPhone());
-        accountEntity.setAccEmail(accountDto.getAccEmail());
-        accountEntity.setAccPassword(accountDto.getAccPassword());
-        accountEntity.setAccBirthday(accountDto.getAccBirthday());
-        accountEntity.setAccStatus(accountDto.getAccStatus());
-        accountEntity.setAccImg(accountDto.getAccImg());
-        int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
-        if (accountEntity.getRoleID() != null) {
-            // Lấy ID của vai trò từ đối tượng RoleEntity và gán cho roleID
-            roleID = accountEntity.getRoleID().getRoleID(); // Giả sử ID của vai trò là một số nguyên
-        }
-        accountDto.setRoleID(roleID);
-
-        return accountEntity;
-    }
 
 }
-

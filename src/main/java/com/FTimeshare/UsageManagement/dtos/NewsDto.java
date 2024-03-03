@@ -16,6 +16,10 @@ public class NewsDto {
     private String newsTitle;
     private LocalDateTime newsPost;
     private String newsContent;
-    private int Userid;
+    private String imgName;
+    private byte[] imgData;
+    private int newsViewer;
+    private String newsStatus;
+    private int accID;
 
 }

@@ -69,11 +69,6 @@ public class ReportController {
 
     }
 
-    @PostMapping("/customer/submitreport")
-    public ResponseEntity<ReportDto> submitReport(@RequestBody ReportDto reportDto) {
-        ReportDto submittedReport = reportService.submitReport(reportDto);
-        return new ResponseEntity<>(submittedReport, HttpStatus.CREATED);
-    }
 
     // API endpoint để xóa một báo cáo dựa trên reportID
     @DeleteMapping("delete/{reportID}")

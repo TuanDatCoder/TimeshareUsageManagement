@@ -3,6 +3,7 @@ package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name="Account", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"acc_name"}),
         @UniqueConstraint(columnNames = {"acc_email"})

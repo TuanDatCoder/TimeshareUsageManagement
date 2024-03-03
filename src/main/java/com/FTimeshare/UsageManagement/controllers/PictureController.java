@@ -2,7 +2,7 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.PictureDto;
-import com.FTimeshare.UsageManagement.entities.PictureEntity;
+
 import com.FTimeshare.UsageManagement.services.PictureService;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import jakarta.persistence.EntityNotFoundException;
