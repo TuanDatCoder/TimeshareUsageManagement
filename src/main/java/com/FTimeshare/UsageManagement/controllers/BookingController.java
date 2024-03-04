@@ -159,7 +159,8 @@ public class BookingController {
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getRespondPaymentImg());
     }
 
 }

@@ -51,7 +51,8 @@ public class BookingService {
                         bookingEntity.getImgName(),
                         bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID()))
+                        bookingEntity.getProductID().getProductID(),
+                        bookingEntity.getRespondPaymentImg()))
 
                 .collect(Collectors.toList());
     }
@@ -70,6 +71,7 @@ public class BookingService {
         bookingEntity.setBookingStatus(booking.getBookingStatus());
         bookingEntity.setImgName(booking.getImgName());
         bookingEntity.setImgData(booking.getImgData());
+        bookingEntity.setRespondPaymentImg(booking.getRespondPaymentImg());
         // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
@@ -102,7 +104,8 @@ public class BookingService {
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getRespondPaymentImg());
     }
 
     public BookingDto deleteBooking(int bookingID) {
