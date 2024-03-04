@@ -1,5 +1,6 @@
 package com.FTimeshare.UsageManagement.services;
 
+import com.FTimeshare.UsageManagement.controllers.BookingController;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
@@ -51,7 +52,8 @@ public class BookingService {
                         bookingEntity.getImgName(),
                         bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID()))
+                        bookingEntity.getProductID().getProductID(),
+                        bookingEntity.getRespondPaymentImg()))
 
                 .collect(Collectors.toList());
     }
@@ -102,7 +104,8 @@ public class BookingService {
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(),
+                bookingEntity.getRespondPaymentImg());
     }
 
     public BookingDto deleteBooking(int bookingID) {
@@ -165,6 +168,8 @@ public class BookingService {
     public List<BookingEntity> getBookingsByStatus(String status) {
         return bookingRepository.findByBookingStatus(status);
     }
+
+
 }
 
 
