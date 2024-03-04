@@ -14,8 +14,9 @@ public class PaymentDto {
     private String accountName;
     private String banking;
     private String accountNumber;
-    private byte[] imageBanking;
-    private int accId;
+    private String imgName;
+    private byte[] imgData;
+    private int accID;
 
 
 }

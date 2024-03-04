@@ -8,24 +8,29 @@ import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
-@Autowired
-private BookingRepository bookingRepository;
-@Autowired
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
     private  AccountRepository accountRepository;
-@Autowired
+    @Autowired
     private  ProductRepository productRepository;
 
 
 
-    public void closeBooking(int bookingID, String Status) {
+    public void statusBooking(int bookingID, String Status) {
         Optional<BookingEntity> optionalBooking = bookingRepository.findById(bookingID);
         if (optionalBooking.isPresent()) {
             BookingEntity booking = optionalBooking.get();
@@ -46,32 +51,37 @@ private BookingRepository bookingRepository;
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
                         bookingEntity.getBookingPrice(),
-                        bookingEntity.getPaymentMethods(),
-                        bookingEntity.getBookingRating(),
+                        bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
+                        bookingEntity.getImgName(),
+                        bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID(),
-                        bookingEntity.getPaymentID().getPaymentID()))
+                        bookingEntity.getRespondPaymentImg()))
 
                 .collect(Collectors.toList());
     }
 
 
+
     public BookingDto createBooking(BookingDto booking) {
+
+
         BookingEntity bookingEntity = new BookingEntity();
         // Set properties of bookingEntity from bookingRequest
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
-        bookingEntity.setBookingPrice(booking.getBookingPrice());
-        bookingEntity.setPaymentMethods(booking.getPaymentMethods());
-        bookingEntity.setBookingRating(booking.getBookingRating());
-        bookingEntity.setBookingStatus(booking.getBookingStatus());
+        Duration duration = Duration.between(booking.getStartDate(), booking.getEndDate());
+        long days = duration.toDays();
 
-        // Assuming you have UserRepository and ProductRepository
+        bookingEntity.setBookingPerson(booking.getBookingPerson());
+        bookingEntity.setBookingStatus("Pending");
+        bookingEntity.setImgName(booking.getImgName());
+        bookingEntity.setImgData(booking.getImgData());
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
-
-        if (accountEntity != null && productEntity != null) {
+        bookingEntity.setBookingPrice(productEntity.getProductPrice()*days);
+        if (accountEntity != null && productEntity != null  ) {
             bookingEntity.setAccID(accountEntity);
             bookingEntity.setProductID(productEntity);
             // Set other properties as needed
@@ -87,6 +97,26 @@ private BookingRepository bookingRepository;
         }
     }
 
+    public ResponseEntity<?> uploadBookingPaymentPicture(MultipartFile file, int bookingID) throws IOException {
+        BookingEntity booking = getBookingByBookingIDV2(bookingID);
+
+        booking.setImgName(file.getOriginalFilename());
+        booking.setImgData(ImageService.compressImage(file.getBytes()));
+        booking.setBookingStatus("Wait to confirm");
+        bookingRepository.save(booking);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Booking Payment Picture submit successfully.");
+    }
+
+    public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
+        BookingEntity booking = getBookingByBookingIDV2(bookingID);
+
+        booking.setImgData(ImageService.compressImage(file.getBytes()));
+        booking.setBookingStatus("Wait customer to confirm respond payment");
+        bookingRepository.save(booking);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Booking Respond Payment Picture submit successfully.");
+    }
     private BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
         return new BookingDto(
@@ -94,15 +124,15 @@ private BookingRepository bookingRepository;
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
                 bookingEntity.getBookingPrice(),
-                bookingEntity.getPaymentMethods(),
-                bookingEntity.getBookingRating(),
+                bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
+                bookingEntity.getImgName(),
+                bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID(),
-                bookingEntity.getPaymentID().getPaymentID());
-
-
+                bookingEntity.getRespondPaymentImg());
     }
+
     public BookingDto deleteBooking(int bookingID) {
         // Tìm đặt phòng theo ID
         Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(bookingID);
@@ -147,6 +177,10 @@ private BookingRepository bookingRepository;
                 .collect(Collectors.toList());
     }
 
+    public BookingEntity getBookingByBookingIDV2(int bookingID){
+        BookingEntity bookingEntity = bookingRepository.findBookingEntityByBookingID(bookingID);
+        return  bookingEntity;
+    }
     public List<Float> getBookingPricesByProductId(int productID) {
         List<BookingEntity> bookings = bookingRepository.findByProductID_ProductID(productID);
 
@@ -159,6 +193,8 @@ private BookingRepository bookingRepository;
         List<Float> bookingPrices = bookingRepository.findBookingPricesByProductID(productId);
         return (float) bookingPrices.stream().mapToDouble(Float::doubleValue).sum();
     }
+
+    public List<BookingEntity> getBookingsByStatus(String status) {
+        return bookingRepository.findByBookingStatus(status);
+    }
 }
-
-

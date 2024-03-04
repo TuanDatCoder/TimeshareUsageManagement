@@ -41,6 +41,7 @@ public class AuthController {
         }
     }
 
+
 //    @PostMapping("/logout")
 //    public ResponseEntity<String> logout(HttpServletRequest request) {
 //        String token = authTokenFilter.parseJwt(request);
@@ -51,6 +52,7 @@ public class AuthController {
 //        return ResponseEntity.ok("Logged out successfully");
 //    }
 //    @PostMapping("/logout")
+
 //    public ResponseEntity<?> logout(HttpServletRequest request) {
 //        // Get the current authenticated user
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

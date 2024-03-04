@@ -3,16 +3,22 @@ package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Account")
+@Builder
+@Table(name="Account", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"acc_name"}),
+        @UniqueConstraint(columnNames = {"acc_email"})
+})
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

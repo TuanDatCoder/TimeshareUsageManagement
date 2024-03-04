@@ -26,7 +26,6 @@ public class ProductDto {
     private float productRating;
     private int productSale;
     private int productViewer;
-    private String productPicture;
     private int projectID;
     private int productTypeID;
     private int accID;

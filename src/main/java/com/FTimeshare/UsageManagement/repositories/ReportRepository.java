@@ -12,6 +12,5 @@ public interface ReportRepository extends JpaRepository<ReportEntity, Integer> {
     @Query("SELECT DISTINCT e.reportStatus FROM ReportEntity e")
     List<String> findAllStatus();
     List<ReportEntity> findByProductID_ProductID(int productID);
-
-
+    
 }

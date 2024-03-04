@@ -25,11 +25,8 @@ public class ProductService {
         return productRepository.findByProductStatus(status);
     }
 
-//    public int getTotalProductCount() {
-//        return (int) productRepository.count();
-//    }
 
-    public void closeProduct(int productID, String Status) {
+    public void statusProduct(int productID, String Status) {
         Optional<ProductEntity> optionalProduct = productRepository.findById(productID);
         if (optionalProduct.isPresent()) {
             ProductEntity product = optionalProduct.get();
@@ -141,7 +138,6 @@ public class ProductService {
                 productEntity.getProductRating(),
                 productEntity.getProductSale(),
                 productEntity.getProductViewer(),
-                productEntity.getProductStatus(),
                 productEntity.getProjectID().getProjectID(),
                 productEntity.getProductTypeID().getProductTypeID(),
                 productEntity.getAccID().getAccID());
@@ -149,6 +145,18 @@ public class ProductService {
     }
     public ProductEntity addNewProduct(ProductEntity productEntity) {
         return productRepository.save(productEntity);
+    }
+    public ProductEntity getProductById(int productID) {
+        Optional<ProductEntity> productOptional = productRepository.findById(productID);
+        return productOptional.orElse(null);
+    }
+
+    public List<ProductDto> getProductByProductTypeId(int productTypeID) {
+       List<ProductEntity> productEntities = productRepository.findByProductTypeID_ProductTypeID(productTypeID);
+        return productEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+
     }
 
 }

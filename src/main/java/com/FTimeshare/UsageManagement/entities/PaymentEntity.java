@@ -2,9 +2,11 @@ package com.FTimeshare.UsageManagement.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,11 +28,15 @@ public class PaymentEntity {
     @Column(name="account_number")
     private String accountNumber;
 
+    @Column(name="img_name")
+    private String imgName;
+
     @Lob
-    @Column(name="image_banking",length = 1000)
-    private byte[] imageBanking;
+    @Column(name="img_data")
+    private byte[] imgData;
 
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
-    private  AccountEntity accId;
+    private  AccountEntity accID;
+
 }

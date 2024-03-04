@@ -26,14 +26,18 @@ public class BookingEntity {
     @Column(name = "booking_price")
     private float bookingPrice;
 
-    @Column(name = "payment_methods")
-    private String paymentMethods;
-
-    @Column(name = "booking_rating")
-    private float bookingRating;
+    @Column(name = "booking_person")
+    private int bookingPerson;
 
     @Column(name = "booking_status")
     private String bookingStatus;
+
+    @Column(name = "img_name")
+    private String imgName;
+
+    @Lob
+    @Column(name = "img_data")
+    private byte[] imgData;
 
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
@@ -43,7 +47,9 @@ public class BookingEntity {
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
-    private PaymentEntity paymentID;
+    @Lob
+    @Column(name = "respond_payment_img")
+    private byte[] respondPaymentImg;
+
+
 }

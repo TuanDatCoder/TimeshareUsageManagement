@@ -1,8 +1,11 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
+import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
+import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.entities.ReportEntity;
 import com.FTimeshare.UsageManagement.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,16 @@ public class FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+
     public List<FeedbackDto> getAllFeedback() {
         List<FeedbackEntity> feedbackEntities = feedbackRepository.findAll();
+        return feedbackEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<FeedbackDto> viewFeedbackByProductID(int productID) {
+        List<FeedbackEntity> feedbackEntities = feedbackRepository.findByProductID_ProductID(productID);
         return feedbackEntities.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -28,7 +39,9 @@ public class FeedbackService {
                 feedbackEntity.getFeedbackCreateDate(),
                 feedbackEntity.getFeedbackDetail(),
                 feedbackEntity.getFeedbackStatus(),
-                feedbackEntity.getBookingID().getBookingID()
+                feedbackEntity.getFeedbackRating(),
+                feedbackEntity.getBookingID().getBookingID(),
+                feedbackEntity.getProductID().getProductID()
         );
     }
 
@@ -47,6 +60,7 @@ public class FeedbackService {
         existingFeedback.setFeedbackCreateDate(updatedFeedback.getFeedbackCreateDate());
         existingFeedback.setFeedbackDetail(updatedFeedback.getFeedbackDetail());
         existingFeedback.setFeedbackStatus(updatedFeedback.getFeedbackStatus());
+        existingFeedback.setFeedbackRating(updatedFeedback.getFeedbackRating());
 
         // Lưu cập nhật vào cơ sở dữ liệu
         FeedbackEntity savedFeedback = feedbackRepository.save(existingFeedback);
@@ -81,19 +95,18 @@ public class FeedbackService {
         feedbackEntity.setFeedbackCreateDate(feedbackDto.getFeedbackCreateDate());
         feedbackEntity.setFeedbackDetail(feedbackDto.getFeedbackDetail());
         feedbackEntity.setFeedbackStatus(feedbackDto.getFeedbackStatus());
+        feedbackEntity.setFeedbackRating(feedbackDto.getFeedbackRating());
 
         // Assume that bookingID is an int in FeedbackDto
         BookingEntity bookingEntity = new BookingEntity();
+        ProductEntity productEntity = new ProductEntity();
         bookingEntity.setBookingID(feedbackDto.getBookingID());
+        productEntity.setProductID(feedbackDto.getProductID());
 
         // Set the bookingEntity to feedbackEntity
         feedbackEntity.setBookingID(bookingEntity);
+        feedbackEntity.setProductID(productEntity);
 
         return feedbackEntity;
     }
 }
-
-
-
-
-
