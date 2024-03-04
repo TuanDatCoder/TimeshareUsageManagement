@@ -57,7 +57,6 @@ public class BookingService {
                         bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID(),
-                        bookingEntity.getPaymentID(),
                         bookingEntity.getRespondPaymentImg()))
 
                 .collect(Collectors.toList());
@@ -79,8 +78,6 @@ public class BookingService {
         bookingEntity.setBookingStatus("Pending");
         bookingEntity.setImgName(booking.getImgName());
         bookingEntity.setImgData(booking.getImgData());
-        bookingEntity.setPaymentID(booking.getPaymentID());
-        // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
         bookingEntity.setBookingPrice(productEntity.getProductPrice()*days);
@@ -133,7 +130,6 @@ public class BookingService {
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID(),
-                bookingEntity.getPaymentID(),
                 bookingEntity.getRespondPaymentImg());
     }
 
