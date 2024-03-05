@@ -50,4 +50,6 @@ public class BookingEntity {
     @Lob
     @Column(name = "respond_payment_img")
     private byte[] respondPaymentImg;
+
+
 }

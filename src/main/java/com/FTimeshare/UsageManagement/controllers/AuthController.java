@@ -1,6 +1,5 @@
 package com.FTimeshare.UsageManagement.controllers;
 
-import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.exceptions.UserAlreadyExistsException;
 import com.FTimeshare.UsageManagement.request.LoginRequest;
@@ -9,24 +8,20 @@ import com.FTimeshare.UsageManagement.security.jwt.AuthTokenFilter;
 import com.FTimeshare.UsageManagement.security.jwt.JwtUtils;
 import com.FTimeshare.UsageManagement.security.user.TimeshareUserDetails;
 import com.FTimeshare.UsageManagement.services.AccountService;
-import com.FTimeshare.UsageManagement.services.InMemoryTokenBlacklist;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -35,7 +30,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final AuthTokenFilter authTokenFilter;
-    private final InMemoryTokenBlacklist tokenBlacklist;
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody AccountEntity accountEntity){
         try{
@@ -47,16 +41,18 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        String token = authTokenFilter.parseJwt(request);
-        tokenBlacklist.addToBlacklist(token);
 
-        // Clear any session-related data if necessary
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout(HttpServletRequest request) {
+//        String token = authTokenFilter.parseJwt(request);
+//        tokenBlacklist.addToBlacklist(token);
+//
+//        // Clear any session-related data if necessary
+//
+//        return ResponseEntity.ok("Logged out successfully");
+//    }
+//    @PostMapping("/logout")
 
-        return ResponseEntity.ok("Logged out successfully");
-    }
-    //    @PostMapping("/logout")
 //    public ResponseEntity<?> logout(HttpServletRequest request) {
 //        // Get the current authenticated user
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

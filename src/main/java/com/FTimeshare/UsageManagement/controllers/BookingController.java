@@ -2,6 +2,7 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
+import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.services.BookingService;
@@ -124,14 +125,28 @@ public class BookingController {
     }
     //Staff duyet va view status
 
-    public ResponseEntity<List<BookingDto>> getStatusBooking(String status) {
+
+    @GetMapping("/view-booking-by-status/{status}")
+    public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
         List<BookingEntity> statusProducts = bookingService.getBookingsByStatus(status);
         return ResponseEntity.ok(convertToDtoList(statusProducts));
     }
 
+//    public ResponseEntity<List<BookingEntity>> getStatusBookingEntity(String status) {
+//        List<BookingDto> statusBookings = bookingService.getBookingsByStatus(status);
+//        List<BookingEntity> bookingEntities = convertToEntityList(statusBookings);
+//        return ResponseEntity.ok(bookingEntities);
+//    }
+
     // View total status
     @GetMapping("staff/totalPending")
-    public int countPendingBookings() {
+//    public long countPendingBookings() {
+//        ResponseEntity<List<BookingEntity>> responseEntity = getStatusBookingEntity("Pending");
+//        List<BookingEntity> pendingBookings = responseEntity.getBody();
+//        return pendingBookings.size();
+//    }
+
+        public int countPendingBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
         List<BookingDto> pendindBooking = responseEntity.getBody();
         return pendindBooking.size();
@@ -203,7 +218,7 @@ public class BookingController {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-    private BookingDto convertToDto(BookingEntity bookingEntity) {
+    public BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
         return new BookingDto(
                 bookingEntity.getBookingID(),
@@ -218,5 +233,36 @@ public class BookingController {
                 bookingEntity.getProductID().getProductID(),
                 bookingEntity.getRespondPaymentImg());
     }
+
+    private List<BookingEntity> convertToEntityList(List<BookingDto> bookingDtos) {
+        return bookingDtos.stream()
+                .map(this::convertToEntity)
+                .collect(Collectors.toList());
+    }
+
+    private BookingEntity convertToEntity(BookingDto bookingDto) {
+        BookingEntity bookingEntity = new BookingEntity();
+        bookingEntity.setBookingID(bookingDto.getBookingID());
+        bookingEntity.setStartDate(bookingDto.getStartDate());
+        bookingEntity.setEndDate(bookingDto.getEndDate());
+        bookingEntity.setBookingPrice(bookingDto.getBookingPrice());
+        bookingEntity.setBookingPerson(bookingDto.getBookingPerson());
+        bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
+        bookingEntity.setImgName(bookingDto.getImgName());
+        bookingEntity.setImgData(bookingDto.getImgData());
+
+        // Assuming that 'AccID' and 'ProductID' are references to other entities
+        // Set references to other entities based on their IDs
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setAccID(bookingDto.getAccID());
+        bookingEntity.setAccID(accountEntity);
+
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setProductID(bookingDto.getProductID());
+        bookingEntity.setProductID(productEntity);
+
+        return bookingEntity;
+    }
+
 
 }
