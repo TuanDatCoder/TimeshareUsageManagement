@@ -125,7 +125,9 @@ public class BookingController {
     }
     //Staff duyet va view status
 
-    public ResponseEntity<List<BookingDto>> getStatusBooking(String status) {
+
+    @GetMapping("/view-booking/{status}")
+    public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
         List<BookingEntity> statusProducts = bookingService.getBookingsByStatus(status);
         return ResponseEntity.ok(convertToDtoList(statusProducts));
     }

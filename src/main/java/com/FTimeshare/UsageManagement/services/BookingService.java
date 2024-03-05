@@ -111,7 +111,7 @@ public class BookingService {
     public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
         BookingEntity booking = getBookingByBookingIDV2(bookingID);
 
-        booking.setImgData(ImageService.compressImage(file.getBytes()));
+        booking.setRespondPaymentImg(ImageService.compressImage(file.getBytes()));
         booking.setBookingStatus("Wait customer to confirm respond payment");
         bookingRepository.save(booking);
         return ResponseEntity.status(HttpStatus.OK)
