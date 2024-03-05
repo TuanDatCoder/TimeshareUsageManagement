@@ -47,9 +47,5 @@ public class BookingEntity {
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
 
-    @Lob
-    @Column(name = "respond_payment_img")
-    private byte[] respondPaymentImg;
-
 
 }

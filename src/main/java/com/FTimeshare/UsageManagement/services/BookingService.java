@@ -56,8 +56,7 @@ public class BookingService {
                         bookingEntity.getImgName(),
                         bookingEntity.getImgData(),
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID(),
-                        bookingEntity.getRespondPaymentImg()))
+                        bookingEntity.getProductID().getProductID()))
 
                 .collect(Collectors.toList());
     }
@@ -108,15 +107,7 @@ public class BookingService {
                 .body("Booking Payment Picture submit successfully.");
     }
 
-    public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
-        BookingEntity booking = getBookingByBookingIDV2(bookingID);
 
-        booking.setRespondPaymentImg(ImageService.compressImage(file.getBytes()));
-        booking.setBookingStatus("Wait customer to confirm respond payment");
-        bookingRepository.save(booking);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("Booking Respond Payment Picture submit successfully.");
-    }
     private BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
         return new BookingDto(
@@ -129,8 +120,7 @@ public class BookingService {
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(),
-                bookingEntity.getRespondPaymentImg());
+                bookingEntity.getProductID().getProductID());
     }
 
     public BookingDto deleteBooking(int bookingID) {

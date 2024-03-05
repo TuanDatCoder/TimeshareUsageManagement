@@ -23,5 +23,4 @@ public class BookingDto {
     private byte[] imgData;
     private int accID;
     private int productID;
-    private byte[] respondPaymentImg;
 }

@@ -62,7 +62,7 @@ public class BookingController {
         return bookingService.uploadBookingPaymentPicture(file, bookingID);
     }
 
-    //chu nha check chuyen khoan va confirm
+    //staff check chuyen khoan va confirm
     @PutMapping("/confirm_booking/{bookingID}")
     public ResponseEntity<String> confirmBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Active");
@@ -82,17 +82,6 @@ public class BookingController {
             bookingService.statusBooking(bookingID,"Waiting respond payment (50%%)");
         }
         return ResponseEntity.ok("Submit cancel request");
-    }
-
-    //khứa chủ trả lại tiền đã chuyển
-    @PostMapping("/customer/submit_respond_payment/{bookingID}")
-    public ResponseEntity<?> uploadRespondPaymentImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
-        if (bookingService.getBookingsByBookingId(bookingID) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Booking not found with ID: " + bookingID);
-        }
-
-        return bookingService.uploadBookingRespondPaymentPicture(file, bookingID);
     }
 
     //khách hàng nhận lại tiền chuyển và xác nhận
@@ -230,8 +219,7 @@ public class BookingController {
                 bookingEntity.getImgName(),
                 bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(),
-                bookingEntity.getRespondPaymentImg());
+                bookingEntity.getProductID().getProductID());
     }
 
     private List<BookingEntity> convertToEntityList(List<BookingDto> bookingDtos) {
