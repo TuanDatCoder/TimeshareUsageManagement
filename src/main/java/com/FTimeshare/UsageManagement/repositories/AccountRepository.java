@@ -33,5 +33,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     List<String> findAllStatus();
 
     Optional<AccountEntity> findByImgName(String fileName);
+
+    List<AccountEntity> findByAccStatus(String status);
 }
 

@@ -116,8 +116,8 @@ public class BookingController {
 
     @GetMapping("/view-booking-by-status/{status}")
     public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
-        List<BookingEntity> statusProducts = bookingService.getBookingsByStatus(status);
-        return ResponseEntity.ok(convertToDtoList(statusProducts));
+        List<BookingEntity> statusBookings = bookingService.getBookingsByStatus(status);
+        return ResponseEntity.ok(convertToDtoList(statusBookings));
     }
 
 
@@ -127,6 +127,18 @@ public class BookingController {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
         List<BookingDto> pendindBooking = responseEntity.getBody();
         return pendindBooking.size();
+    }
+    @GetMapping("staff/totalWaitToConfirm")
+    public int countWaitToConfirmBookings() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait To Confirm");
+        List<BookingDto> waitBooking = responseEntity.getBody();
+        return waitBooking.size();
+    }
+    @GetMapping("staff/totalWaitToConfirmRC")
+    public int countWaitToConfirmRC() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait to confirm (request cancel)");
+        List<BookingDto> waitBooking = responseEntity.getBody();
+        return waitBooking.size();
     }
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
@@ -153,21 +165,16 @@ public class BookingController {
         bookingService.statusBooking(bookingID,"Active");
         return ResponseEntity.ok("Done");
     }
-    @PutMapping("staff/cancel/{bookingID}")
-    public ResponseEntity<String> cancelBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Cancel");
+
+    @PutMapping("staff/waitToConfirm/{bookingID}")
+    public ResponseEntity<String> waitToConfirmToActive(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Wait To Confirm");
         return ResponseEntity.ok("Done");
     }
 
-    @PutMapping("staff/pending/{bookingID}")
-    public ResponseEntity<String> pendingBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Pending");
-        return ResponseEntity.ok("Done");
-    }
-
-    @PutMapping("staff/Done/{bookingID}")
+    @PutMapping("staff/waitToConfirmRequestCancel/{bookingID}")
     public ResponseEntity<String> doneBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Done");
+        bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
         return ResponseEntity.ok("Done");
     }
 
