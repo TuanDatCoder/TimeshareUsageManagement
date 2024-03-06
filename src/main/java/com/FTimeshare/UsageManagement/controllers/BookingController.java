@@ -272,6 +272,14 @@ public class BookingController {
 
     @GetMapping("staff/waitToRespond-Active")
     public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait To Respond", "Active");}
+    @GetMapping("staff/WaitRespondPayment(100)")
+    public ResponseEntity<List<BookingDto>> getWaitRespond100() {
+        return getStatusBooking("Wait respond payment (100%)");
+    }
+    @GetMapping("staff/WaitRespondPayment(80)")
+    public ResponseEntity<List<BookingDto>> getWaitRespond80() {
+        return getStatusBooking("Wait respond payment (80%)");
+    }
     @GetMapping("staff/respond")
     public ResponseEntity<List<BookingDto>> getRespondBooking() {
         return getStatusBooking("Wait To Respond");
