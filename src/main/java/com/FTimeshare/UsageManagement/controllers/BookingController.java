@@ -135,31 +135,31 @@ public class BookingController {
     }
     //Staff duyet va view status
 
-
     @GetMapping("/view-booking-by-status/{status}")
     public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
-        List<BookingEntity> statusProducts = bookingService.getBookingsByStatus(status);
-        return ResponseEntity.ok(convertToDtoList(statusProducts));
+        List<BookingEntity> statusBookings = bookingService.getBookingsByStatus(status);
+        return ResponseEntity.ok(convertToDtoList(statusBookings));
     }
 
-//    public ResponseEntity<List<BookingEntity>> getStatusBookingEntity(String status) {
-//        List<BookingDto> statusBookings = bookingService.getBookingsByStatus(status);
-//        List<BookingEntity> bookingEntities = convertToEntityList(statusBookings);
-//        return ResponseEntity.ok(bookingEntities);
-//    }
 
     // View total status
     @GetMapping("staff/totalPending")
-//    public long countPendingBookings() {
-//        ResponseEntity<List<BookingEntity>> responseEntity = getStatusBookingEntity("Pending");
-//        List<BookingEntity> pendingBookings = responseEntity.getBody();
-//        return pendingBookings.size();
-//    }
-
-        public int countPendingBookings() {
+    public int countPendingBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
         List<BookingDto> pendindBooking = responseEntity.getBody();
         return pendindBooking.size();
+    }
+    @GetMapping("staff/totalWaitToConfirm")
+    public int countWaitToConfirmBookings() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait To Confirm");
+        List<BookingDto> waitBooking = responseEntity.getBody();
+        return waitBooking.size();
+    }
+    @GetMapping("staff/totalWaitToConfirmRC")
+    public int countWaitToConfirmRC() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait to confirm (request cancel)");
+        List<BookingDto> waitBooking = responseEntity.getBody();
+        return waitBooking.size();
     }
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
@@ -186,25 +186,41 @@ public class BookingController {
         bookingService.statusBooking(bookingID,"Active");
         return ResponseEntity.ok("Done");
     }
-    @PutMapping("staff/cancel/{bookingID}")
-    public ResponseEntity<String> cancelBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Cancel");
+
+    @PutMapping("staff/waitToConfirm/{bookingID}")
+    public ResponseEntity<String> waitToConfirmToActive(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Wait To Confirm");
         return ResponseEntity.ok("Done");
     }
 
-    @PutMapping("staff/pending/{bookingID}")
-    public ResponseEntity<String> pendingBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Pending");
-        return ResponseEntity.ok("Done");
-    }
-
-    @PutMapping("staff/Done/{bookingID}")
+    @PutMapping("staff/waitToConfirmRequestCancel/{bookingID}")
     public ResponseEntity<String> doneBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Done");
+        bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
         return ResponseEntity.ok("Done");
     }
+
+
 
     // view theo status
+    //View wait to confirm - wait to confirm cancel
+    public ResponseEntity<List<BookingDto>> getStatusBookingAcc(int accID, String status1, String status2) {
+        List<BookingEntity> statusProducts = bookingService.getBookingsByStatusByAccount(accID,status1,status2);
+        return ResponseEntity.ok(convertToDtoList(statusProducts));
+    }
+    @GetMapping("customer/waitToByAccId/{accID}")
+    public ResponseEntity<List<BookingDto>> getWaitToConfirm(@PathVariable int accID) {
+        return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
+    }
+
+    @GetMapping("staff/waitToConfirm")
+    public ResponseEntity<List<BookingDto>> getWaitToBooking() {
+        return getStatusBooking("Wait To Confirm");
+    }
+
+    @GetMapping("staff/waitToConfirmRC")
+    public ResponseEntity<List<BookingDto>> getWaitToRCBooking() {
+        return getStatusBooking("Wait to confirm (request cancel)");
+    }
 
     @GetMapping("staff/active")
     public ResponseEntity<List<BookingDto>> getActiveBooking() {
@@ -222,6 +238,7 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getDoneBooking() {
         return getStatusBooking("Done");
     }
+
 
     private List<BookingDto> convertToDtoList(List<BookingEntity> bookingEntities) {
         return bookingEntities.stream()
