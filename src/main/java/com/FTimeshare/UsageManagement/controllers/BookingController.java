@@ -191,6 +191,12 @@ public class BookingController {
         return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
     }
 
+    /// xam nha
+    public void Xammmmmmmmmmmmmmmmm(BookingService bookingService) {
+        this.bookingService = bookingService;
+        System.out.println("fsdfsdfsd");
+    }
+
     @GetMapping("staff/waitToConfirm")
     public ResponseEntity<List<BookingDto>> getWaitToBooking() {
         return getStatusBooking("Wait To Confirm");
