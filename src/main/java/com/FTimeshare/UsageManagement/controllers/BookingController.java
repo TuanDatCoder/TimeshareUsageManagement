@@ -5,6 +5,7 @@ import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.repositories.BookingRepository;
 import com.FTimeshare.UsageManagement.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 public class BookingController {
     @Autowired
     private BookingService bookingService;
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @GetMapping("/customerview")
     public ResponseEntity<List<BookingDto>> getAllBookings() {
@@ -145,18 +148,26 @@ public class BookingController {
 //    }
 
     // View total status
-    @GetMapping("staff/totalPending")
+//    @GetMapping("staff/totalPending")
 //    public long countPendingBookings() {
 //        ResponseEntity<List<BookingEntity>> responseEntity = getStatusBookingEntity("Pending");
 //        List<BookingEntity> pendingBookings = responseEntity.getBody();
 //        return pendingBookings.size();
 //    }
+//
+//        public int countPendingBookings() {
+//        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
+//        List<BookingDto> pendindBooking = responseEntity.getBody();
+//        return pendindBooking.size();
+//    }
 
-        public int countPendingBookings() {
-        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
-        List<BookingDto> pendindBooking = responseEntity.getBody();
-        return pendindBooking.size();
+    @GetMapping("staff/totalWaitToRespond")
+    public long countWaitToRespondBookings() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait To Respond");
+        List<BookingDto> respondBookings = responseEntity.getBody();
+        return respondBookings.size();
     }
+
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Active");
