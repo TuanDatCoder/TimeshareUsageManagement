@@ -53,11 +53,10 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        bookingEntity.getImgName(),
-                        bookingEntity.getImgData(),
+                        "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        new byte[0],
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID(),
-                        bookingEntity.getRespondPaymentImg()))
+                        bookingEntity.getProductID().getProductID()))
 
                 .collect(Collectors.toList());
     }
@@ -108,15 +107,6 @@ public class BookingService {
                 .body("Booking Payment Picture submit successfully.");
     }
 
-    public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
-        BookingEntity booking = getBookingByBookingIDV2(bookingID);
-
-        booking.setRespondPaymentImg(ImageService.compressImage(file.getBytes()));
-        booking.setBookingStatus("Wait customer to confirm respond payment");
-        bookingRepository.save(booking);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("Booking Respond Payment Picture submit successfully.");
-    }
     private BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
         return new BookingDto(
@@ -126,11 +116,10 @@ public class BookingService {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                bookingEntity.getImgName(),
-                bookingEntity.getImgData(),
+                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                new byte[0],
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(),
-                bookingEntity.getRespondPaymentImg());
+                bookingEntity.getProductID().getProductID());
     }
 
     public BookingDto deleteBooking(int bookingID) {
@@ -197,4 +186,14 @@ public class BookingService {
     public List<BookingEntity> getBookingsByStatus(String status) {
         return bookingRepository.findByBookingStatus(status);
     }
+
+    public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
+        return bookingRepository.findByBookingStatus2(status1, status2);
+    }
+
+    public byte[] downloadImage(String fileName) {
+        Optional<BookingEntity> dbImageData = bookingRepository.findByImgName(fileName);
+        return ImageService.decompressImage(dbImageData.get().getImgData());
+    }
+
 }
