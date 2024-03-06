@@ -203,7 +203,9 @@ public class BookingService {
         return bookingRepository.findByBookingStatus(status);
     }
 
-
+    public List<BookingEntity> getBookingsByStatusByAccount(int accID, String status1, String status2) {
+        return bookingRepository.findByBookingStatusAAndAccID(accID, status1, status2);
+    }
     public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
         return bookingRepository.findByBookingStatus2(status1, status2);
     }
