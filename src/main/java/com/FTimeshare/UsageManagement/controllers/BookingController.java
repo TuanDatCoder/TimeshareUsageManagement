@@ -46,20 +46,53 @@ public class BookingController {
 
     //Khach hang create booking, booking Entity duoc tao ra voi status Pending
     @PostMapping("/customer/createbooking")
-    public ResponseEntity<?> createBooking(@RequestBody BookingDto booking) {
-        BookingDto createdBooking = bookingService.createBooking(booking);
+    public ResponseEntity<?> createBooking(@RequestParam("bill") MultipartFile file,
+                                           @RequestParam String startDate,
+                                           @RequestParam String endDate,
+                                           @RequestParam int booking_person,
+                                           @RequestParam int acc_id,
+                                           @RequestParam int productID) throws IOException {
+        LocalDateTime start_date = LocalDateTime.parse(startDate);
+        LocalDateTime end_date = LocalDateTime.parse(endDate);
+        Duration duration = Duration.between(start_date, end_date);
+        long hours = duration.toHours();
+        if (hours < 24 ){
+            return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
+        }
+        BookingDto booking = BookingDto.builder().startDate(start_date)
+                .endDate(end_date)
+                .bookingPerson(booking_person)
+                .accID(acc_id)
+                .productID(productID)
+                .build();
+        if (bookingService.checkBooking(booking) == false){
+            return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
+        }
+        BookingDto createdBooking = bookingService.createBooking(booking, file);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
-
-    //người thuê đăng hóa đơn chuyển khoản, status chuyen thanh "Wait to confirm"
-    @PostMapping("/customer/submit_payment/{bookingID}")
-    public ResponseEntity<?> uploadImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
-        if (bookingService.getBookingsByBookingId(bookingID) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Booking not found with ID: " + bookingID);
+    //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
+    //nếu status là Active thì đổi thành wait to respond + x
+    @PostMapping("/cancel/{bookingID}")
+    public ResponseEntity<?> cancelBookingV2(@PathVariable int bookingID){
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        if(booking.getBookingStatus().equals("Wait to confirm")){
+            bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
+            return ResponseEntity.ok("Submit cancel request");
+        } else if(booking.getBookingStatus().equals("Active")) {
+            LocalDateTime current = LocalDateTime.now();
+            if(current.isAfter(booking.getStartDate())){
+                return ResponseEntity.ok("You can't cancel booking after check-in date");
+            }
+            Duration duration = Duration.between(current, booking.getStartDate());
+            long days = duration.toHours();
+            if (days >= 24) {
+                bookingService.statusBooking(bookingID, "Waiting respond payment (100%)");
+            } else {
+                bookingService.statusBooking(bookingID, "Waiting respond payment (80%)");
+            }
         }
-
-        return bookingService.uploadBookingPaymentPicture(file, bookingID);
+        return ResponseEntity.ok("Submit cancel request");
     }
 
     //staff check chuyen khoan va confirm
@@ -69,22 +102,8 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
-    //khứa khách hủy đặt phòng trước hoặc hơn 3 ngày trước ngày check-in thì trả lại 100%, dưới 3 ngày thì 50%
-    @PostMapping("/cancel/{bookingID}")
-    public ResponseEntity<?> cancelBookingV2(@PathVariable int bookingID){
-        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
-        LocalDateTime current = LocalDateTime.now();
-        Duration duration = Duration.between(current, booking.getStartDate());
-        long days = duration.toDays();
-        if(days>=3){
-            bookingService.statusBooking(bookingID,"Waiting respond payment (100%)");
-        }else{
-            bookingService.statusBooking(bookingID,"Waiting respond payment (80%)");
-        }
-        return ResponseEntity.ok("Submit cancel request");
-    }
 
-    //khách hàng nhận lại tiền chuyển và xác nhận
+    //staff đã chuyển tiền và xác nhận
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Canceled");
@@ -129,12 +148,6 @@ public class BookingController {
 
     // View total status
     @GetMapping("staff/totalPending")
-//    public long countPendingBookings() {
-//        ResponseEntity<List<BookingEntity>> responseEntity = getStatusBookingEntity("Pending");
-//        List<BookingEntity> pendingBookings = responseEntity.getBody();
-//        return pendingBookings.size();
-//    }
-
         public int countPendingBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
         List<BookingDto> pendindBooking = responseEntity.getBody();
