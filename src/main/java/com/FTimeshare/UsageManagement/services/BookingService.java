@@ -43,6 +43,7 @@ public class BookingService {
 
 
 
+
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
         return bookings.stream()
@@ -186,5 +187,8 @@ public class BookingService {
 
     public List<BookingEntity> getBookingsByStatus(String status) {
         return bookingRepository.findByBookingStatus(status);
+    }
+    public List<BookingEntity> getBookingsByStatusByAccount(int accID, String status1, String status2) {
+        return bookingRepository.findByBookingStatusAAndAccID(accID, status1, status2);
     }
 }
