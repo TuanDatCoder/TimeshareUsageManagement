@@ -149,7 +149,7 @@ public class BookingController {
     }
 
     @GetMapping("/view-booking-by-2status/{status}")
-    public ResponseEntity<List<BookingDto>> getStatusBooking2(@PathVariable String status1, String status2) {
+    public ResponseEntity<List<BookingDto>> getStatusBooking2( String status1, String status2) {
         List<BookingEntity> statusBooking = bookingService.getBookingsByStatus2(status1, status2);
         return ResponseEntity.ok(convertToDtoList(statusBooking));
     }
@@ -271,14 +271,14 @@ public class BookingController {
     // view theo status
 
     @GetMapping("staff/waitToRespond-Active")
-    public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait To Respond", "Active");}
+    public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait to respond", "Active");}
     @GetMapping("staff/WaitRespondPayment(100)")
     public ResponseEntity<List<BookingDto>> getWaitRespond100() {
-        return getStatusBooking("Wait respond payment (100%)");
+        return getStatusBooking("Wait to respond payment (100%)");
     }
     @GetMapping("staff/WaitRespondPayment(80)")
     public ResponseEntity<List<BookingDto>> getWaitRespond80() {
-        return getStatusBooking("Wait respond payment (80%)");
+        return getStatusBooking("Wait to respond payment (80%)");
     }
     @GetMapping("staff/respond")
     public ResponseEntity<List<BookingDto>> getRespondBooking() {

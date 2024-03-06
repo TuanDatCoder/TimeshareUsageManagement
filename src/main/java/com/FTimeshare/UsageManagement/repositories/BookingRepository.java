@@ -31,12 +31,12 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     List<BookingEntity> findByBookingStatus(String status);
 
 
-    @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus = :status1 OR b.bookingStatus = :status2")
+    @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus   Like CONCAT('%', :status1, '%') OR b.bookingStatus = :status2")
     List<BookingEntity> findByBookingStatus2(String status1, String status2);
 
     Optional<BookingEntity> findByImgName(String fileName);
 
-    @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus = :bookingStatus AND b.productID.productID = :productID")
+    @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus Like :bookingStatus AND b.productID.productID = :productID")
     List<BookingEntity> findBookingEntityByBookingStatusAndProductID(String bookingStatus, int productID);
 
     @Query("SELECT b FROM BookingEntity b WHERE b.accID.accID = :accID AND(b.bookingStatus = :status1 OR b.bookingStatus = :status2)")
