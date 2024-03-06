@@ -17,7 +17,7 @@ public class BookingEntity {
     @Column(name = "bookingID")
     private int bookingID;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date")  
     private LocalDateTime startDate;
 
     @Column(name = "end_date")
@@ -46,10 +46,6 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
-
-    @Lob
-    @Column(name = "respond_payment_img")
-    private byte[] respondPaymentImg;
 
 
 }

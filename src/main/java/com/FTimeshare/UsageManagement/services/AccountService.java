@@ -75,17 +75,17 @@ public class AccountService {
                               Date accBirthday,
                               int roleID) throws IOException {
 
-        byte[] imgData = file.getBytes();
-
         RoleEntity roleEntity = roleRepository.findById(roleID)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found with ID: " +roleID));
-
+        if (accountRepository.existsByAccEmail(accEmail)){
+            return accEmail + " already exists";
+        }
 
         AccountEntity accountEntity = accountRepository.save(AccountEntity.builder()
                 .accName(accName)
                 .accPhone(accPhone)
                 .accEmail(accEmail)
-                .accPassword(accPassword)
+                .accPassword(passwordEncoder.encode(accPassword))
                 .imgName(file.getOriginalFilename())
                 .imgData(ImageService.compressImage(file.getBytes()))
                 .accStatus(accStatus)
