@@ -233,7 +233,11 @@ public class BookingController {
         bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
         return ResponseEntity.ok("Done");
     }
-
+    @PutMapping("staff/Rejected/{bookingID}")
+    public ResponseEntity<String> rejectedBooking(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Rejected");
+        return ResponseEntity.ok("Done");
+    }
 
     // view theo status
     //View wait to confirm - wait to confirm cancel
