@@ -1,13 +1,13 @@
 package com.FTimeshare.UsageManagement.repositories;
 
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
-import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Integer> {
@@ -27,4 +27,9 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     List<Float> findBookingPricesByProductID(int productID);
 
     List<BookingEntity> findByBookingStatus(String status);
+
+    @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus = :status1 OR b.bookingStatus = :status2")
+    List<BookingEntity> findByBookingStatus2(String status1, String status2);
+
+    Optional<BookingEntity> findByImgName(String fileName);
 }
