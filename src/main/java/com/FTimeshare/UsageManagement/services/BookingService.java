@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,9 +62,23 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    public Boolean checkBooking(BookingDto bookingDto){
+        List<BookingEntity> bookings = getBookingsByStatusAndProductId("Active", bookingDto.getProductID());
+        LocalDateTime reqStartDate = bookingDto.getStartDate();
+        LocalDateTime reqEndDate = bookingDto.getEndDate();
 
+        for (BookingEntity b: bookings) {
+            if(reqStartDate.isAfter(b.getStartDate())&&reqStartDate.isBefore(b.getEndDate()))
+                return false;
+            if (reqEndDate.isAfter(b.getStartDate())&&reqEndDate.isBefore(b.getEndDate()))
+                return false;
+            if(reqStartDate.isBefore(b.getStartDate())&&reqEndDate.isAfter(b.getEndDate()))
+                return false;
+        }
+        return true;
+    }
 
-    public BookingDto createBooking(BookingDto booking) {
+    public BookingDto createBooking(BookingDto booking,MultipartFile file) throws IOException {
 
 
         BookingEntity bookingEntity = new BookingEntity();
@@ -74,9 +89,9 @@ public class BookingService {
         long days = duration.toDays();
 
         bookingEntity.setBookingPerson(booking.getBookingPerson());
-        bookingEntity.setBookingStatus("Pending");
-        bookingEntity.setImgName(booking.getImgName());
-        bookingEntity.setImgData(booking.getImgData());
+        bookingEntity.setBookingStatus("Wait to confirm");
+        bookingEntity.setImgName(file.getOriginalFilename());
+        bookingEntity.setImgData(ImageService.compressImage(file.getBytes()));
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
         bookingEntity.setBookingPrice(productEntity.getProductPrice()*days);
@@ -186,5 +201,9 @@ public class BookingService {
 
     public List<BookingEntity> getBookingsByStatus(String status) {
         return bookingRepository.findByBookingStatus(status);
+    }
+
+    public List<BookingEntity> getBookingsByStatusAndProductId(String status, int productID) {
+        return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
     }
 }

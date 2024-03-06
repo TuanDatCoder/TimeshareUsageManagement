@@ -27,4 +27,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     List<Float> findBookingPricesByProductID(int productID);
 
     List<BookingEntity> findByBookingStatus(String status);
+
+    @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus = :bookingStatus AND b.productID.productID = :productID")
+    List<BookingEntity> findBookingEntityByBookingStatusAndProductID(String bookingStatus, int productID);
 }
