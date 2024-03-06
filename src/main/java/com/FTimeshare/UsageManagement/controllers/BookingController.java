@@ -88,9 +88,9 @@ public class BookingController {
             Duration duration = Duration.between(current, booking.getStartDate());
             long days = duration.toHours();
             if (days >= 24) {
-                bookingService.statusBooking(bookingID, "Waiting respond payment (100%)");
+                bookingService.statusBooking(bookingID, "Wait to respond payment (100%)");
             } else {
-                bookingService.statusBooking(bookingID, "Waiting respond payment (80%)");
+                bookingService.statusBooking(bookingID, "Wait to respond payment (80%)");
             }
         }
         return ResponseEntity.ok("Submit cancel request");
