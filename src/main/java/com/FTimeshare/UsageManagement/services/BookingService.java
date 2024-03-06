@@ -206,4 +206,8 @@ public class BookingService {
     public List<BookingEntity> getBookingsByStatusAndProductId(String status, int productID) {
         return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
     }
+
+    public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
+        return bookingRepository.findByBookingStatus2(status1, status2);
+    }
 }
