@@ -44,55 +44,22 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    //Khach hang create booking, booking Entity duoc tao ra voi status Wait to confirm
+    //Khach hang create booking, booking Entity duoc tao ra voi status Pending
     @PostMapping("/customer/createbooking")
-    public ResponseEntity<?> createBooking(@RequestParam("bill") MultipartFile file,
-                                           @RequestParam String startDate,
-                                           @RequestParam String endDate,
-                                           @RequestParam int booking_person,
-                                           @RequestParam int acc_id,
-                                           @RequestParam int productID) throws IOException {
-        LocalDateTime start_date = LocalDateTime.parse(startDate);
-        LocalDateTime end_date = LocalDateTime.parse(endDate);
-        Duration duration = Duration.between(start_date, end_date);
-        long hours = duration.toHours();
-        if (hours < 24 ){
-            return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
-        }
-        BookingDto booking = BookingDto.builder().startDate(start_date)
-                                                 .endDate(end_date)
-                                                 .bookingPerson(booking_person)
-                                                 .accID(acc_id)
-                                                 .productID(productID)
-                                                 .build();
-        if (bookingService.checkBooking(booking) == false){
-            return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
-        }
-        BookingDto createdBooking = bookingService.createBooking(booking, file);
+    public ResponseEntity<?> createBooking(@RequestBody BookingDto booking) {
+        BookingDto createdBooking = bookingService.createBooking(booking);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
-    //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
-    //nếu status là Active thì đổi thành wait to respond + x
-    @PostMapping("/cancel/{bookingID}")
-    public ResponseEntity<?> cancelBookingV2(@PathVariable int bookingID){
-        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
-        if(booking.getBookingStatus().equals("Wait to confirm")){
-            bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
-            return ResponseEntity.ok("Submit cancel request");
-        } else if(booking.getBookingStatus().equals("Active")) {
-            LocalDateTime current = LocalDateTime.now();
-            if(current.isAfter(booking.getStartDate())){
-                return ResponseEntity.ok("You can't cancel booking after check-in date");
-            }
-            Duration duration = Duration.between(current, booking.getStartDate());
-            long days = duration.toHours();
-            if (days >= 24) {
-                bookingService.statusBooking(bookingID, "Waiting respond payment (100%)");
-            } else {
-                bookingService.statusBooking(bookingID, "Waiting respond payment (80%)");
-            }
+
+    //người thuê đăng hóa đơn chuyển khoản, status chuyen thanh "Wait to confirm"
+    @PostMapping("/customer/submit_payment/{bookingID}")
+    public ResponseEntity<?> uploadImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
+        if (bookingService.getBookingsByBookingId(bookingID) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Booking not found with ID: " + bookingID);
         }
-        return ResponseEntity.ok("Submit cancel request");
+
+        return bookingService.uploadBookingPaymentPicture(file, bookingID);
     }
 
     //staff check chuyen khoan va confirm
@@ -102,10 +69,22 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
+    //khứa khách hủy đặt phòng trước hoặc hơn 3 ngày trước ngày check-in thì trả lại 100%, dưới 3 ngày thì 50%
+    @PostMapping("/cancel/{bookingID}")
+    public ResponseEntity<?> cancelBookingV2(@PathVariable int bookingID){
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        LocalDateTime current = LocalDateTime.now();
+        Duration duration = Duration.between(current, booking.getStartDate());
+        long days = duration.toDays();
+        if(days>=3){
+            bookingService.statusBooking(bookingID,"Waiting respond payment (100%)");
+        }else{
+            bookingService.statusBooking(bookingID,"Waiting respond payment (80%)");
+        }
+        return ResponseEntity.ok("Submit cancel request");
+    }
 
-
-
-    //staff đã chuyển tiền và xác nhận
+    //khách hàng nhận lại tiền chuyển và xác nhận
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Canceled");
@@ -135,31 +114,31 @@ public class BookingController {
     }
     //Staff duyet va view status
 
+
     @GetMapping("/view-booking-by-status/{status}")
     public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
-        List<BookingEntity> statusBookings = bookingService.getBookingsByStatus(status);
-        return ResponseEntity.ok(convertToDtoList(statusBookings));
+        List<BookingEntity> statusProducts = bookingService.getBookingsByStatus(status);
+        return ResponseEntity.ok(convertToDtoList(statusProducts));
     }
 
+//    public ResponseEntity<List<BookingEntity>> getStatusBookingEntity(String status) {
+//        List<BookingDto> statusBookings = bookingService.getBookingsByStatus(status);
+//        List<BookingEntity> bookingEntities = convertToEntityList(statusBookings);
+//        return ResponseEntity.ok(bookingEntities);
+//    }
 
     // View total status
     @GetMapping("staff/totalPending")
-    public int countPendingBookings() {
+//    public long countPendingBookings() {
+//        ResponseEntity<List<BookingEntity>> responseEntity = getStatusBookingEntity("Pending");
+//        List<BookingEntity> pendingBookings = responseEntity.getBody();
+//        return pendingBookings.size();
+//    }
+
+        public int countPendingBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
         List<BookingDto> pendindBooking = responseEntity.getBody();
         return pendindBooking.size();
-    }
-    @GetMapping("staff/totalWaitToConfirm")
-    public int countWaitToConfirmBookings() {
-        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait To Confirm");
-        List<BookingDto> waitBooking = responseEntity.getBody();
-        return waitBooking.size();
-    }
-    @GetMapping("staff/totalWaitToConfirmRC")
-    public int countWaitToConfirmRC() {
-        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait to confirm (request cancel)");
-        List<BookingDto> waitBooking = responseEntity.getBody();
-        return waitBooking.size();
     }
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
@@ -186,41 +165,25 @@ public class BookingController {
         bookingService.statusBooking(bookingID,"Active");
         return ResponseEntity.ok("Done");
     }
-
-    @PutMapping("staff/waitToConfirm/{bookingID}")
-    public ResponseEntity<String> waitToConfirmToActive(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Wait To Confirm");
+    @PutMapping("staff/cancel/{bookingID}")
+    public ResponseEntity<String> cancelBooking(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Cancel");
         return ResponseEntity.ok("Done");
     }
 
-    @PutMapping("staff/waitToConfirmRequestCancel/{bookingID}")
+    @PutMapping("staff/pending/{bookingID}")
+    public ResponseEntity<String> pendingBooking(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Pending");
+        return ResponseEntity.ok("Done");
+    }
+
+    @PutMapping("staff/Done/{bookingID}")
     public ResponseEntity<String> doneBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
+        bookingService.statusBooking(bookingID,"Done");
         return ResponseEntity.ok("Done");
     }
-
-
 
     // view theo status
-    //View wait to confirm - wait to confirm cancel
-    public ResponseEntity<List<BookingDto>> getStatusBookingAcc(int accID, String status1, String status2) {
-        List<BookingEntity> statusProducts = bookingService.getBookingsByStatusByAccount(accID,status1,status2);
-        return ResponseEntity.ok(convertToDtoList(statusProducts));
-    }
-    @GetMapping("customer/waitToByAccId/{accID}")
-    public ResponseEntity<List<BookingDto>> getWaitToConfirm(@PathVariable int accID) {
-        return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
-    }
-
-    @GetMapping("staff/waitToConfirm")
-    public ResponseEntity<List<BookingDto>> getWaitToBooking() {
-        return getStatusBooking("Wait To Confirm");
-    }
-
-    @GetMapping("staff/waitToConfirmRC")
-    public ResponseEntity<List<BookingDto>> getWaitToRCBooking() {
-        return getStatusBooking("Wait to confirm (request cancel)");
-    }
 
     @GetMapping("staff/active")
     public ResponseEntity<List<BookingDto>> getActiveBooking() {
@@ -238,7 +201,6 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getDoneBooking() {
         return getStatusBooking("Done");
     }
-
 
     private List<BookingDto> convertToDtoList(List<BookingEntity> bookingEntities) {
         return bookingEntities.stream()

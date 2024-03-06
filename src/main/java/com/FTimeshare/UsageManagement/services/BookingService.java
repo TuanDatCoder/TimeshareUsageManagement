@@ -44,7 +44,6 @@ public class BookingService {
 
 
 
-
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
         return bookings.stream()
@@ -55,8 +54,8 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        bookingEntity.getImgName(),
-                        bookingEntity.getImgData(),
+                        "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        new byte[0],
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
 
@@ -133,8 +132,8 @@ public class BookingService {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                bookingEntity.getImgName(),
-                bookingEntity.getImgData(),
+                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
@@ -204,10 +203,18 @@ public class BookingService {
         return bookingRepository.findByBookingStatus(status);
     }
 
+    public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
+        return bookingRepository.findByBookingStatus2(status1, status2);
+    }
+
     public List<BookingEntity> getBookingsByStatusAndProductId(String status, int productID) {
         return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
     }
     public List<BookingEntity> getBookingsByStatusByAccount(int accID, String status1, String status2) {
         return bookingRepository.findByBookingStatusAAndAccID(accID, status1, status2);
+    }
+    public byte[] downloadImage(String fileName) {
+        Optional<BookingEntity> dbImageData = bookingRepository.findByImgName(fileName);
+        return ImageService.decompressImage(dbImageData.get().getImgData());
     }
 }
