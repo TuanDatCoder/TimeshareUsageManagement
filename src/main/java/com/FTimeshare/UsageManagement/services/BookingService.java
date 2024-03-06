@@ -203,11 +203,19 @@ public class BookingService {
         return bookingRepository.findByBookingStatus(status);
     }
 
-    public List<BookingEntity> getBookingsByStatusAndProductId(String status, int productID) {
-        return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
-    }
 
     public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
         return bookingRepository.findByBookingStatus2(status1, status2);
     }
+
+    public byte[] downloadImage(String fileName) {
+        Optional<BookingEntity> dbImageData = bookingRepository.findByImgName(fileName);
+        return ImageService.decompressImage(dbImageData.get().getImgData());
+    }
+
+
+    public List<BookingEntity> getBookingsByStatusAndProductId(String status, int productID) {
+        return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.RoleEntity;
 import com.FTimeshare.UsageManagement.exceptions.UserAlreadyExistsException;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
@@ -64,8 +65,19 @@ public class AccountService {
     public List<String> getAllStatus() {
         return accountRepository.findAllStatus();
     }
-
-
+    public List<AccountEntity> getAccountsByStatus(String status) {
+        return accountRepository.findByAccStatus(status);
+    }
+    public void statusAccount(int accID, String Status) {
+        Optional<AccountEntity> optionalAccount = accountRepository.findById(accID);
+        if (optionalAccount.isPresent()) {
+            AccountEntity account = optionalAccount.get();
+            account.setAccStatus(Status);
+            accountRepository.save(account);
+        } else {
+            throw new RuntimeException("Sản phẩm không tồn tại với ID: " + accID);
+        }
+    }
     public String uploadImage(MultipartFile file,
                               String accName,
                               String accPhone,

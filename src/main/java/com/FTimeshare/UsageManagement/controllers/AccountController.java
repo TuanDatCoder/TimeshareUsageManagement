@@ -1,8 +1,10 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
+import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,47 @@ public class AccountController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    public ResponseEntity<List<AccountDto>> getStatusAccount(String status) {
+        List<AccountEntity> statusAccounts = accountService.getAccountsByStatus(status);
+        return ResponseEntity.ok(convertToDtoList(statusAccounts));
+    }
+
+    //Total:
+    @GetMapping("staff/totalActive")
+    public int countActiveAccounts() {
+        ResponseEntity<List<AccountDto>> responseEntity = getStatusAccount("Active");
+        List<AccountDto> activeAcc = responseEntity.getBody();
+        return activeAcc.size();
+    }
+    @GetMapping("staff/totalBlock")
+    public int countBlockAccounts() {
+        ResponseEntity<List<AccountDto>> responseEntity = getStatusAccount("Block");
+        List<AccountDto> blockAcc = responseEntity.getBody();
+        return blockAcc.size();
+    }
+
+    //Change
+    @PutMapping("staff/active/{accID}")
+    public ResponseEntity<String> activeAccount(@PathVariable int accID) {
+        accountService.statusAccount(accID,"Active");
+        return ResponseEntity.ok("Done");
+    }
+    @PutMapping("staff/block/{accID}")
+    public ResponseEntity<String> blockAccount(@PathVariable int accID) {
+        accountService.statusAccount(accID,"Block");
+        return ResponseEntity.ok("Done");
+    }
+
+    //view
+    @GetMapping("staff/active")
+    public ResponseEntity<List<AccountDto>> getActive() {
+        return getStatusAccount("Active");
+    }
+    @GetMapping("staff/block")
+    public ResponseEntity<List<AccountDto>> getBlock() {
+        return getStatusAccount("Block");
     }
 
 

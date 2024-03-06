@@ -96,7 +96,16 @@ public class BookingController {
         return ResponseEntity.ok("Submit cancel request");
     }
 
-    //staff check chuyen khoan va confirm
+    @GetMapping("imgView/{fileName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+        byte[] imageData=bookingService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+
+    }
+
+    //chu nha check chuyen khoan va confirm
     @PutMapping("/confirm_booking/{bookingID}")
     public ResponseEntity<String> confirmBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Active");
@@ -106,7 +115,8 @@ public class BookingController {
 
 
 
-    //staff đã chuyển tiền và xác nhận
+
+
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Canceled");
