@@ -199,16 +199,28 @@ public class BookingController {
     }
 
     // làm change status
-    @PutMapping("staff/respond/{bookingID}")
+    @PutMapping("staff/respond80/{bookingID}")
     public ResponseEntity<String> respondBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Wait To Respond");
+        bookingService.statusBooking(bookingID,"Wait To Respond (80%)");
         return ResponseEntity.ok("Active");
     }
 
-    @PutMapping("staff/finalcancel/{bookingID}")
+    @PutMapping("staff/respond100/{bookingID}")
+    public ResponseEntity<String> respondBooking2(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Wait To Respond (100%)");
+        return ResponseEntity.ok("Active");
+    }
+
+    @PutMapping("staff/finalcancel80/{bookingID}")
     public ResponseEntity<String> finalcancelBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Cancelled");
-        return ResponseEntity.ok("Wait To Respond");
+        return ResponseEntity.ok("Wait To Respond (80%)");
+    }
+
+    @PutMapping("staff/finalcancel100/{bookingID}")
+    public ResponseEntity<String> finalcancelBooking2(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"Cancelled");
+        return ResponseEntity.ok("Wait To Respond (100%)");
     }
 
     @PutMapping("staff/active/{bookingID}")
