@@ -112,11 +112,6 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
-
-
-
-
-
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Canceled");
@@ -177,6 +172,13 @@ public class BookingController {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
         List<BookingDto> pendindBooking = responseEntity.getBody();
         return pendindBooking.size();
+    }
+
+    @GetMapping("staff/totalWaitToRespond")
+    public long countWaitToRespondBookings() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait To Respond");
+        List<BookingDto> respondBookings = responseEntity.getBody();
+        return respondBookings.size();
     }
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
