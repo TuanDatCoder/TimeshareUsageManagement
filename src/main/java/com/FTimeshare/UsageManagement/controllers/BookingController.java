@@ -251,8 +251,8 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                bookingEntity.getImgName(),
-                bookingEntity.getImgData(),
+                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
@@ -271,8 +271,9 @@ public class BookingController {
         bookingEntity.setBookingPrice(bookingDto.getBookingPrice());
         bookingEntity.setBookingPerson(bookingDto.getBookingPerson());
         bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
-        bookingEntity.setImgName(bookingDto.getImgName());
-        bookingEntity.setImgData(bookingDto.getImgData());
+
+        bookingEntity.setImgName("http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName());
+        bookingEntity.setImgData(new byte[0]);
 
         // Assuming that 'AccID' and 'ProductID' are references to other entities
         // Set references to other entities based on their IDs
