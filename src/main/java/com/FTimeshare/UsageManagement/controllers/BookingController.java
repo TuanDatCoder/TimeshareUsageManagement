@@ -79,7 +79,7 @@ public class BookingController {
         if(days>=3){
             bookingService.statusBooking(bookingID,"Waiting respond payment (100%)");
         }else{
-            bookingService.statusBooking(bookingID,"Waiting respond payment (50%%)");
+            bookingService.statusBooking(bookingID,"Waiting respond payment (80%)");
         }
         return ResponseEntity.ok("Submit cancel request");
     }

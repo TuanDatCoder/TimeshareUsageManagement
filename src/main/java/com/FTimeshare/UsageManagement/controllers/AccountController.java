@@ -71,7 +71,7 @@ public class AccountController {
 
 
     @PostMapping
-    public ResponseEntity<?> uploadImage(@RequestParam("Avatar") MultipartFile file,
+    public ResponseEntity<?> CreateAccount(@RequestParam("Avatar") MultipartFile file,
                                          @RequestParam String accName,
                                          @RequestParam String accPhone,
                                          @RequestParam String accEmail,
