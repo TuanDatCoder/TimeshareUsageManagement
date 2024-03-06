@@ -5,11 +5,9 @@ import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
-import com.FTimeshare.UsageManagement.repositories.BookingRepository;
 import com.FTimeshare.UsageManagement.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,8 +24,6 @@ import java.util.stream.Collectors;
 public class BookingController {
     @Autowired
     private BookingService bookingService;
-    @Autowired
-    private BookingRepository bookingRepository;
 
     @GetMapping("/customerview")
     public ResponseEntity<List<BookingDto>> getAllBookings() {
@@ -66,16 +62,7 @@ public class BookingController {
         return bookingService.uploadBookingPaymentPicture(file, bookingID);
     }
 
-    @GetMapping("imgView/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
-        byte[] imageData=bookingService.downloadImage(fileName);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(imageData);
-
-    }
-
-    //chu nha check chuyen khoan va confirm
+    //staff check chuyen khoan va confirm
     @PutMapping("/confirm_booking/{bookingID}")
     public ResponseEntity<String> confirmBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Active");
@@ -92,11 +79,10 @@ public class BookingController {
         if(days>=3){
             bookingService.statusBooking(bookingID,"Waiting respond payment (100%)");
         }else{
-            bookingService.statusBooking(bookingID,"Waiting respond payment (80%%)");
+            bookingService.statusBooking(bookingID,"Waiting respond payment (80%)");
         }
         return ResponseEntity.ok("Submit cancel request");
     }
-
 
     //khách hàng nhận lại tiền chuyển và xác nhận
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
@@ -135,12 +121,6 @@ public class BookingController {
         return ResponseEntity.ok(convertToDtoList(statusProducts));
     }
 
-    @GetMapping("/view-booking-by-2status/{status}")
-    public ResponseEntity<List<BookingDto>> getStatusBooking2(@PathVariable String status1, String status2) {
-        List<BookingEntity> statusBooking = bookingService.getBookingsByStatus2(status1, status2);
-        return ResponseEntity.ok(convertToDtoList(statusBooking));
-    }
-
 //    public ResponseEntity<List<BookingEntity>> getStatusBookingEntity(String status) {
 //        List<BookingDto> statusBookings = bookingService.getBookingsByStatus(status);
 //        List<BookingEntity> bookingEntities = convertToEntityList(statusBookings);
@@ -148,26 +128,18 @@ public class BookingController {
 //    }
 
     // View total status
-//    @GetMapping("staff/totalPending")
+    @GetMapping("staff/totalPending")
 //    public long countPendingBookings() {
 //        ResponseEntity<List<BookingEntity>> responseEntity = getStatusBookingEntity("Pending");
 //        List<BookingEntity> pendingBookings = responseEntity.getBody();
 //        return pendingBookings.size();
 //    }
-//
-//        public int countPendingBookings() {
-//        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
-//        List<BookingDto> pendindBooking = responseEntity.getBody();
-//        return pendindBooking.size();
-//    }
 
-    @GetMapping("staff/totalWaitToRespond")
-    public long countWaitToRespondBookings() {
-        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait To Respond");
-        List<BookingDto> respondBookings = responseEntity.getBody();
-        return respondBookings.size();
+        public int countPendingBookings() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
+        List<BookingDto> pendindBooking = responseEntity.getBody();
+        return pendindBooking.size();
     }
-
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Active");
@@ -188,18 +160,6 @@ public class BookingController {
     }
 
     // làm change status
-    @PutMapping("staff/respond/{bookingID}")
-    public ResponseEntity<String> respondBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Wait To Respond");
-        return ResponseEntity.ok("Active");
-    }
-
-    @PutMapping("staff/finalcancel/{bookingID}")
-    public ResponseEntity<String> finalcancelBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Cancelled");
-        return ResponseEntity.ok("Wait To Respond");
-    }
-
     @PutMapping("staff/active/{bookingID}")
     public ResponseEntity<String> activeBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Active");
@@ -225,12 +185,6 @@ public class BookingController {
 
     // view theo status
 
-    @GetMapping("staff/waitToRespond-Active")
-    public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait To Respond", "Active");}
-    @GetMapping("staff/respond")
-    public ResponseEntity<List<BookingDto>> getRespondBooking() {
-        return getStatusBooking("Wait To Respond");
-    }
     @GetMapping("staff/active")
     public ResponseEntity<List<BookingDto>> getActiveBooking() {
         return getStatusBooking("Active");
@@ -262,8 +216,8 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
-                new byte[0],
+                bookingEntity.getImgName(),
+                bookingEntity.getImgData(),
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
@@ -282,9 +236,8 @@ public class BookingController {
         bookingEntity.setBookingPrice(bookingDto.getBookingPrice());
         bookingEntity.setBookingPerson(bookingDto.getBookingPerson());
         bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
-
-        bookingEntity.setImgName("http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName());
-        bookingEntity.setImgData(new byte[0]);
+        bookingEntity.setImgName(bookingDto.getImgName());
+        bookingEntity.setImgData(bookingDto.getImgData());
 
         // Assuming that 'AccID' and 'ProductID' are references to other entities
         // Set references to other entities based on their IDs
