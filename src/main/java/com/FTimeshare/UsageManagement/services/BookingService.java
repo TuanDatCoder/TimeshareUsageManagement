@@ -54,8 +54,8 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        bookingEntity.getImgName(),
-                        bookingEntity.getImgData(),
+                        "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        new byte[0],
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
 
@@ -132,8 +132,8 @@ public class BookingService {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                bookingEntity.getImgName(),
-                bookingEntity.getImgData(),
+                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
