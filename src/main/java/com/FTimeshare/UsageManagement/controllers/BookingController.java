@@ -261,6 +261,10 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getWaitToConfirm(@PathVariable int accID) {
         return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
     }
+    @GetMapping("customer/waitToRespond-Active/{accID}")
+    public ResponseEntity<List<BookingDto>> getwaitToRespondActive(@PathVariable int accID) {
+        return getStatusBookingAcc(accID,"Wait to respond", "Active");
+    }
 
 
     @GetMapping("staff/waitToConfirm")
@@ -284,6 +288,7 @@ public class BookingController {
 
     @GetMapping("staff/waitToRespond-Active")
     public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait to respond", "Active");}
+
     @GetMapping("staff/WaitRespondPayment(100)")
     public ResponseEntity<List<BookingDto>> getWaitRespond100() {
         return getStatusBooking("Wait to respond payment (100%)");

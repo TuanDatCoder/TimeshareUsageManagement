@@ -39,6 +39,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus Like :bookingStatus AND b.productID.productID = :productID")
     List<BookingEntity> findBookingEntityByBookingStatusAndProductID(String bookingStatus, int productID);
 
-    @Query("SELECT b FROM BookingEntity b WHERE b.accID.accID = :accID AND(b.bookingStatus = :status1 OR b.bookingStatus = :status2)")
+    @Query("SELECT b FROM BookingEntity b WHERE b.accID.accID = :accID AND(b.bookingStatus  Like CONCAT('%', :status1, '%') OR b.bookingStatus  Like CONCAT('%', :status2, '%'))")
     List<BookingEntity>  findByBookingStatusAAndAccID(int accID, String status1, String status2);
 }
