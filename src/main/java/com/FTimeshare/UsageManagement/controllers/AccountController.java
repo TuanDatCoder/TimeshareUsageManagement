@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/users")
 public class AccountController {
 
@@ -183,6 +184,7 @@ public class AccountController {
         accountDto.setAccEmail(accountEntity.getAccEmail());
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
+        accountDto.setAccStatus(accountEntity.getAccStatus());
         accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
         accountDto.setImgData(new byte[0]);
         int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID

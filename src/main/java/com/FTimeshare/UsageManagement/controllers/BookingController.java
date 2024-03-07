@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/bookings")
 public class BookingController {
     @Autowired
@@ -100,9 +101,9 @@ public class BookingController {
             Duration duration = Duration.between(current, booking.getStartDate());
             long days = duration.toHours();
             if (days >= 24) {
-                bookingService.statusBooking(bookingID, "Waiting respond payment (100%)");
+                bookingService.statusBooking(bookingID, "Wait to respond payment (100%)");
             } else {
-                bookingService.statusBooking(bookingID, "Waiting respond payment (80%)");
+                bookingService.statusBooking(bookingID, "Wait to respond payment (80%)");
             }
         }
         return ResponseEntity.ok("Submit cancel request");
@@ -273,6 +274,10 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getWaitToConfirm(@PathVariable int accID) {
         return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
     }
+    @GetMapping("customer/waitToRespond-Active/{accID}")
+    public ResponseEntity<List<BookingDto>> getwaitToRespondActive(@PathVariable int accID) {
+        return getStatusBookingAcc(accID,"Wait to respond", "Active");
+    }
 
 
     @GetMapping("staff/waitToConfirm")
@@ -301,6 +306,7 @@ public class BookingController {
 
     @GetMapping("staff/waitToRespond-Active")
     public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait to respond", "Active");}
+
     @GetMapping("staff/WaitRespondPayment(100)")
     public ResponseEntity<List<BookingDto>> getWaitRespond100() {
         return getStatusBooking("Wait to respond payment (100%)");
