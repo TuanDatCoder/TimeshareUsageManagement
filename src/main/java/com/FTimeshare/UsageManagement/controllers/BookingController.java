@@ -45,6 +45,18 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    @GetMapping("/by-account/done/{accID}")
+    public ResponseEntity<List<BookingDto>> viewBookingsByAccountId_Done(@PathVariable int accID) {
+        List<BookingDto> bookings = bookingService.getBookingsByAccountId_Status(accID, "Done");
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-account/cancel/{accID}")
+    public ResponseEntity<List<BookingDto>> viewBookingsByAccountId_Cancel(@PathVariable int accID) {
+        List<BookingDto> bookings = bookingService.getBookingsByAccountId_Status(accID, "Cancelled");
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
     //Khach hang create booking, booking Entity duoc tao ra voi status Wait to confirm
     @PostMapping("/customer/createbooking")
     public ResponseEntity<?> createBooking(@RequestParam("bill") MultipartFile file,
@@ -280,7 +292,12 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
+
+
+
+
     // view theo status
+
 
     @GetMapping("staff/waitToRespond-Active")
     public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait to respond", "Active");}
@@ -312,6 +329,7 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getDoneBooking() {
         return getStatusBooking("Done");
     }
+
 
     private List<BookingDto> convertToDtoList(List<BookingEntity> bookingEntities) {
         return bookingEntities.stream()

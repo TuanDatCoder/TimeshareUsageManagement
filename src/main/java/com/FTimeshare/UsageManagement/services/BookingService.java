@@ -220,4 +220,13 @@ public class BookingService {
         return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
     }
 
+    public List<BookingDto> getBookingsByAccountId_Status(int accID, String status) {
+        List<BookingEntity> bookingEntities = bookingRepository.findByAccIDAAndBookingStatus(accID, status);
+        return bookingEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        //return bookingRepository.findByAccIDAAndBookingStatus(accID, done);
+    }
+
+
 }

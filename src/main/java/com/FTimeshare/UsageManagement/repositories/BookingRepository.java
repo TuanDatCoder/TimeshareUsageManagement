@@ -1,7 +1,6 @@
 package com.FTimeshare.UsageManagement.repositories;
 
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
-import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,4 +40,9 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
     @Query("SELECT b FROM BookingEntity b WHERE b.accID.accID = :accID AND(b.bookingStatus = :status1 OR b.bookingStatus = :status2)")
     List<BookingEntity>  findByBookingStatusAAndAccID(int accID, String status1, String status2);
+    @Query("SELECT b FROM BookingEntity b WHERE b.accID.accID = :accID and b.bookingStatus = :status")
+    List<BookingEntity> findByAccIDAAndBookingStatus(int accID, String status);
+
+
+
 }
