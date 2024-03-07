@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/payment")
 public class PaymentController {
 

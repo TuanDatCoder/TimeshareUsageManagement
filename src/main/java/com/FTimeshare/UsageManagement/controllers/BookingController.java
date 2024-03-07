@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/bookings")
 public class BookingController {
     @Autowired

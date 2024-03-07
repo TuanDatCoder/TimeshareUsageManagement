@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/users")
 public class AccountController {
 
