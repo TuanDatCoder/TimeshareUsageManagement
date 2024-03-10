@@ -1,4 +1,5 @@
 package com.FTimeshare.UsageManagement.controllers;
+import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
@@ -214,6 +215,16 @@ public class ProductController {
         productService.deleteProduct(productID, user_id);
         return productService.getAllProducts();
 
+    }
+    @DeleteMapping("/delete/{productID}")
+    public ResponseEntity<?> deleteProduct(@PathVariable int productID) {
+        ProductDto deleteProduct= productService.deleteProductID(productID);
+
+        if (deleteProduct != null) {
+            return ResponseEntity.ok(deleteProduct);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/sum/{user_id}")
