@@ -2,6 +2,7 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.controllers.ProductController;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
+import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,4 +160,16 @@ public class ProductService {
 
     }
 
+    public ProductDto deleteProductID(int productID) {
+        Optional<ProductEntity> productEntityOptional = productRepository.findById(productID);
+
+        if (productEntityOptional.isPresent()) {
+            ProductEntity productEntity = productEntityOptional.get();
+
+            productRepository.delete(productEntity);
+            return convertToDto(productEntity);
+        } else {
+            return null;
+        }
+    }
 }
