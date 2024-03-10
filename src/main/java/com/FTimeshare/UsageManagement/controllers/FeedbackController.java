@@ -48,4 +48,10 @@ public class FeedbackController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/viewByProductId/{productid}")
+    public ResponseEntity<List<FeedbackDto>> getFeedbackByProductId(@PathVariable int productid) {
+        List<FeedbackDto> feedback = feedbackService.viewFeedbackByProductID(productid);
+        return ResponseEntity.ok(feedback);
+    }
 }
