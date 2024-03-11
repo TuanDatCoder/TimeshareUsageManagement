@@ -51,13 +51,14 @@ public class BookingService {
                         bookingEntity.getBookingID(),
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
+                        bookingEntity.getCreateDate(),
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
                         "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
                         new byte[0],
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID()))
+                        bookingEntity.getProductID().getProductID(), new byte[0]))
 
                 .collect(Collectors.toList());
     }
@@ -85,6 +86,8 @@ public class BookingService {
         // Set properties of bookingEntity from bookingRequest
         bookingEntity.setStartDate(booking.getStartDate());
         bookingEntity.setEndDate(booking.getEndDate());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        bookingEntity.setCreateDate(localDateTime);
         Duration duration = Duration.between(booking.getStartDate(), booking.getEndDate());
         long days = duration.toDays();
 
@@ -122,6 +125,14 @@ public class BookingService {
                 .body("Booking Payment Picture submit successfully.");
     }
 
+    public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
+        BookingEntity booking = getBookingByBookingIDV2(bookingID);
+
+        booking.setRespondPaymentImg(ImageService.compressImage(file.getBytes()));
+        bookingRepository.save(booking);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Booking Respond Payment Picture submit successfully.");
+    }
 
     private BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
@@ -129,13 +140,14 @@ public class BookingService {
                 bookingEntity.getBookingID(),
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
+                bookingEntity.getCreateDate(),
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
                 "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(), new byte[0]);
     }
 
     public BookingDto deleteBooking(int bookingID) {
@@ -170,7 +182,9 @@ public class BookingService {
         float sum = 0;
         List<BookingEntity> bookingEntities = bookingRepository.findByProductID(productID);
         for(int i = 0; i<bookingEntities.size(); i++){
-            sum+=bookingEntities.get(i).getBookingPrice();
+            if(bookingEntities.get(i).getBookingStatus().equals("Done")) {
+                sum += bookingEntities.get(i).getBookingPrice();
+            }
         }
         return sum;
     }

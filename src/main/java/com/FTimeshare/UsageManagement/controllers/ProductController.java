@@ -189,7 +189,7 @@ public class ProductController {
 
     @GetMapping("/{user_id}")
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
-        List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);
+        List<ProductEntity> productEntities = productService.getProductsByAccountID(user_id);
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
     @PostMapping("/add")
@@ -229,7 +229,7 @@ public class ProductController {
 
     @GetMapping("/sum/{user_id}")
     public float getSumOfAllProductByUserID( @PathVariable("user_id") int user_id){
-        List<ProductEntity> productEntities = productService.getProductsByUserID(user_id);
+        List<ProductEntity> productEntities = productService.getProductsByAccountID(user_id);
         float sum = 0;
         for(int i = 0; i<productEntities.size(); i++){
             sum+= (float) bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());

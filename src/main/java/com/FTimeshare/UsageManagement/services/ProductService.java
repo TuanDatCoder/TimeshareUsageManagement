@@ -44,9 +44,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<ProductEntity> getProductsByUserID(int userID) {
+    public List<ProductEntity> getProductsByAccountID(int accID) {
 
-        return productRepository.findByUserID(userID);
+        return productRepository.findByAccountID(accID);
     }
 
     public void deleteProduct(int productID, int acc_id) {

@@ -16,6 +16,7 @@ public class BookingDto {
     private int bookingID;
     private LocalDateTime startDate;
     private  LocalDateTime endDate;
+    private  LocalDateTime createDate;
     private float bookingPrice;
     private int bookingPerson;
     private String bookingStatus;
@@ -23,4 +24,6 @@ public class BookingDto {
     private byte[] imgData;
     private int accID;
     private int productID;
+    private byte[] respondPaymentImg;
+
 }

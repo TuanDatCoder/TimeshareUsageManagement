@@ -23,6 +23,9 @@ public class BookingEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
+
     @Column(name = "booking_price")
     private float bookingPrice;
 
@@ -47,5 +50,7 @@ public class BookingEntity {
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
 
-
+    @Lob
+    @Column(name = "respond_payment_img")
+    private byte[] respondPaymentImg;
 }

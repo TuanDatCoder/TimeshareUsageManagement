@@ -298,9 +298,6 @@ public class BookingController {
     }
 
 
-
-
-
     // view theo status
 
 
@@ -314,6 +311,16 @@ public class BookingController {
     @GetMapping("staff/WaitRespondPayment(80)")
     public ResponseEntity<List<BookingDto>> getWaitRespond80() {
         return getStatusBooking("Wait to respond payment (80%)");
+    }
+
+    //staff upload hinh chuyen khoan nguoc lai
+    @PostMapping("/customer/submit_respond_payment/{bookingID}")
+    public ResponseEntity<?> uploadRespondPaymentImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
+        if (bookingService.getBookingsByBookingId(bookingID) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Booking not found with ID: " + bookingID);
+        }
+        return bookingService.uploadBookingRespondPaymentPicture(file, bookingID);
     }
     @GetMapping("staff/respond")
     public ResponseEntity<List<BookingDto>> getRespondBooking() {
@@ -348,13 +355,14 @@ public class BookingController {
                 bookingEntity.getBookingID(),
                 bookingEntity.getStartDate(),
                 bookingEntity.getEndDate(),
+                bookingEntity.getCreateDate(),
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
                 "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID());
+                bookingEntity.getProductID().getProductID(), new byte[0]);
     }
 
     private List<BookingEntity> convertToEntityList(List<BookingDto> bookingDtos) {
