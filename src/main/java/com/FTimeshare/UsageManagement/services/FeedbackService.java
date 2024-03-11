@@ -1,11 +1,9 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
-import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
-import com.FTimeshare.UsageManagement.entities.ReportEntity;
 import com.FTimeshare.UsageManagement.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,6 +87,7 @@ public class FeedbackService {
         }
     }
 
+
     private FeedbackEntity convertToEntity(FeedbackDto feedbackDto) {
         FeedbackEntity feedbackEntity = new FeedbackEntity();
         feedbackEntity.setFeedbackID(feedbackDto.getFeedbackID());
@@ -109,4 +108,26 @@ public class FeedbackService {
 
         return feedbackEntity;
     }
+
+    public List<Float> getFeedbackRatingByProductId(int productID) {
+        List<FeedbackEntity> feedbackRatings = feedbackRepository.findByProductID_ProductID(productID);
+
+        return feedbackRatings.stream()
+                .map(FeedbackEntity::getFeedbackRating)
+                .collect(Collectors.toList());
+    }
+
+        public Float getAverageFeedbackRatingByProductId(int productID) {
+            List<Float> feedbackRatings = feedbackRepository.findBookingRatingsByProductID(productID);
+
+            if (feedbackRatings.isEmpty()) {
+                return null; // or handle the case where there are no ratings
+            }
+
+            double sum = feedbackRatings.stream()
+                    .mapToDouble(Float::doubleValue)
+                    .sum();
+
+            return (float) (sum / feedbackRatings.size());
+        }
 }

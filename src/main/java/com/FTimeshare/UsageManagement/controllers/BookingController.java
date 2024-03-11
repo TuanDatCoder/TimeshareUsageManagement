@@ -60,6 +60,8 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+
+
     //Khach hang create booking, booking Entity duoc tao ra voi status Wait to confirm
     @PostMapping("/customer/createbooking")
     public ResponseEntity<?> createBooking(@RequestParam("bill") MultipartFile file,
@@ -153,7 +155,11 @@ public class BookingController {
         Float totalBookingPrice = bookingService.getTotalBookingPriceByProductId(productID);
         return new ResponseEntity<>(totalBookingPrice, HttpStatus.OK);
     }
-    
+
+
+
+
+
     //Staff duyet va view status
 
     @GetMapping("/view-booking-by-status/{status}")

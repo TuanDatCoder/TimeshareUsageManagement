@@ -1,10 +1,7 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
-import com.FTimeshare.UsageManagement.dtos.BookingDto;
-import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
     @GetMapping("/staffview")
-    public ResponseEntity<List<AccountDto>> getAllBookings() {
+    public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }

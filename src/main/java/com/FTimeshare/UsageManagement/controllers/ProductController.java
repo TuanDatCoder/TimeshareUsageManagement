@@ -6,6 +6,7 @@ import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.entities.ProductTypeEntity;
 import com.FTimeshare.UsageManagement.entities.ProjectEntity;
 import com.FTimeshare.UsageManagement.services.BookingService;
+import com.FTimeshare.UsageManagement.services.FeedbackService;
 import com.FTimeshare.UsageManagement.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class ProductController {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private FeedbackService feedbackService;
     // Đạt
 
     // Làm Select Option
@@ -260,6 +264,9 @@ public class ProductController {
         productDto.setProjectID(productEntity.getProjectID().getProjectID());
         productDto.setAccID(productEntity.getAccID().getAccID());
         productDto.setProductTypeID(productEntity.getProductTypeID().getProductTypeID());
+
+        Float averageRating = feedbackService.getAverageFeedbackRatingByProductId(productEntity.getProductID());
+        productDto.setProductRating(averageRating != null ? averageRating : 0.0f);
         return productDto;
     }
 
