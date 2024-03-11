@@ -26,7 +26,6 @@ public class ProductController {
     private BookingService bookingService;
     // Đạt
 
-
     // Làm Select Option
     @GetMapping("/statuses")
     public ResponseEntity<List<String>> getAllProductStatuses() {
