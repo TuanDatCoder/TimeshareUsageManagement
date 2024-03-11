@@ -43,4 +43,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     @Query("SELECT b FROM BookingEntity b WHERE b.accID.accID = :accID and b.bookingStatus = :status")
     List<BookingEntity> findByAccIDAAndBookingStatus(int accID, String status);
 
+    void deleteAllByAccIDIn(List<Integer> accIDs);
+
+
 }

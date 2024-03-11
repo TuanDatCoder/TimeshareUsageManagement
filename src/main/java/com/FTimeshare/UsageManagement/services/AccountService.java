@@ -40,7 +40,10 @@ public class AccountService {
     public void deleteUserById(int userId) {
         accountRepository.deleteById(userId);
     }
-
+    @Transactional
+    public void deleteAccountsByAccIDs(List<Integer> accIDs) {
+        accountRepository.deleteAllByAccIDIn(accIDs);
+    }
 
     // update
     public AccountEntity updateUserStatus(int accID, String newAccountStatus) {

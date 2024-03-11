@@ -28,6 +28,12 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
+    @DeleteMapping("/staff/accounts/delete")
+    public ResponseEntity<String> deleteAccountsByAccIDs(@RequestBody List<Integer> accIDs) {
+        accountService.deleteAccountsByAccIDs(accIDs);
+        return ResponseEntity.status(HttpStatus.OK).body("Accounts deleted successfully");
+    }
+
     @GetMapping("/statuses")
     public ResponseEntity<List<String>> getAllStatus() {
         List<String> statuses = accountService.getAllStatus();
