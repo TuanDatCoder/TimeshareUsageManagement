@@ -232,7 +232,7 @@ public class BookingController {
 
     @PutMapping("staff/finalcancel100/{bookingID}")
     public ResponseEntity<String> finalcancelBooking2(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Cancelled");
+        bookingService.statusBooking(bookingID,"Canceled");
         return ResponseEntity.ok("Wait To Respond (100%)");
     }
 
@@ -243,7 +243,7 @@ public class BookingController {
     }
     @PutMapping("staff/cancel/{bookingID}")
     public ResponseEntity<String> cancelBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Cancel");
+        bookingService.statusBooking(bookingID,"Canceled");
         return ResponseEntity.ok("Done");
     }
 
@@ -327,9 +327,9 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getPendingBooking() {
         return getStatusBooking("Pending");
     }
-    @GetMapping("staff/cancel")
+    @GetMapping("staff/canceled")
     public ResponseEntity<List<BookingDto>> getCancelBooking() {
-        return getStatusBooking("Cancel");
+        return getStatusBooking("Canceled");
     }
     @GetMapping("staff/done")
     public ResponseEntity<List<BookingDto>> getDoneBooking() {
