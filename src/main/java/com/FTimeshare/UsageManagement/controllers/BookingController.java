@@ -16,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -115,7 +117,6 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-
     }
 
     //chu nha check chuyen khoan va confirm
@@ -152,8 +153,8 @@ public class BookingController {
         Float totalBookingPrice = bookingService.getTotalBookingPriceByProductId(productID);
         return new ResponseEntity<>(totalBookingPrice, HttpStatus.OK);
     }
+    
     //Staff duyet va view status
-
 
     @GetMapping("/view-booking-by-status/{status}")
     public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
@@ -166,6 +167,46 @@ public class BookingController {
         List<BookingEntity> statusBooking = bookingService.getBookingsByStatus2(status1, status2);
         return ResponseEntity.ok(convertToDtoList(statusBooking));
     }
+
+    //------------------   STATISTICAL -------------------------
+    // View Price
+    @GetMapping("/admin/total_Price_For_Done_Bookings")
+    public float totalPriceForDoneBookings() {
+        List<BookingEntity> doneBookings = bookingService.getBookingsByStatus("Done");
+        float totalBookingPrice = 0;
+        for (BookingEntity b: doneBookings) {
+            totalBookingPrice += b.getBookingPrice();
+        }
+        return totalBookingPrice*0.1f;
+    }
+
+    // View total By month
+    @GetMapping("/admin/monthlyTotalPrice/{year}")
+    public Map<Integer, Float> calculateMonthlyTotalPrice(@PathVariable int year) {
+        List<BookingEntity> doneBookings = bookingService.getBookingsByStatus("Done");
+        Map<Integer, Float> monthlyTotalPriceMap = new HashMap<>();
+
+        for (BookingEntity booking : doneBookings) {
+           if(booking.getCreateDate().getYear() == year){
+               int month = booking.getCreateDate().getMonthValue();
+               float totalPrice = booking.getBookingPrice() * 0.1f;
+               monthlyTotalPriceMap.put(month, monthlyTotalPriceMap.getOrDefault(month, 0f) + totalPrice);
+           }
+        }
+
+        return monthlyTotalPriceMap;
+    }
+    // view total Year
+    @GetMapping("/admin/yearlyTotalPrice/{year}")
+    public Float calculateYearlyTotalPrice(@PathVariable int year) {
+        Map<Integer, Float> monthlyTotalPriceMap = calculateMonthlyTotalPrice(year);
+        float yearlyTotalPrice = 0;
+        for (float price : monthlyTotalPriceMap.values()) {
+            yearlyTotalPrice += price;
+        }
+        return yearlyTotalPrice;
+    }
+
 
     // View total status
     @GetMapping("staff/totalPending")
@@ -232,7 +273,7 @@ public class BookingController {
 
     @PutMapping("staff/finalcancel100/{bookingID}")
     public ResponseEntity<String> finalcancelBooking2(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Canceled");
+        bookingService.statusBooking(bookingID,"Cancelled");
         return ResponseEntity.ok("Wait To Respond (100%)");
     }
 
@@ -243,7 +284,7 @@ public class BookingController {
     }
     @PutMapping("staff/cancel/{bookingID}")
     public ResponseEntity<String> cancelBooking(@PathVariable int bookingID) {
-        bookingService.statusBooking(bookingID,"Canceled");
+        bookingService.statusBooking(bookingID,"Cancelled");
         return ResponseEntity.ok("Done");
     }
 
@@ -336,7 +377,7 @@ public class BookingController {
     }
     @GetMapping("staff/canceled")
     public ResponseEntity<List<BookingDto>> getCancelBooking() {
-        return getStatusBooking("Canceled");
+        return getStatusBooking("Cancelled");
     }
     @GetMapping("staff/done")
     public ResponseEntity<List<BookingDto>> getDoneBooking() {
@@ -379,12 +420,8 @@ public class BookingController {
         bookingEntity.setBookingPrice(bookingDto.getBookingPrice());
         bookingEntity.setBookingPerson(bookingDto.getBookingPerson());
         bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
-
         bookingEntity.setImgName("http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName());
         bookingEntity.setImgData(new byte[0]);
-
-        // Assuming that 'AccID' and 'ProductID' are references to other entities
-        // Set references to other entities based on their IDs
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccID(bookingDto.getAccID());
         bookingEntity.setAccID(accountEntity);
