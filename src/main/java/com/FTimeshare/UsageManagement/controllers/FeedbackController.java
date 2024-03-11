@@ -38,6 +38,7 @@ public class FeedbackController {
         return ResponseEntity.ok(editedFeedback);
     }
 
+
     @DeleteMapping("/delete-feedback/{feedbackID}")
     public ResponseEntity<?> deleteFeedback(@PathVariable int feedbackID) {
         FeedbackDto deletedFeedback = feedbackService.deleteFeedback(feedbackID);
@@ -47,5 +48,15 @@ public class FeedbackController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/view-feedback-rating/{productID}")
+    public ResponseEntity<List<Float>> viewFeedbackRatingByProductId(@PathVariable int productID) {
+        List<Float> feedbackRatings = feedbackService.getFeedbackRatingByProductId(productID);
+        return new ResponseEntity<>(feedbackRatings, HttpStatus.OK);
+    }
+    @GetMapping("/average-feedback-rating/{productID}")
+    public ResponseEntity<Float> getAverageFeedbackRatingByProductId(@PathVariable int productID) {
+        Float totalFeedbackRatings = feedbackService.getAverageFeedbackRatingByProductId(productID);
+        return new ResponseEntity<>(totalFeedbackRatings, HttpStatus.OK);
     }
 }
