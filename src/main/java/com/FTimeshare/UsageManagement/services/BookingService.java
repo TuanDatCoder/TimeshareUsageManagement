@@ -68,9 +68,9 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
+                        "http://localhost:8080/api/bookings/viewImg/" + bookingEntity.getImgName(),
                         new byte[0],
-                        "http://localhost:8080/api/payment/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                        "http://localhost:8080/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                         new byte[0],
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
@@ -158,9 +158,9 @@ public class BookingService {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
+                "http://localhost:8080/api/bookings/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "http://localhost:8080/api/payment/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "http://localhost:8080/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
