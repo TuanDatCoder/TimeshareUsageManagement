@@ -164,9 +164,6 @@ public class AccountService {
     }
 
 
-
-
-
     public byte[] downloadImage(String fileName){
         Optional<AccountEntity> dbImageData = accountRepository.findByImgName(fileName);
         return ImageService.decompressImage(dbImageData.get().getImgData());
@@ -185,7 +182,7 @@ public class AccountService {
         existingAccount.setAccName(updatedAccount.getAccName());
         existingAccount.setAccPhone(updatedAccount.getAccPhone());
         existingAccount.setAccEmail(updatedAccount.getAccEmail());
-        existingAccount.setAccPassword(updatedAccount.getAccPassword());
+        existingAccount.setAccPassword(passwordEncoder.encode(updatedAccount.getAccPassword()));
         existingAccount.setImgName(file.getOriginalFilename());
         existingAccount.setImgData(ImageService.compressImage(file.getBytes()));
         existingAccount.setAccStatus(updatedAccount.getAccStatus());
