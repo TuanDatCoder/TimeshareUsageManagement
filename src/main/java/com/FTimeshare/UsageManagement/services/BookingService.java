@@ -70,7 +70,7 @@ public class BookingService {
                         bookingEntity.getBookingStatus(),
                         "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
                         new byte[0],
-                        "http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                        "http://localhost:8080/api/payment/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                         new byte[0],
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
@@ -160,7 +160,7 @@ public class BookingService {
                 bookingEntity.getBookingStatus(),
                 "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "http://localhost:8080/api/payment/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());

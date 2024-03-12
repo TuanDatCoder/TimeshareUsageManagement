@@ -432,9 +432,9 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
+                "http://localhost:8080/api/bookings/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "http://localhost:8080/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
@@ -457,12 +457,11 @@ public class BookingController {
         bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
         bookingEntity.setImgName("http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName());
         bookingEntity.setImgData(new byte[0]);
-        bookingEntity.setImgRespondName("http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName());
+        bookingEntity.setImgRespondName("http://localhost:8080/api/book/paymentRespond/viewImg/" + bookingEntity.getImgRespondName());
         bookingEntity.setImgRespondData(new byte[0]);
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccID(bookingDto.getAccID());
         bookingEntity.setAccID(accountEntity);
-
         ProductEntity productEntity = new ProductEntity();
         productEntity.setProductID(bookingDto.getProductID());
         bookingEntity.setProductID(productEntity);
