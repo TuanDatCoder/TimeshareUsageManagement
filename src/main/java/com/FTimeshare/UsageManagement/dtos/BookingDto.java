@@ -22,8 +22,10 @@ public class BookingDto {
     private String bookingStatus;
     private String imgName;
     private byte[] imgData;
+    private String imgRespondName;
+    private byte[] imgRespondData;
     private int accID;
     private int productID;
-    private byte[] respondPaymentImg;
+
 
 }

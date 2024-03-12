@@ -34,7 +34,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     List<BookingEntity> findByBookingStatus2(String status1, String status2);
 
     Optional<BookingEntity> findByImgName(String fileName);
-
+    Optional<BookingEntity> findByImgRespondName(String fileName);
     @Query("SELECT b FROM BookingEntity b WHERE b.bookingStatus Like :bookingStatus AND b.productID.productID = :productID")
     List<BookingEntity> findBookingEntityByBookingStatusAndProductID(String bookingStatus, int productID);
 
@@ -44,6 +44,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     List<BookingEntity> findByAccIDAAndBookingStatus(int accID, String status);
 
     void deleteAllByAccIDIn(List<Integer> accIDs);
+
 
 
 }

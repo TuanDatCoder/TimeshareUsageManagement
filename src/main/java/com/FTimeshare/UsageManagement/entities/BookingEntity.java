@@ -42,6 +42,13 @@ public class BookingEntity {
     @Column(name = "img_data")
     private byte[] imgData;
 
+    @Column(name = "img_respond_name")
+    private String imgRespondName;
+
+    @Lob
+    @Column(name = "img_respond_data")
+    private byte[] imgRespondData;
+
     @ManyToOne
     @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
     private AccountEntity accID;
@@ -50,7 +57,4 @@ public class BookingEntity {
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
 
-    @Lob
-    @Column(name = "respond_payment_img")
-    private byte[] respondPaymentImg;
 }

@@ -6,6 +6,7 @@ import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.services.BookingService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -113,13 +114,38 @@ public class BookingController {
         return ResponseEntity.ok("Submit cancel request");
     }
 
-    @GetMapping("imgView/{fileName}")
+    //upload respond
+    @PutMapping("/updateImgRespond/{bookingID}")
+    public ResponseEntity<?> updateImageRespond(@PathVariable int bookingID, @RequestParam("picture") MultipartFile file) {
+        try {
+            ResponseEntity<?> response = bookingService.updateImage(file, bookingID);
+            return response;
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating image: " + e.getMessage());
+        }
+    }
+
+    //View anh
+    @GetMapping("/paymentRespond/viewImg/{fileName}")
+    public ResponseEntity<?> downloadImageRespond(@PathVariable String fileName){
+        byte[] imageRespondData=bookingService.downloadImageRespond(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageRespondData);
+    }
+    @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
         byte[] imageData=bookingService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
     }
+
+
 
     //chu nha check chuyen khoan va confirm
     @PutMapping("/confirm_booking/{bookingID}")
@@ -155,8 +181,6 @@ public class BookingController {
         Float totalBookingPrice = bookingService.getTotalBookingPriceByProductId(productID);
         return new ResponseEntity<>(totalBookingPrice, HttpStatus.OK);
     }
-
-
 
 
 
@@ -360,15 +384,17 @@ public class BookingController {
         return getStatusBooking("Wait to respond payment (80%)");
     }
 
+
+
     //staff upload hinh chuyen khoan nguoc lai
-    @PostMapping("/customer/submit_respond_payment/{bookingID}")
-    public ResponseEntity<?> uploadRespondPaymentImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
-        if (bookingService.getBookingsByBookingId(bookingID) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Booking not found with ID: " + bookingID);
-        }
-        return bookingService.uploadBookingRespondPaymentPicture(file, bookingID);
-    }
+//    @PostMapping("/customer/submit_respond_payment/{bookingID}")
+//    public ResponseEntity<?> uploadRespondPaymentImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
+//        if (bookingService.getBookingsByBookingId(bookingID) == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body("Booking not found with ID: " + bookingID);
+//        }
+//        return bookingService.uploadBookingRespondPaymentPicture(file, bookingID);
+//    }
     @GetMapping("staff/respond")
     public ResponseEntity<List<BookingDto>> getRespondBooking() {
         return getStatusBooking("Wait To Respond");
@@ -406,10 +432,12 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
+                new byte[0],
+                "http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(), new byte[0]);
+                bookingEntity.getProductID().getProductID());
     }
 
     private List<BookingEntity> convertToEntityList(List<BookingDto> bookingDtos) {
@@ -423,11 +451,14 @@ public class BookingController {
         bookingEntity.setBookingID(bookingDto.getBookingID());
         bookingEntity.setStartDate(bookingDto.getStartDate());
         bookingEntity.setEndDate(bookingDto.getEndDate());
+        bookingEntity.setCreateDate(bookingDto.getCreateDate());
         bookingEntity.setBookingPrice(bookingDto.getBookingPrice());
         bookingEntity.setBookingPerson(bookingDto.getBookingPerson());
         bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
         bookingEntity.setImgName("http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName());
         bookingEntity.setImgData(new byte[0]);
+        bookingEntity.setImgRespondName("http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName());
+        bookingEntity.setImgRespondData(new byte[0]);
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccID(bookingDto.getAccID());
         bookingEntity.setAccID(accountEntity);

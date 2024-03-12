@@ -3,6 +3,7 @@ package com.FTimeshare.UsageManagement.services;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
+import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
@@ -42,7 +43,19 @@ public class BookingService {
         }
     }
 
-
+    public ResponseEntity<?> updateImage(MultipartFile file, int bookingID) throws IOException {
+        Optional<BookingEntity> existingBooking = bookingRepository.findById(bookingID);
+        if (!existingBooking.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Booking not found with ID: " + bookingID);
+        }
+        BookingEntity booking = existingBooking.get();
+        booking.setImgRespondName(file.getOriginalFilename());
+        booking.setImgRespondData(ImageService.compressImage(file.getBytes()));
+        bookingRepository.save(booking);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Image updated successfully.");
+    }
 
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
@@ -55,11 +68,12 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
+                        new byte[0],
+                        "http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                         new byte[0],
                         bookingEntity.getAccID().getAccID(),
-                        bookingEntity.getProductID().getProductID(), new byte[0]))
-
+                        bookingEntity.getProductID().getProductID()))
                 .collect(Collectors.toList());
     }
 
@@ -128,13 +142,13 @@ public class BookingService {
     public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
         BookingEntity booking = getBookingByBookingIDV2(bookingID);
 
-        booking.setRespondPaymentImg(ImageService.compressImage(file.getBytes()));
+        booking.setImgRespondData(ImageService.compressImage(file.getBytes()));
         bookingRepository.save(booking);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Booking Respond Payment Picture submit successfully.");
     }
 
-    private BookingDto convertToDto(BookingEntity bookingEntity) {
+    public BookingDto convertToDto(BookingEntity bookingEntity) {
         // Your existing DTO conversion logic
         return new BookingDto(
                 bookingEntity.getBookingID(),
@@ -144,10 +158,12 @@ public class BookingService {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                "http://localhost:8080/api/payment/viewImg/" + bookingEntity.getImgName(),
+                new byte[0],
+                "http://localhost:8080/api/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
-                bookingEntity.getProductID().getProductID(), new byte[0]);
+                bookingEntity.getProductID().getProductID());
     }
 
     public BookingDto deleteBooking(int bookingID) {
@@ -228,7 +244,10 @@ public class BookingService {
         Optional<BookingEntity> dbImageData = bookingRepository.findByImgName(fileName);
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
-
+    public byte[] downloadImageRespond(String fileName) {
+        Optional<BookingEntity> dbImageRespondData = bookingRepository.findByImgRespondName(fileName);
+        return ImageService.decompressImage(dbImageRespondData.get().getImgRespondData());
+    }
 
     public List<BookingEntity> getBookingsByStatusAndProductId(String status, int productID) {
         return bookingRepository.findBookingEntityByBookingStatusAndProductID(status, productID);
