@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/mailbox")
-public class MailboxController {
+public class  MailboxController {
     @Autowired
     private MailboxService mailboxService;
 

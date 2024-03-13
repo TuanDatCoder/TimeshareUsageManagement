@@ -69,32 +69,27 @@ public class NewsController {
                                          @RequestParam String newsStatus,
                                          @RequestParam int accID) throws IOException {
 
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-       // LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
         LocalDateTime newsPost = LocalDateTime.now();
         String uploadImage = newsService.uploadImage(file, newsTitle, newsPost, newsContent, newsViewer, newsStatus, accID);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
-
 
     @PutMapping("/edit/{NewsID}")
     public ResponseEntity<?> editNews(
             @PathVariable int NewsID,
             @RequestParam("news") MultipartFile file,
             @RequestParam String newsTitle,
-            @RequestParam String newsPost,
             @RequestParam String newsContent,
             @RequestParam int newsViewer,
             @RequestParam String newsStatus,
             @RequestParam int accID) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        LocalDateTime parsedNewsPost = LocalDateTime.parse(newsPost, formatter);
+        LocalDateTime newsPost = LocalDateTime.now();
+
         NewsDto updateNews =  NewsDto.builder()
                 .newsTitle(newsTitle)
-                .newsPost(parsedNewsPost)
+                .newsPost(newsPost)
                 .newsContent(newsContent)
                 .newsViewer(newsViewer)
                 .newsStatus(newsStatus)
