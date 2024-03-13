@@ -79,6 +79,8 @@ public class BookingService {
 
     public Boolean checkBooking(BookingDto bookingDto){
         List<BookingEntity> bookings = getBookingsByStatusAndProductId("Active", bookingDto.getProductID());
+        bookings.addAll(getBookingsByStatusAndProductId("Wait to confirm", bookingDto.getProductID()));
+        bookings.addAll(getBookingsByStatusAndProductId("In progress", bookingDto.getProductID()));
         LocalDateTime reqStartDate = bookingDto.getStartDate();
         LocalDateTime reqEndDate = bookingDto.getEndDate();
 

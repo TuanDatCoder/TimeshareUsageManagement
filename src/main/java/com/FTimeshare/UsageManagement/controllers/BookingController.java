@@ -73,7 +73,8 @@ public class BookingController {
                                            @RequestParam int productID) throws IOException {
         LocalDateTime start_date = LocalDateTime.parse(startDate);
         LocalDateTime end_date = LocalDateTime.parse(endDate);
-        Duration duration = Duration.between(start_date, end_date);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Duration duration = Duration.between(localDateTime, start_date);
         long hours = duration.toHours();
         if (hours < 24 ){
             return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
@@ -347,7 +348,7 @@ public class BookingController {
     }
     @GetMapping("customer/waitToByAccId/{accID}")
     public ResponseEntity<List<BookingDto>> getWaitToConfirm(@PathVariable int accID) {
-        return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
+        return getStatusBookingAccV2(accID,"Wait To Confirm", "Wait to confirm (request cancel)", "Rejected", "xxx");
     }
     @GetMapping("customer/waitToRespond-Active/{accID}")
     public ResponseEntity<List<BookingDto>> getwaitToRespondActive(@PathVariable int accID) {
