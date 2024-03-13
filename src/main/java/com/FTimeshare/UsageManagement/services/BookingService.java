@@ -236,6 +236,10 @@ public class BookingService {
     public List<BookingEntity> getBookingsByStatusByAccount(int accID, String status1, String status2) {
         return bookingRepository.findByBookingStatusAAndAccID(accID, status1, status2);
     }
+
+    public List<BookingEntity> getBookingsByStatusByAccountV2(int accID, String status1, String status2, String status3, String status4) {
+        return bookingRepository.findByBookingStatusAAndAccIDV2(accID, status1, status2, status3, status4);
+    }
     public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
         return bookingRepository.findByBookingStatus2(status1, status2);
     }

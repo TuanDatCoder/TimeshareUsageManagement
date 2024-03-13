@@ -341,6 +341,10 @@ public class BookingController {
         List<BookingEntity> statusProducts = bookingService.getBookingsByStatusByAccount(accID,status1,status2);
         return ResponseEntity.ok(convertToDtoList(statusProducts));
     }
+    public ResponseEntity<List<BookingDto>> getStatusBookingAccV2(int accID, String status1, String status2, String status3, String status4) {
+        List<BookingEntity> statusProducts = bookingService.getBookingsByStatusByAccountV2(accID,status1,status2, status3, status4);
+        return ResponseEntity.ok(convertToDtoList(statusProducts));
+    }
     @GetMapping("customer/waitToByAccId/{accID}")
     public ResponseEntity<List<BookingDto>> getWaitToConfirm(@PathVariable int accID) {
         return getStatusBookingAcc(accID,"Wait To Confirm", "Wait to confirm (request cancel)");
@@ -350,7 +354,11 @@ public class BookingController {
         return getStatusBookingAcc(accID,"Wait to respond", "Active");
     }
 
-
+    //Trả về list những booking có 1 trong 4 status "Wait to respond", "Active", "In progress", "Done"
+    @GetMapping("customer/waitToRespond-Active-Done-In_progress/{accID}")
+    public ResponseEntity<List<BookingDto>> getwaitToRespondActiveDoneInprogress(@PathVariable int accID) {
+        return getStatusBookingAccV2(accID,"Wait to respond", "Active", "In progress","Done");
+    }
     @GetMapping("staff/waitToConfirm")
     public ResponseEntity<List<BookingDto>> getWaitToBooking() {
         return getStatusBooking("Wait To Confirm");
