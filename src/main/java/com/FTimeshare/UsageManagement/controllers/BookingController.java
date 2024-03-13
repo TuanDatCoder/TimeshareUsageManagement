@@ -61,7 +61,24 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    @GetMapping("/customer/checkbooking")
+    public ResponseEntity<?> checkbooking(@RequestParam String startDate,
+                                          @RequestParam String endDate,
+                                          @RequestParam int productID) throws IOException{
+        LocalDateTime start_date = LocalDateTime.parse(startDate);
+        LocalDateTime end_date = LocalDateTime.parse(endDate);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Duration duration = Duration.between(localDateTime, start_date);
+        long hours = duration.toHours();
+        if (hours < 24 ){
+            return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (!bookingService.checkBookingByDateAndProductID(start_date, end_date, productID)){
+            return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
+        }
 
+        return new ResponseEntity<>("Your booking is acceptable", HttpStatus.ACCEPTED);
+    }
 
     //Khach hang create booking, booking Entity duoc tao ra voi status Wait to confirm
     @PostMapping("/customer/createbooking")

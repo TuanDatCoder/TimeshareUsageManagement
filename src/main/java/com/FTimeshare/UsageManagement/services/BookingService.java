@@ -95,6 +95,21 @@ public class BookingService {
         return true;
     }
 
+    public Boolean checkBookingByDateAndProductID(LocalDateTime reqStartDate, LocalDateTime reqEndDate, int productID){
+        List<BookingEntity> bookings = getBookingsByStatusAndProductId("Active", productID);
+        bookings.addAll(getBookingsByStatusAndProductId("Wait to confirm", productID));
+        bookings.addAll(getBookingsByStatusAndProductId("In progress", productID));
+
+        for (BookingEntity b: bookings) {
+            if(reqStartDate.isAfter(b.getStartDate())&&reqStartDate.isBefore(b.getEndDate()))
+                return false;
+            if (reqEndDate.isAfter(b.getStartDate())&&reqEndDate.isBefore(b.getEndDate()))
+                return false;
+            if(reqStartDate.isBefore(b.getStartDate())&&reqEndDate.isAfter(b.getEndDate()))
+                return false;
+        }
+        return true;
+    }
     public BookingDto createBooking(BookingDto booking,MultipartFile file) throws IOException {
 
 
