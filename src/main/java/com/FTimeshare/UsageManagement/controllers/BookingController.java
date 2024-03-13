@@ -84,7 +84,7 @@ public class BookingController {
                                                  .accID(acc_id)
                                                  .productID(productID)
                                                  .build();
-        if (bookingService.checkBooking(booking) == false){
+        if (!bookingService.checkBooking(booking)){
             return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
         }
         BookingDto createdBooking = bookingService.createBooking(booking, file);
@@ -368,7 +368,29 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
+    //check date hiện tại có sau end date chưa, nếu sau end date và status là active thì chuyển sang status done
+    @PutMapping("staff/change_status_to_done/{bookingID}")
+    public ResponseEntity<String> doneBookingV2(@PathVariable int bookingID) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        if(localDateTime.isAfter(booking.getEndDate())&&booking.getBookingStatus().equalsIgnoreCase("In progress")){
+            bookingService.statusBooking(bookingID,"Done");
+        }
 
+        return ResponseEntity.ok("Change to Done status");
+    }
+
+    //check date hiện tại có trong giữa start-date và end-date ko, nếu có thì chuyển sang status in-progress
+    @PutMapping("staff/change_status_to_in_progress/{bookingID}")
+    public ResponseEntity<String> inprogressBooking(@PathVariable int bookingID) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        if(localDateTime.isAfter(booking.getStartDate())&&localDateTime.isBefore(booking.getEndDate())&&booking.getBookingStatus().equalsIgnoreCase("active")){
+            bookingService.statusBooking(bookingID,"In progress");
+        }
+
+        return ResponseEntity.ok("Change to In progress status");
+    }
     // view theo status
 
 
