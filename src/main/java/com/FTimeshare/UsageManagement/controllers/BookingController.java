@@ -5,12 +5,19 @@ import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.services.AccountService;
 import com.FTimeshare.UsageManagement.services.BookingService;
+import com.FTimeshare.UsageManagement.services.ProductService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +36,19 @@ import java.util.stream.Collectors;
 public class BookingController {
     @Autowired
     private BookingService bookingService;
+    @Autowired
+    JavaMailSender javaMailSender;
+
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private AccountController accountController;
+
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ProductController productController;
+
 
     @GetMapping("/customerview")
     public ResponseEntity<List<BookingDto>> getAllBookings() {
@@ -106,6 +126,43 @@ public class BookingController {
             return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
         }
         BookingDto createdBooking = bookingService.createBooking(booking, file);
+
+        //Dat send email customer booking
+        SimpleMailMessage msg = new SimpleMailMessage();
+
+        AccountEntity accountEntity = accountService.getAccountById(acc_id);
+        ProductEntity productEntity = productService.getProductById(productID);
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(accountEntity.getAccEmail());
+            helper.setSubject("Thank! Your reservation at " + productEntity.getProductName() + " has been confirmed.");
+
+            String content = "<html><body>"
+                    + "<p>Dear " + accountEntity.getAccName() + ",</p>"
+                    + "<p>Thank you for your reservation at <strong>" + productEntity.getProductName() + "</strong>.</p>"
+                    + "<p>Your booking details:</p>"
+                    + "<ul>"
+                    + "<li>Booking ID: " + createdBooking.getBookingID() + "</li>"
+                    + "<li>Start: " + createdBooking.getStartDate() + "</li>"
+                    + "<li>End: " + createdBooking.getEndDate() + "</li>"
+                    + "<li>Address: " + productEntity.getProductAddress() + "</li>"
+                    + "<li>Person: " + createdBooking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + createdBooking.getBookingPrice() + "</li>"
+                    + "</ul>"
+                    + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
+
+
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
     //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
