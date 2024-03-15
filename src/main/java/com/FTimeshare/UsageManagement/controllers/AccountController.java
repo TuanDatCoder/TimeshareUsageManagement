@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.Date;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,9 +130,28 @@ public class AccountController {
                                          @RequestParam int roleID) throws IOException {
 
         String uploadImage = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
+// Tạo và lưu mã xác minh
+        String verificationCode = generateVerificationCode(6); // Hàm để tạo mã xác minh
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
+        // Gửi email xác minh
+        sendVerificationEmail(accEmail, verificationCode);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Account created successfully. Please verify your email.");
+
+    }
+    public static String generateVerificationCode(int length) {
+        SecureRandom random = new SecureRandom();
+        byte[] codeBytes = new byte[length];
+        random.nextBytes(codeBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(codeBytes).substring(0, length);
+    }
+    private void sendVerificationEmail(String email, String verificationCode) {
+        // Tạo nội dung email
+        String subject = "Verify Your Account";
+        String content = "Please click the following link to verify your account: http://yourwebsite.com/verify?code=" + verificationCode;
+
+        // Gửi email
+        // Code để gửi email ở đây
     }
     @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
