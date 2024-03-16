@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +26,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    JavaMailSender javaMailSender;
+
     @GetMapping("/staffview")
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
@@ -121,38 +126,42 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<?> CreateAccount(@RequestParam("Avatar") MultipartFile file,
-                                         @RequestParam String accName,
-                                         @RequestParam String accPhone,
-                                         @RequestParam String accEmail,
-                                         @RequestParam String accPassword,
-                                         @RequestParam String accStatus,
-                                         @RequestParam Date accBirthday,
-                                         @RequestParam int roleID) throws IOException {
+                                           @RequestParam String accName,
+                                           @RequestParam String accPhone,
+                                           @RequestParam String accEmail,
+                                           @RequestParam String accPassword,
+                                           @RequestParam String accStatus,
+                                           @RequestParam Date accBirthday,
+                                           @RequestParam int roleID) throws IOException {
 
         String uploadImage = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
-// Tạo và lưu mã xác minh
-        String verificationCode = generateVerificationCode(6); // Hàm để tạo mã xác minh
 
-        // Gửi email xác minh
-        sendVerificationEmail(accEmail, verificationCode);
-
-        return ResponseEntity.status(HttpStatus.OK).body("Account created successfully. Please verify your email.");
-
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
     }
-    public static String generateVerificationCode(int length) {
-        SecureRandom random = new SecureRandom();
-        byte[] codeBytes = new byte[length];
-        random.nextBytes(codeBytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(codeBytes).substring(0, length);
-    }
-    private void sendVerificationEmail(String email, String verificationCode) {
-        // Tạo nội dung email
-        String subject = "Verify Your Account";
-        String content = "Please click the following link to verify your account: http://yourwebsite.com/verify?code=" + verificationCode;
-
-        // Gửi email
-        // Code để gửi email ở đây
-    }
+//    // verify email
+//
+//        @GetMapping("/verify")
+//        public boolean verifyEmail (@RequestParam String code){
+//            return true;
+//        }
+//    public static String generateVerificationCode(int length) {
+//        SecureRandom random = new SecureRandom();
+//        byte[] codeBytes = new byte[length];
+//        random.nextBytes(codeBytes);
+//        return Base64.getUrlEncoder().withoutPadding().encodeToString(codeBytes).substring(0, length);
+//    }
+//    private void sendVerificationEmail(String email, String verificationCode) {
+//        // Tạo nội dung email
+//        String subject = "Verify Your Account";
+//        String content = "Please click the following link to verify your account: http://yourwebsite.com/verify?code=" + verificationCode;
+//
+//        SimpleMailMessage msg = new SimpleMailMessage();
+//        msg.setTo(email);
+//        msg.setSubject(subject);
+//        msg.setText(content);
+//        javaMailSender.send(msg);
+//    }
     @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
         byte[] imageData=accountService.downloadImage(fileName);
