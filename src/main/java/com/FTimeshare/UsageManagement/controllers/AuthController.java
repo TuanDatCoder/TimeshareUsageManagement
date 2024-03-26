@@ -40,42 +40,6 @@ public class AuthController {
     }
 
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<String> logout(HttpServletRequest request) {
-//        String token = authTokenFilter.parseJwt(request);
-//        tokenBlacklist.addToBlacklist(token);
-//
-//        // Clear any session-related data if necessary
-//
-//        return ResponseEntity.ok("Logged out successfully");
-//    }
-//    @PostMapping("/logout")
-
-//    public ResponseEntity<?> logout(HttpServletRequest request) {
-//        // Get the current authenticated user
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication != null) {
-//            // Invalidate the token
-//            String token = request.getHeader("Authorization");
-//            if (token != null) {
-//                // If the token is blacklisted, it means the user is already logged out
-//                if (TokenBlacklist.isBlacklisted(token)) {
-//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is already logged out");
-//                }
-//
-//                // Add the token to the blacklist
-//                TokenBlacklist.add(token);
-//
-//                // Return a success message
-//                return ResponseEntity.ok("User logged out successfully");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No token provided");
-//            }
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
-//        }
-//    }
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request){
         Authentication authentication =

@@ -90,6 +90,13 @@ public class BookingController {
         LocalDateTime localDateTime = LocalDateTime.now();
         Duration duration = Duration.between(localDateTime, start_date);
         long hours = duration.toHours();
+
+        if(start_date.isAfter(end_date))
+            return new ResponseEntity<>("Sorry, your start date must before end date", HttpStatus.NOT_ACCEPTABLE);
+
+        if(start_date.isBefore(localDateTime))
+            return new ResponseEntity<>("Sorry, your chosen start date has been passed", HttpStatus.NOT_ACCEPTABLE);
+
         if (hours < 24 ){
             return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
         }
