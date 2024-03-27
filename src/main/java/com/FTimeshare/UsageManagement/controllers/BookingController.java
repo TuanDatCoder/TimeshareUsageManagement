@@ -84,25 +84,33 @@ public class BookingController {
     @PostMapping("/customer/checkbooking")
     public ResponseEntity<?> checkbooking(@RequestParam String startDate,
                                           @RequestParam String endDate,
-                                          @RequestParam int productID) throws IOException{
+                                          @RequestParam int productID,
+                                          @RequestParam int booking_person) throws IOException{
         LocalDateTime start_date = LocalDateTime.parse(startDate);
         LocalDateTime end_date = LocalDateTime.parse(endDate);
         LocalDateTime localDateTime = LocalDateTime.now();
         Duration duration = Duration.between(localDateTime, start_date);
+        ProductEntity chosenTimeShare = productService.getProductById(productID);
         long hours = duration.toHours();
 
         if(start_date.isAfter(end_date))
             return new ResponseEntity<>("Sorry, your start date must before end date", HttpStatus.NOT_ACCEPTABLE);
 
-        if(start_date.isBefore(localDateTime))
+        if(start_date.isBefore(localDateTime)||end_date.isBefore(localDateTime))
             return new ResponseEntity<>("Sorry, your chosen start date has been passed", HttpStatus.NOT_ACCEPTABLE);
 
-        if (hours < 24 ){
+        if(!(start_date.isAfter(chosenTimeShare.getAvailableStartDate())&&start_date.isBefore(chosenTimeShare.getAvailableEndDate())
+            &&end_date.isAfter(chosenTimeShare.getAvailableStartDate())&&end_date.isBefore(chosenTimeShare.getAvailableEndDate())))
+            return new ResponseEntity<>("Sorry, our timeshare is unavailable in this time", HttpStatus.NOT_ACCEPTABLE);
+
+        if (hours < 24 )
             return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (!bookingService.checkBookingByDateAndProductID(start_date, end_date, productID)){
+
+        if (!bookingService.checkBookingByDateAndProductID(start_date, end_date, productID))
             return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
-        }
+
+        if (booking_person > chosenTimeShare.getProductPerson())
+            return new ResponseEntity<>("Sorry! The maximum number of persons available for this timeshare is " + productService.getProductPersonByProductId(productID), HttpStatus.NOT_ACCEPTABLE);
 
         return new ResponseEntity<>("Your booking is acceptable", HttpStatus.ACCEPTED);
     }
@@ -120,18 +128,14 @@ public class BookingController {
         LocalDateTime localDateTime = LocalDateTime.now();
         Duration duration = Duration.between(localDateTime, start_date);
         long hours = duration.toHours();
-        if (hours < 24 ){
-            return new ResponseEntity<>("Your check-in date is too close, please choose your check-in date at least 24 hours from now", HttpStatus.NOT_ACCEPTABLE);
-        }
+
         BookingDto booking = BookingDto.builder().startDate(start_date)
                                                  .endDate(end_date)
                                                  .bookingPerson(booking_person)
                                                  .accID(acc_id)
                                                  .productID(productID)
                                                  .build();
-        if (!bookingService.checkBooking(booking)){
-            return new ResponseEntity<>("We're so sorry! Our timeshare is busy this time", HttpStatus.NOT_ACCEPTABLE);
-        }
+
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
         //Dat send email customer booking

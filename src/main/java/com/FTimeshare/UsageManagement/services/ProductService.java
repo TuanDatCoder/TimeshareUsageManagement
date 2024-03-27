@@ -57,10 +57,6 @@ public class ProductService {
         }
     }
 
-    // Quý
-    //Goi tat ca san pham
-
-
     //Goi cac danh sach san pham tang dan theo view
     public List<ProductEntity> getAllProductsAscendingByView() {
         return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productViewer"));
@@ -90,12 +86,9 @@ public class ProductService {
     public List<ProductEntity> getAllProductsDescendingByPrice() {
         return productRepository.findAll(Sort.by(Sort.Direction.DESC, "productPrice"));
     }
-
-    //Tinh tong tien
-
-    //    public List<ProductEntity> searchProductsByName(String name) {
-//        return productRepository.findByProductNameContainingIgnoreCase(name);
-//    }
+    public int getProductPersonByProductId(int productID){
+        return productRepository.findByProductID(productID).getProductPerson();
+    }
     public List<ProductEntity> findByProductNameContainingIgnoreCaseAndProductStatus(String productName, String productStatus) {
         return productRepository.findByProductNameContainingIgnoreCaseAndProductStatus(productName, productStatus);
     }

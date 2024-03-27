@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.security.user;
 
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.exceptions.UserBlockedException;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,10 @@ public class TimeshareUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AccountEntity account = accountRepository.findByAccEmail(email);
-//               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if(!account.getAccStatus().equals("active")){
+            throw new UserBlockedException("Tài khoản này đã bị đình chỉ hoạt động");
+        }
+//              .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return TimeshareUserDetails.buildUserDetails(account);
     }
