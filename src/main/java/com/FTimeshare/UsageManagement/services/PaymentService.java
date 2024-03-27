@@ -31,8 +31,6 @@ public class PaymentService {
             AccountEntity accountEntity = accountRepository.findById(accId)
                     .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " +accId));
 
-
-
             PaymentEntity paymentEntity = paymentRepository.save(PaymentEntity.builder()
                     .accountName(accountName)
                     .banking(banking)
