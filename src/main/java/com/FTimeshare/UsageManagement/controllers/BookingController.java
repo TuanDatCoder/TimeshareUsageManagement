@@ -160,9 +160,6 @@ public class BookingController {
             e.printStackTrace();
         }
 
-
-
-
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
     //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
@@ -170,6 +167,8 @@ public class BookingController {
     @PostMapping("/cancel/{bookingID}")
     public ResponseEntity<?> cancelBookingV2(@PathVariable int bookingID){
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+
+
         if(booking.getBookingStatus().equals("Wait to confirm")){
             bookingService.statusBooking(bookingID,"Wait to confirm (request cancel)");
             return ResponseEntity.ok("Submit cancel request");
@@ -181,11 +180,17 @@ public class BookingController {
             Duration duration = Duration.between(current, booking.getStartDate());
             long days = duration.toHours();
             if (days >= 24) {
+
                 bookingService.statusBooking(bookingID, "Wait to respond payment (100%)");
             } else {
+
                 bookingService.statusBooking(bookingID, "Wait to respond payment (80%)");
             }
         }
+
+
+
+
         return ResponseEntity.ok("Submit cancel request");
     }
 
@@ -364,15 +369,53 @@ public class BookingController {
         return ResponseEntity.ok("Active");
     }
 
+    public void sendEmail(int bookingID, float moneyRefund){
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        SimpleMailMessage msg = new SimpleMailMessage();
+        AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
+        ProductEntity productEntity = productService.getProductById(booking.getProductID().getProductID());
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(accountEntity.getAccEmail());
+            helper.setSubject("You have successfully canceled Booking " + productEntity.getProductName()+".");
+
+            String content = "<html><body>"
+                    + "<p>Dear " + accountEntity.getAccName() + ",</p>"
+                    + "<p>You have successfully canceled Booking</strong>.</p>"
+                    + "<p>Your booking details:</p>"
+                    + "<ul>"
+                    + "<li>Booking ID: " + booking.getBookingID() + "</li>"
+                    + "<li>Start: " + booking.getStartDate() + "</li>"
+                    + "<li>End: " + booking.getEndDate() + "</li>"
+                    + "<li>Address: " + productEntity.getProductAddress() + "</li>"
+                    + "<li>Person: " + booking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
+                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - booking.getBookingPrice() * moneyRefund)+ "</li>"
+                    + "</ul>"
+                    + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @PutMapping("staff/respond100/{bookingID}")
     public ResponseEntity<String> respondBooking2(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Wait To Respond (100%)");
+        sendEmail(bookingID,1.0f );
         return ResponseEntity.ok("Active");
     }
 
     @PutMapping("staff/finalcancel80/{bookingID}")
     public ResponseEntity<String> finalcancelBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Cancelled");
+        sendEmail(bookingID,0.2f );
         return ResponseEntity.ok("Wait To Respond (80%)");
     }
 
