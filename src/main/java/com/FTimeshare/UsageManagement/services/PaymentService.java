@@ -28,32 +28,21 @@ public class PaymentService {
                                 String accountNumber,
                                 int accId) throws IOException {
             byte[] imgData = file.getBytes();
-
             AccountEntity accountEntity = accountRepository.findById(accId)
                     .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " +accId));
 
-        String originalFilename = file.getOriginalFilename();
-        String filename = originalFilename;
-        int counter = 1;
 
-        while (paymentRepository.existsByImgName(filename)) {
-            // If it does, append a counter to the filename and try again
-            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
-                    + "_" + counter
-                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
-            counter++;
-        }
 
             PaymentEntity paymentEntity = paymentRepository.save(PaymentEntity.builder()
                     .accountName(accountName)
                     .banking(banking)
                     .accountNumber(accountNumber)
-                    .imgName(filename)
+                    .imgName(file.getName())
                     .imgData(ImageService.compressImage(file.getBytes()))
                     .accID(accountEntity)
                     .build());
 
-            return "File uploaded successfully: " + filename;
+            return "File uploaded successfully: " + file.getName();
         }
 
         public byte[] downloadImage(String fileName){
