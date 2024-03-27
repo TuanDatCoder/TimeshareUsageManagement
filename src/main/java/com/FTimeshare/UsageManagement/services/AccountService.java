@@ -146,6 +146,11 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    public boolean isEmailExists(String accEmail) {
+
+        return accountRepository.existsByAccEmail(accEmail);
+    }
+
     public List<AccountEntity> getAccount() {
         return accountRepository.findAll();
     }
@@ -172,6 +177,8 @@ public class AccountService {
         Optional<AccountEntity> accountOptional = accountRepository.findById(accID);
         return accountOptional.orElse(null);
     }
+
+
 
 
     //edit feedback
