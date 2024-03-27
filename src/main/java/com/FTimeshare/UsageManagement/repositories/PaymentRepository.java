@@ -11,4 +11,6 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Integer>
     Optional<PaymentEntity> findByImgName(String fileName);
 
     List<PaymentEntity> findByAccID_AccID(int accId);
+
+    boolean existsByImgName(String filename);
 }

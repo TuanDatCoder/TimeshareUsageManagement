@@ -1,5 +1,4 @@
 package com.FTimeshare.UsageManagement.controllers;
-import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
@@ -245,6 +244,8 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
+
+
     public ProductDto convertToDto(ProductEntity productEntity) {
         ProductDto productDto = new ProductDto();
         productDto.setProductID(productEntity.getProductID());
@@ -267,6 +268,7 @@ public class ProductController {
 
         Float averageRating = feedbackService.getAverageFeedbackRatingByProductId(productEntity.getProductID());
         productDto.setProductRating(averageRating != null ? averageRating : 0.0f);
+
         return productDto;
     }
 

@@ -2,8 +2,8 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.controllers.ProductController;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
-import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.repositories.FeedbackRepository;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -21,11 +21,12 @@ public class ProductService {
     @Autowired
     private ProductController productController;
 
+    @Autowired
+    private FeedbackRepository feedbackRepository;
     //Đạt
     public List<ProductEntity> getProductsByStatus(String status) {
         return productRepository.findByProductStatus(status);
     }
-
 
     public void statusProduct(int productID, String Status) {
         Optional<ProductEntity> optionalProduct = productRepository.findById(productID);

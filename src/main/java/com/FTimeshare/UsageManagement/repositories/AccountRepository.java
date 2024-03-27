@@ -37,5 +37,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     List<AccountEntity> findByAccStatus(String status);
 
     void deleteAllByAccIDIn(List<Integer> accIDs);
+
+    boolean existsByImgName(String filename);
 }
 
