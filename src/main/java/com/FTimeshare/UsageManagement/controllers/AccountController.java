@@ -134,34 +134,17 @@ public class AccountController {
                                            @RequestParam Date accBirthday,
                                            @RequestParam int roleID) throws IOException {
 
+        if (accountService.isEmailExists(accEmail)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists");
+        }
+
         String uploadImage = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
-//    // verify email
-//
-//        @GetMapping("/verify")
-//        public boolean verifyEmail (@RequestParam String code){
-//            return true;
-//        }
-//    public static String generateVerificationCode(int length) {
-//        SecureRandom random = new SecureRandom();
-//        byte[] codeBytes = new byte[length];
-//        random.nextBytes(codeBytes);
-//        return Base64.getUrlEncoder().withoutPadding().encodeToString(codeBytes).substring(0, length);
-//    }
-//    private void sendVerificationEmail(String email, String verificationCode) {
-//        // Tạo nội dung email
-//        String subject = "Verify Your Account";
-//        String content = "Please click the following link to verify your account: http://yourwebsite.com/verify?code=" + verificationCode;
-//
-//        SimpleMailMessage msg = new SimpleMailMessage();
-//        msg.setTo(email);
-//        msg.setSubject(subject);
-//        msg.setText(content);
-//        javaMailSender.send(msg);
-//    }
+
     @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
         byte[] imageData=accountService.downloadImage(fileName);
