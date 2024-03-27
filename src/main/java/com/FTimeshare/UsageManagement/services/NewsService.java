@@ -1,5 +1,4 @@
 package com.FTimeshare.UsageManagement.services;
-
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
@@ -58,6 +57,7 @@ public class NewsService {
         AccountEntity accountEntity = accountRepository.findById(accID)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " + accID));
 
+        // Kiểm tra xem tên ảnh đã tồn tại trong cơ sở dữ liệu chưa
         String originalFilename = file.getOriginalFilename();
         String filename = originalFilename;
         int counter = 1;
@@ -90,6 +90,9 @@ public class NewsService {
         Optional<NewsEntity> dbImageData = newsRepository.findByImgName(imgName);
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
+
+
+
 
 
     public NewsDto editNews(int newsID, NewsDto updatedNews, MultipartFile file) throws IOException {

@@ -63,7 +63,6 @@ public class PictureService {
             String uploadResult = uploadImage(file, productID);
             uploadResults.add(uploadResult);
         }
-
         return uploadResults;
     }
 
@@ -72,6 +71,7 @@ public class PictureService {
             System.out.println("Product not found with ID: " + productID);
             return "Product not found with ID: " + productID;
         }
+
 
         String originalFilename = file.getOriginalFilename();
         String filename = originalFilename;

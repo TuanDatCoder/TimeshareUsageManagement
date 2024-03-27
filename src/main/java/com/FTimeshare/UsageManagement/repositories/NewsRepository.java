@@ -11,4 +11,6 @@ public interface NewsRepository extends JpaRepository<NewsEntity, Integer> {
     Optional<NewsEntity> findByImgName(String fileName);
 
     boolean existsByImgName(String filename);
+
+    Optional<NewsEntity> findByNewsIDAndImgName(int newsID, String imgName);
 }
