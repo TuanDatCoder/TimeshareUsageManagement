@@ -13,4 +13,5 @@ public interface FeedbackRepository extends JpaRepository <FeedbackEntity, Integ
 
     @Query("SELECT b.feedbackRating FROM FeedbackEntity b WHERE b.productID.productID = :productID")
     List<Float> findBookingRatingsByProductID(int productID);
+
 }

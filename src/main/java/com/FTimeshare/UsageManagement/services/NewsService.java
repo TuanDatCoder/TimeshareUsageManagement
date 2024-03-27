@@ -1,6 +1,5 @@
 package com.FTimeshare.UsageManagement.services;
 
-import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
@@ -59,18 +58,30 @@ public class NewsService {
         AccountEntity accountEntity = accountRepository.findById(accID)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " + accID));
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (newsRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
+
         NewsEntity newsEntity = newsRepository.save(NewsEntity.builder()
                 .newsTitle(newsTitle)
                 .newsPost(newsPost)
                 .newsContent(newsContent)
-                .imgName(file.getOriginalFilename())
+                .imgName(filename)
                 .imgData(ImageService.compressImage(file.getBytes()))
                 .newsViewer(newsViewer)
                 .newsStatus(newsStatus)
                 .accID(accountEntity)
                 .build());
 
-        return "File uploaded successfully: " + file.getOriginalFilename();
+        return "File uploaded successfully: " + filename;
     }
 
 

@@ -1,18 +1,13 @@
 package com.FTimeshare.UsageManagement.services;
 
-import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.PictureDto;
-import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.PictureEntity;
-import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.PictureRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,22 +73,28 @@ public class PictureService {
             return "Product not found with ID: " + productID;
         }
 
-        // Kiểm tra xem tên ảnh đã tồn tại trong cơ sở dữ liệu chưa
-        Optional<PictureEntity> existingPicture = pictureRepository.findByImgName(file.getOriginalFilename());
-        if (existingPicture.isPresent()) {
-            System.out.println("Image with name " + file.getOriginalFilename() + " already exists.");
-            return "Image with name " + file.getOriginalFilename() + " already exists.";
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        // Check if the original filename already exists in the database
+        while (pictureRepository.findByImgName(filename).isPresent()) {
+            // If it does, append a counter to the filename and try again
+            assert originalFilename != null;
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
         }
 
         // Lưu ảnh vào cơ sở dữ liệu nếu không trùng tên
         PictureEntity imageData = pictureRepository.save(PictureEntity.builder()
-                .imgName(file.getOriginalFilename())
+                .imgName(filename)
                 .imgData(ImageService.compressImage(file.getBytes()))
                 .productID(productService.getProductById(productID))
                 .build());
-        return "File uploaded successfully: " + file.getOriginalFilename();
+        return "File uploaded successfully: " + filename;
     }
-
 
     public byte[] downloadImage(String fileName){
         Optional<PictureEntity> dbImageData = pictureRepository.findByImgName(fileName);

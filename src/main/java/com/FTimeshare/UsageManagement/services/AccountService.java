@@ -2,7 +2,6 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.RoleEntity;
 import com.FTimeshare.UsageManagement.exceptions.UserAlreadyExistsException;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
@@ -14,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -93,20 +91,34 @@ public class AccountService {
             return accEmail + " already exists";
         }
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (accountRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
+
         AccountEntity accountEntity = accountRepository.save(AccountEntity.builder()
                 .accName(accName)
                 .accPhone(accPhone)
                 .accEmail(accEmail)
                 .accPassword(passwordEncoder.encode(accPassword))
-                .imgName(file.getOriginalFilename())
+                .imgName(filename)
                 .imgData(ImageService.compressImage(file.getBytes()))
                 .accStatus(accStatus)
                 .accBirthday(accBirthday)
                 .roleID(roleEntity)
                 .build());
 
-        return "File uploaded successfully: " + file.getOriginalFilename();
+        return "File uploaded successfully: " + filename;
     }
+
+
 
 
     @Autowired
