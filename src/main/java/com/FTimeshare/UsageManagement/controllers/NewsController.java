@@ -2,6 +2,7 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
+import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.services.NewsService;
@@ -104,6 +105,11 @@ public class NewsController {
         }
     }
 
+    @GetMapping("staff/totalNews")
+    public int countClosedProducts() {
+        List<NewsEntity> newsList = newsService.getAllNews();
+        return newsList.size();
+    }
 
     // Helper method to convert Entity to DTO
     private NewsDto convertToDto(NewsEntity newsEntity) {
