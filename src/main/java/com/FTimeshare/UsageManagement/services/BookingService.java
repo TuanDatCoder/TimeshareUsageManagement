@@ -3,7 +3,6 @@ package com.FTimeshare.UsageManagement.services;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
-import com.FTimeshare.UsageManagement.entities.PictureEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.AccountRepository;
 import com.FTimeshare.UsageManagement.repositories.BookingRepository;
@@ -49,18 +48,38 @@ public class BookingService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Booking not found with ID: " + bookingID);
         }
+        // Ensure that the booking exists
+        if (!bookingRepository.existsById(bookingID)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Booking not found with ID: " + bookingID);
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        // Check if the original filename already exists in the database
+        while (bookingRepository.existsByImgRespondName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
         BookingEntity booking = existingBooking.get();
-        booking.setImgRespondName(file.getOriginalFilename());
+        booking.setImgRespondName(filename);
         booking.setImgRespondData(ImageService.compressImage(file.getBytes()));
         bookingRepository.save(booking);
         return ResponseEntity.status(HttpStatus.OK)
-                .body("Image updated successfully.");
+                .body("Image updated successfully with" + filename);
     }
+
+
 
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
         return bookings.stream()
-                .map(bookingEntity -> new BookingDto(
+                    .map(bookingEntity -> new BookingDto(
                         bookingEntity.getBookingID(),
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
@@ -112,6 +131,17 @@ public class BookingService {
     }
     public BookingDto createBooking(BookingDto booking,MultipartFile file) throws IOException {
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (bookingRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
 
         BookingEntity bookingEntity = new BookingEntity();
         // Set properties of bookingEntity from bookingRequest
@@ -124,7 +154,7 @@ public class BookingService {
 
         bookingEntity.setBookingPerson(booking.getBookingPerson());
         bookingEntity.setBookingStatus("Wait to confirm");
-        bookingEntity.setImgName(file.getOriginalFilename());
+        bookingEntity.setImgName(filename);
         bookingEntity.setImgData(ImageService.compressImage(file.getBytes()));
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
