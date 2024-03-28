@@ -88,6 +88,11 @@ public class AccountController {
         accountService.statusAccount(accID,"Active");
         return ResponseEntity.ok("Done");
     }
+    @PutMapping("/verify/active/{email}")
+    public ResponseEntity<String> activeAccount(@PathVariable String email) {
+        accountService.statusAccountEmail(email,"Active");
+        return ResponseEntity.ok("Done");
+    }
     @PutMapping("staff/block/{accID}")
     public ResponseEntity<String> blockAccount(@PathVariable int accID) {
         accountService.statusAccount(accID,"Block");
@@ -146,18 +151,14 @@ public class AccountController {
         if (accountService.isEmailExists(accEmail)) {
             return "Email already exists";
         }
-
         String createAccount = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
         if (createAccount.equals("File uploaded successfully") || createAccount.equals("already exists"))
             return accEmail;
 
         return "Account creation failed";
-
-
-
     }
 
-    @GetMapping("/sendOTP/")
+    @PostMapping("/sendOTP/")
     public void sendOTP(@RequestParam int getOTP, @RequestParam String email){
 
         SimpleMailMessage msg = new SimpleMailMessage();

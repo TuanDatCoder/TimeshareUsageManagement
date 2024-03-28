@@ -397,7 +397,7 @@ public class BookingController {
         return ResponseEntity.ok("Active");
     }
 
-    public void sendEmail(int bookingID, float moneyRefund){
+    public void sendCancelEmail(int bookingID, float moneyRefund){
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
         SimpleMailMessage msg = new SimpleMailMessage();
         AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
@@ -436,14 +436,14 @@ public class BookingController {
     @PutMapping("staff/respond100/{bookingID}")
     public ResponseEntity<String> respondBooking2(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Wait To Respond (100%)");
-        sendEmail(bookingID,1.0f );
+        sendCancelEmail(bookingID,1.0f );
         return ResponseEntity.ok("Active");
     }
 
     @PutMapping("staff/finalcancel80/{bookingID}")
     public ResponseEntity<String> finalcancelBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Cancelled");
-        sendEmail(bookingID,0.2f );
+        sendCancelEmail(bookingID,0.2f );
         return ResponseEntity.ok("Wait To Respond (80%)");
     }
 
