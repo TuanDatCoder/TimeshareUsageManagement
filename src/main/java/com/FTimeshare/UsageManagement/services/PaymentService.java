@@ -27,20 +27,31 @@ public class PaymentService {
                                 String banking,
                                 String accountNumber,
                                 int accId) throws IOException {
-            byte[] imgData = file.getBytes();
             AccountEntity accountEntity = accountRepository.findById(accId)
                     .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " +accId));
+
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (paymentRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
 
             PaymentEntity paymentEntity = paymentRepository.save(PaymentEntity.builder()
                     .accountName(accountName)
                     .banking(banking)
                     .accountNumber(accountNumber)
-                    .imgName(file.getName())
+                    .imgName(filename)
                     .imgData(ImageService.compressImage(file.getBytes()))
                     .accID(accountEntity)
                     .build());
 
-            return "File uploaded successfully: " + file.getName();
+            return "File uploaded successfully: " + filename;
         }
 
         public byte[] downloadImage(String fileName){
@@ -85,11 +96,23 @@ public class PaymentService {
         PaymentEntity existingPayment = paymentRepository.findById(paymentID)
                 .orElseThrow(() -> new RuntimeException("Feedback not found with id: " + paymentID));
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (paymentRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
+
 
         existingPayment.setAccountName(updatedPayment.getAccountName());
         existingPayment.setBanking(updatedPayment.getBanking());
         existingPayment.setAccountNumber(updatedPayment.getAccountNumber());
-        existingPayment.setImgName(file.getOriginalFilename());
+        existingPayment.setImgName(filename);
         existingPayment.setImgData(ImageService.compressImage(file.getBytes()));
 
         // Lưu cập nhật vào cơ sở dữ liệu
