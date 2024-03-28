@@ -1,9 +1,6 @@
 package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
-import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.ProductEntity;
-import com.FTimeshare.UsageManagement.entities.ProductTypeEntity;
-import com.FTimeshare.UsageManagement.entities.ProjectEntity;
+import com.FTimeshare.UsageManagement.entities.*;
 import com.FTimeshare.UsageManagement.services.BookingService;
 import com.FTimeshare.UsageManagement.services.FeedbackService;
 import com.FTimeshare.UsageManagement.services.ProductService;
@@ -12,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -141,6 +139,7 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+
     @GetMapping("/viewByProductTypeId/{productTypeID}")
     public ResponseEntity<List<ProductDto>> viewProductByProductTypeId(@PathVariable int productTypeID) {
         List<ProductDto> products = productService.getProductByProductTypeId(productTypeID);
@@ -189,6 +188,17 @@ public class ProductController {
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
 
+    //sau khi da qua available end date cua san pham thi status cua san pham tu chuyen thanh closed
+    @PutMapping("status/change_status_to_closed/{productId}")
+    public ResponseEntity<String> changeStatusProductToClosed(@PathVariable int productId) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        ProductEntity product = productService.getProductById(productId);
+        if(product.getAvailableEndDate().isBefore(localDateTime)){
+            productService.statusProduct(productId, "Closed");
+        }
+
+        return ResponseEntity.ok("Change to Done status");
+    }
     @GetMapping("/{user_id}")
     public ResponseEntity<List<ProductDto>> getProductsByUserID(@PathVariable int user_id) {
         List<ProductEntity> productEntities = productService.getProductsByAccountID(user_id);

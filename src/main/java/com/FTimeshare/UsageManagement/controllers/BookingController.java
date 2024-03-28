@@ -125,9 +125,6 @@ public class BookingController {
                                            @RequestParam int productID) throws IOException {
         LocalDateTime start_date = LocalDateTime.parse(startDate);
         LocalDateTime end_date = LocalDateTime.parse(endDate);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Duration duration = Duration.between(localDateTime, start_date);
-        long hours = duration.toHours();
 
         BookingDto booking = BookingDto.builder().startDate(start_date)
                                                  .endDate(end_date)

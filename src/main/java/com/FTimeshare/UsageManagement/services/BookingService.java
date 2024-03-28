@@ -60,7 +60,7 @@ public class BookingService {
     public List<BookingDto> getAllBookings() {
         List<BookingEntity> bookings = bookingRepository.findAll();
         return bookings.stream()
-                .map(bookingEntity -> new BookingDto(
+                    .map(bookingEntity -> new BookingDto(
                         bookingEntity.getBookingID(),
                         bookingEntity.getStartDate(),
                         bookingEntity.getEndDate(),
