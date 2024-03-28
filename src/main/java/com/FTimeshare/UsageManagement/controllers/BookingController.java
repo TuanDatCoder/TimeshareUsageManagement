@@ -138,10 +138,10 @@ public class BookingController {
 
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
-        //Dat send email customer booking
-        ProductEntity productEntity = productService.getProductById(booking.getProductID());
-        sendBookingEmail(booking.getBookingID(), "Booking " + productEntity.getProductName()
-                + " is pending.","This booking will be approved within 24 hours.");
+//        //Dat send email customer booking
+//        ProductEntity productEntity = productService.getProductById(booking.getProductID());
+//        sendBookingEmail(booking.getBookingID(), "Booking " + productEntity.getProductName()
+//                + " is pending.","This booking will be approved within 24 hours.");
 
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
