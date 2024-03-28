@@ -115,7 +115,7 @@ public class ProductController {
 
     @GetMapping("staff/totalClosed")
     public int countClosedProducts() {
-        ResponseEntity<List<ProductDto>> responseEntity = getStatusProducts("Close");
+        ResponseEntity<List<ProductDto>> responseEntity = getStatusProducts("Closed");
         List<ProductDto> closeProducts = responseEntity.getBody();
         return closeProducts.size();
     }
