@@ -19,7 +19,7 @@ public class TimeshareUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AccountEntity account = accountRepository.findByAccEmail(email);
-        if(!account.getAccStatus().equals("active")){
+        if(!(account.getAccStatus().equals("active")||account.getAccStatus().equals("Active"))){
             throw new UserBlockedException("Tài khoản này đã bị đình chỉ hoạt động");
         }
 //              .orElseThrow(() -> new UsernameNotFoundException("User not found"));
