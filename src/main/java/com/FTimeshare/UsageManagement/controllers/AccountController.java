@@ -2,13 +2,18 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
+import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -122,10 +127,14 @@ public class AccountController {
         accountService.deleteUserById(userId);
         return ResponseEntity.ok("User with ID " + userId + " has been deleted successfully.");
     }
-
+    @DeleteMapping("delete/{userId}")
+    public ResponseEntity<String> deleteEmail(@PathVariable String email) {
+        accountService.deleteAccountByEmail(email);
+        return ResponseEntity.ok("User with Email " + email + " has been deleted successfully.");
+    }
 
     @PostMapping
-    public ResponseEntity<?> CreateAccount(@RequestParam("Avatar") MultipartFile file,
+    public String CreateAccount(@RequestParam("Avatar") MultipartFile file,
                                            @RequestParam String accName,
                                            @RequestParam String accPhone,
                                            @RequestParam String accEmail,
@@ -135,15 +144,42 @@ public class AccountController {
                                            @RequestParam int roleID) throws IOException {
 
         if (accountService.isEmailExists(accEmail)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Email already exists");
+            return "Email already exists";
         }
 
-        String uploadImage = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
+        String createAccount = accountService.uploadImage(file,accName,accPhone,accEmail,accPassword,accStatus,accBirthday,roleID);
+        if (createAccount.equals("File uploaded successfully") || createAccount.equals("already exists"))
+            return accEmail;
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
+        return "Account creation failed";
+
+
+
     }
+
+    @GetMapping("/sendOTP/")
+    public void sendOTP(@RequestParam int getOTP, @RequestParam String email){
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("Email Verification - "+getOTP);
+
+            String content = "<html><body>"
+                    + "<p>Please enter this OTP code to check your email to register for the bookinghomestay page.</p>"
+                    + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
