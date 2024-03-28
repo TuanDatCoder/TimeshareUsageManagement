@@ -132,7 +132,7 @@ public class AccountController {
         accountService.deleteUserById(userId);
         return ResponseEntity.ok("User with ID " + userId + " has been deleted successfully.");
     }
-    @DeleteMapping("delete/{email}")
+    @DeleteMapping("deleteByEmail/{email}")
     public ResponseEntity<String> deleteEmail(@PathVariable String email) {
         accountService.deleteAccountByEmail(email);
         return ResponseEntity.ok("User with Email " + email + " has been deleted successfully.");
