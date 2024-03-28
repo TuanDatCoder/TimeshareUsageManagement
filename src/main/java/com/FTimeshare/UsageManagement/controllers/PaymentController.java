@@ -1,7 +1,6 @@
 package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.PaymentDto;
-import com.FTimeshare.UsageManagement.repositories.PaymentRepository;
 import com.FTimeshare.UsageManagement.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +20,6 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    private PaymentRepository paymentRepository;
-
     @PostMapping
     public ResponseEntity<?> createPayment(@RequestParam("ImgBanking") MultipartFile file,
                                            @RequestParam String accountName,
@@ -42,7 +38,6 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-
     }
 
     @GetMapping("/viewAll")

@@ -72,14 +72,11 @@ public class PictureService {
             return "Product not found with ID: " + productID;
         }
 
-
         String originalFilename = file.getOriginalFilename();
         String filename = originalFilename;
         int counter = 1;
 
-        // Check if the original filename already exists in the database
         while (pictureRepository.findByImgName(filename).isPresent()) {
-            // If it does, append a counter to the filename and try again
             assert originalFilename != null;
             filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
                     + "_" + counter
@@ -87,7 +84,6 @@ public class PictureService {
             counter++;
         }
 
-        // Lưu ảnh vào cơ sở dữ liệu nếu không trùng tên
         PictureEntity imageData = pictureRepository.save(PictureEntity.builder()
                 .imgName(filename)
                 .imgData(ImageService.compressImage(file.getBytes()))
@@ -108,7 +104,6 @@ public class PictureService {
                     .body("Picture not found with ID: " + imgID);
         }
 
-        // Kiểm tra xem tên ảnh đã tồn tại trong cơ sở dữ liệu chưa
         Optional<PictureEntity> existingPictureWithName = pictureRepository.findByImgName(file.getOriginalFilename());
         if (existingPictureWithName.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

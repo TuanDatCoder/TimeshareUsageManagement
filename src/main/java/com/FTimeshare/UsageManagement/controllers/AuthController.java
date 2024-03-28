@@ -8,7 +8,6 @@ import com.FTimeshare.UsageManagement.security.jwt.AuthTokenFilter;
 import com.FTimeshare.UsageManagement.security.jwt.JwtUtils;
 import com.FTimeshare.UsageManagement.security.user.TimeshareUserDetails;
 import com.FTimeshare.UsageManagement.services.AccountService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,7 +37,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request){

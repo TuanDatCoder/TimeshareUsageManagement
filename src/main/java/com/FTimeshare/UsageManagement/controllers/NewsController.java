@@ -1,9 +1,6 @@
 package com.FTimeshare.UsageManagement.controllers;
 
-import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.dtos.NewsDto;
-import com.FTimeshare.UsageManagement.dtos.ProductDto;
-import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.NewsEntity;
 import com.FTimeshare.UsageManagement.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +23,6 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    // Get all news
     @GetMapping("/view")
     public ResponseEntity<List<NewsDto>> getAllNews() {
         List<NewsEntity> newsEntities = newsService.getAllNews();
@@ -111,7 +105,6 @@ public class NewsController {
         return newsList.size();
     }
 
-    // Helper method to convert Entity to DTO
     private NewsDto convertToDto(NewsEntity newsEntity) {
         NewsDto newsDto = new NewsDto();
         newsDto.setNewsID(newsEntity.getNewsID());
@@ -126,10 +119,6 @@ public class NewsController {
         if (newsEntity.getAccID() != null) {
             newsDto.setAccID(newsEntity.getAccID().getAccID());
         }
-
         return newsDto;
     }
-
-
-
 }

@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/staff")
@@ -19,7 +17,6 @@ public class StaffController {
 
     @Autowired
     private AccountController accountController;
-
 
     @PutMapping("/update-status/{userId}")
     public ResponseEntity<AccountDto> updateAccStatus(@PathVariable int accId, @RequestBody AccountDto accDto) {

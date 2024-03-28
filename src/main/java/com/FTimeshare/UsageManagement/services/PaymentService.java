@@ -35,7 +35,6 @@ public class PaymentService {
         int counter = 1;
 
         while (paymentRepository.existsByImgName(filename)) {
-            // If it does, append a counter to the filename and try again
             filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
                     + "_" + counter
                     + originalFilename.substring(originalFilename.lastIndexOf('.'));
@@ -115,10 +114,8 @@ public class PaymentService {
         existingPayment.setImgName(filename);
         existingPayment.setImgData(ImageService.compressImage(file.getBytes()));
 
-        // Lưu cập nhật vào cơ sở dữ liệu
         PaymentEntity savedPayment = paymentRepository.save(existingPayment);
 
-        // Chuyển đổi và trả về phiên bản cập nhật của phản hồi
         return convertToDto(savedPayment);
     }
 

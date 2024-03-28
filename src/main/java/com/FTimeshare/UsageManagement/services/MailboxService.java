@@ -36,34 +36,27 @@ public class MailboxService {
 
     public MailboxDto submitMail(MailboxDto mailbox) {
         MailboxEntity mailboxEntity = new MailboxEntity();
-        // Set properties of bookingEntity from bookingRequest
         mailboxEntity.setMailboxId(mailbox.getMailboxId());
         mailboxEntity.setMailboxDescription(mailbox.getMailboxDescription());
         mailboxEntity.setMailboxType(mailbox.getMailboxType());
         mailboxEntity.setMailboxStatus(mailbox.getMailboxStatus());
         mailboxEntity.setMailboxSendDate(mailbox.getMailboxSendDate());
-        // Assuming you have UserRepository and ProductRepository
         AccountEntity accountEntity = accountRepository.findById(mailbox.getAccIdSend()).orElse(null);
         AccountEntity accountEntityy = accountRepository.findById(mailbox.getAccIdReceive()).orElse(null);
 
         if (accountEntity != null && accountEntityy != null) {
             mailboxEntity.setAccIdSend(accountEntity);
             mailboxEntity.setAccIdReceive(accountEntityy);
-            // Set other properties as needed
 
-            // Save the bookingEntity
             MailboxEntity savedMailboxEntity = mailboxRepository.save(mailboxEntity);
 
-            // Convert and return the saved entity as DTO
             return convertToDto(savedMailboxEntity);
         } else {
-            // Handle case where user or product is not found
             return null;
         }
     }
 
     private MailboxDto convertToDto(MailboxEntity mailboxEntity) {
-        // Your existing DTO conversion logic
         return new MailboxDto(
                 mailboxEntity.getMailboxId(),
                 mailboxEntity.getMailboxDescription(),

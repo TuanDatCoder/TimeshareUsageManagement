@@ -16,7 +16,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query("SELECT p FROM ProductEntity p WHERE p.productID = :productID")
     ProductEntity findByProductID(@Param("productID") int productID);
 
-    // List<ProductEntity> findByProductNameContainingIgnoreCase(String name);
     List<ProductEntity> findByProductNameContainingIgnoreCaseAndProductStatus(String productName, String productStatus);
 
     @Query("SELECT DISTINCT p.productStatus FROM ProductEntity p")

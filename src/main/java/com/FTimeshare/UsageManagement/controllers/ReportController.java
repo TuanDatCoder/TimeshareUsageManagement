@@ -45,8 +45,6 @@ public class ReportController {
         return ResponseEntity.ok(reportDto);
     }
 
-
-    // API endpoint để lấy một báo cáo dựa trên reportID
     @GetMapping("viewDetail/{reportID}")
     public ReportEntity getReportById(@PathVariable int reportID) {
         return reportRepository.findById(reportID)
@@ -74,7 +72,6 @@ public class ReportController {
         return ResponseEntity.ok(editedFeedback);
     }
 
-    // API endpoint để xóa một báo cáo dựa trên reportID
     @DeleteMapping("delete/{reportID}")
     public void deleteReport(@PathVariable int reportID) {
         reportRepository.deleteById(reportID);
@@ -88,13 +85,10 @@ private ReportDto convertToDto(ReportEntity reportEntity) {
     reportDto.setReportDetail(reportEntity.getReportDetail());
     reportDto.setReportStatus(reportEntity.getReportStatus());
 
-    // Bổ sung accID từ ReportEntity
     if (reportEntity.getAccID() != null) {
         reportDto.setAccID(reportEntity.getAccID().getAccID());
     }
 
-
-    // Bổ sung productID từ ReportEntity (nếu có)
     if (reportEntity.getProductID() != null) {
         reportDto.setProductID(reportEntity.getProductID().getProductID());
     }

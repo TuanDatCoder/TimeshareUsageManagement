@@ -47,9 +47,6 @@ public class  MailboxController {
         return ResponseEntity.ok(newsDto);
     }
 
-    //View theo accid
-
-    // View nguoi nhan
     @GetMapping("sendByAccId/{user_id}")
     public ResponseEntity<List<MailboxDto>> getMailboxByAccIdSend(@PathVariable int user_id) {
         List<MailboxEntity> mailboxEntities = mailboxService.getMailboxByAccIdSend(user_id);
@@ -78,5 +75,4 @@ public class  MailboxController {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-
 }

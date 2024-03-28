@@ -13,13 +13,6 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<AccountEntity, Integer> {
     @Query("SELECT u FROM AccountEntity u WHERE u.roleID.roleID = :roleId")
     List<AccountEntity> findAllByRoleID(@Param("roleId") int roleId);
-
-//    @Query("SELECT u FROM AccountEntity u WHERE u.accEmail = :accEmail")
-//    AccountEntity findByAccEmail(String accEmail);
-
-
-
-
     @Query("SELECT u FROM AccountEntity u WHERE u.accEmail = :email")
     AccountEntity findByAccEmail(String email);
     AccountEntity findByAccName(String username);
@@ -31,7 +24,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
 
     int countByRoleIDRoleName(String roleName);
     List<AccountEntity> findByRoleIDRoleName(String roleName);
-    //List<AccountEntity> findByAccNameContainingIgnoreCaseAndRoleName(String accName, String roleName);
     @Query("SELECT DISTINCT a.accStatus FROM AccountEntity a")
     List<String> findAllStatus();
 

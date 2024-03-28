@@ -85,14 +85,10 @@ public class NewsService {
     }
 
 
-
     public byte[] downloadImage(String imgName) {
         Optional<NewsEntity> dbImageData = newsRepository.findByImgName(imgName);
         return ImageService.decompressImage(dbImageData.get().getImgData());
     }
-
-
-
 
 
     public NewsDto editNews(int newsID, NewsDto updatedNews, MultipartFile file) throws IOException {

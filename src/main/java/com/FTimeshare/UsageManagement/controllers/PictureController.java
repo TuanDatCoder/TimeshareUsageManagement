@@ -1,10 +1,7 @@
 package com.FTimeshare.UsageManagement.controllers;
-
-import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.PictureDto;
 
 import com.FTimeshare.UsageManagement.services.PictureService;
-import com.FTimeshare.UsageManagement.services.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
@@ -37,8 +32,6 @@ public class PictureController {
         return ResponseEntity.ok(pictures);
     }
 
-
-
     @PostMapping("/{productID}")
     public ResponseEntity<?> uploadImages(@PathVariable int productID, @RequestParam("pictures") MultipartFile[] files) throws IOException {
         List<String> uploadResults = pictureService.uploadImages(files, productID);
@@ -51,7 +44,6 @@ public class PictureController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-
     }
 
     @PutMapping("/updateImg/{imgID}")
@@ -67,6 +59,4 @@ public class PictureController {
                     .body("Error updating image: " + e.getMessage());
         }
     }
-
-
 }

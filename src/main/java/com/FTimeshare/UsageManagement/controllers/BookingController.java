@@ -233,7 +233,6 @@ public class BookingController {
         }
     }
 
-
     @GetMapping("/view-booking-price/{productID}")
     public ResponseEntity<List<Float>> viewBookingPricesByProductId(@PathVariable int productID) {
         List<Float> bookingPrices = bookingService.getBookingPricesByProductId(productID);
@@ -244,10 +243,6 @@ public class BookingController {
         Float totalBookingPrice = bookingService.getTotalBookingPriceByProductId(productID);
         return new ResponseEntity<>(totalBookingPrice, HttpStatus.OK);
     }
-
-
-
-    //Staff duyet va view status
 
     @GetMapping("/view-booking-by-status/{status}")
     public ResponseEntity<List<BookingDto>> getStatusBooking(@PathVariable String status) {
@@ -261,8 +256,6 @@ public class BookingController {
         return ResponseEntity.ok(convertToDtoList(statusBooking));
     }
 
-    //------------------   STATISTICAL -------------------------
-    // View Price
     @GetMapping("/admin/total_Price_For_Done_Bookings")
     public float totalPriceForDoneBookings() {
         List<BookingEntity> doneBookings = bookingService.getBookingsByStatus("Done");
@@ -273,7 +266,6 @@ public class BookingController {
         return totalBookingPrice*0.1f;
     }
 
-    // View total By month
     @GetMapping("/admin/monthlyTotalPrice/{year}")
     public Map<Integer, Float> calculateMonthlyTotalPrice(@PathVariable int year) {
         List<BookingEntity> doneBookings = bookingService.getBookingsByStatus("Done");
@@ -286,10 +278,9 @@ public class BookingController {
                monthlyTotalPriceMap.put(month, monthlyTotalPriceMap.getOrDefault(month, 0f) + totalPrice);
            }
         }
-
         return monthlyTotalPriceMap;
     }
-    // view total Year
+
     @GetMapping("/admin/yearlyTotalPrice/{year}")
     public Float calculateYearlyTotalPrice(@PathVariable int year) {
         Map<Integer, Float> monthlyTotalPriceMap = calculateMonthlyTotalPrice(year);
@@ -300,8 +291,6 @@ public class BookingController {
         return yearlyTotalPrice;
     }
 
-
-    // View total status
     @GetMapping("staff/totalPending")
         public int countPendingBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Pending");
@@ -359,7 +348,6 @@ public class BookingController {
         return doneBooking.size();
     }
 
-    // làm change status
     @PutMapping("staff/respond80/{bookingID}")
     public ResponseEntity<String> respondBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Wait To Respond (80%)");
@@ -436,7 +424,6 @@ public class BookingController {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
     }
     @PutMapping("staff/respond100/{bookingID}")
     public ResponseEntity<String> respondBooking2(@PathVariable int bookingID) {
@@ -494,8 +481,6 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
-    // view theo status
-    //View wait to confirm - wait to confirm cancel
     public ResponseEntity<List<BookingDto>> getStatusBookingAcc(int accID, String status1, String status2) {
         List<BookingEntity> statusProducts = bookingService.getBookingsByStatusByAccount(accID,status1,status2);
         return ResponseEntity.ok(convertToDtoList(statusProducts));
@@ -558,8 +543,6 @@ public class BookingController {
 
         return ResponseEntity.ok("Change to In progress status");
     }
-    // view theo status
-
 
     @GetMapping("staff/waitToRespond-Active")
     public ResponseEntity<List<BookingDto>> getWaitToRespondBooking() { return getStatusBooking2("Wait to respond", "Active");}
@@ -573,17 +556,6 @@ public class BookingController {
         return getStatusBooking("Wait to respond payment (80%)");
     }
 
-
-
-    //staff upload hinh chuyen khoan nguoc lai
-//    @PostMapping("/customer/submit_respond_payment/{bookingID}")
-//    public ResponseEntity<?> uploadRespondPaymentImage(@PathVariable int bookingID, @RequestParam("pictures") MultipartFile file) throws IOException {
-//        if (bookingService.getBookingsByBookingId(bookingID) == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("Booking not found with ID: " + bookingID);
-//        }
-//        return bookingService.uploadBookingRespondPaymentPicture(file, bookingID);
-//    }
     @GetMapping("staff/respond")
     public ResponseEntity<List<BookingDto>> getRespondBooking() {
         return getStatusBooking("Wait To Respond");

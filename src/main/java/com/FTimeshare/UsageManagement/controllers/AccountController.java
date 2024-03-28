@@ -2,11 +2,9 @@ package com.FTimeshare.UsageManagement.controllers;
 
 import com.FTimeshare.UsageManagement.dtos.AccountDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
-import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.sql.Date;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,24 +105,18 @@ public class AccountController {
         return getStatusAccount("Block");
     }
 
-
-    //----------------------- Count Total Account --------------------
-
     @GetMapping("/staff/count/{roleName}")
     public ResponseEntity<Integer> countUsersByRoleName(@PathVariable String roleName) {
         int count = accountService.countUsersByRoleName(roleName);
         return ResponseEntity.ok(count);
     }
 
-    //-------------------------- View all -----------------------
     @GetMapping("/{roleName}")
     public ResponseEntity<List<AccountDto>> getUsersByRoleName(@PathVariable String roleName) {
         List<AccountEntity> userEntities = accountService.getUsersByRoleName(roleName);
         return ResponseEntity.ok(convertToDtoList(userEntities));
     }
 
-    //-------------------------- delete -------------------------
-    //http://localhost:8080/api/users/delete/10
     @DeleteMapping("delete/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable int userId) {
         accountService.deleteUserById(userId);
@@ -178,9 +168,7 @@ public class AccountController {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
     }
-
 
     @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
@@ -188,7 +176,6 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-
     }
 
     @PutMapping("/edit/{accountID}")
@@ -222,7 +209,6 @@ public class AccountController {
         }
     }
 
-
     private List<AccountDto> convertToDtoList(List<AccountEntity> userEntities) {
         return userEntities.stream()
                 .map(this::convertToDto)
@@ -240,10 +226,9 @@ public class AccountController {
         accountDto.setAccStatus(accountEntity.getAccStatus());
         accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
         accountDto.setImgData(new byte[0]);
-        int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
+        int roleID = 0;
         if (accountEntity.getRoleID() != null) {
-            // Lấy ID của vai trò từ đối tượng RoleEntity và gán cho roleID
-            roleID = accountEntity.getRoleID().getRoleID(); // Giả sử ID của vai trò là một số nguyên
+            roleID = accountEntity.getRoleID().getRoleID();
         }
         accountDto.setRoleID(roleID);
 
