@@ -49,5 +49,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     void deleteAllByAccIDIn(List<Integer> accIDs);
 
 
+    boolean existsByImgName(String filename);
 
+    boolean existsByImgRespondName(String filename);
 }

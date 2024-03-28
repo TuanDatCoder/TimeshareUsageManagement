@@ -5,6 +5,7 @@ import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
+import com.FTimeshare.UsageManagement.repositories.BookingRepository;
 import com.FTimeshare.UsageManagement.services.AccountService;
 import com.FTimeshare.UsageManagement.services.BookingService;
 import com.FTimeshare.UsageManagement.services.ProductService;
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
 @CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/bookings")
 public class BookingController {
+    @Autowired
+    private BookingRepository bookingRepository;
     @Autowired
     private BookingService bookingService;
     @Autowired
@@ -208,6 +211,7 @@ public class BookingController {
     //upload respond
     @PutMapping("/updateImgRespond/{bookingID}")
     public ResponseEntity<?> updateImageRespond(@PathVariable int bookingID, @RequestParam("picture") MultipartFile file) {
+
         try {
             ResponseEntity<?> response = bookingService.updateImage(file, bookingID);
             return response;
@@ -219,6 +223,9 @@ public class BookingController {
                     .body("Error updating image: " + e.getMessage());
         }
     }
+
+
+
 
     //View anh
     @GetMapping("/paymentRespond/viewImg/{fileName}")
