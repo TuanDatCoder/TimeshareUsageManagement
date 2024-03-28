@@ -357,6 +357,20 @@ public class BookingController {
         List<BookingDto> respondBookings = responseEntity.getBody();
         return respondBookings.size();
     }
+
+    @GetMapping("staff/totalWaitToRespond100")
+    public long countWaitToRespondBookings100() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait to respond payment (100%)");
+        List<BookingDto> respondBookings = responseEntity.getBody();
+        return respondBookings.size();
+    }
+
+    @GetMapping("staff/totalWaitToRespond80")
+    public long countWaitToRespondBookings80() {
+        ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Wait to respond payment (80%)");
+        List<BookingDto> respondBookings = responseEntity.getBody();
+        return respondBookings.size();
+    }
     @GetMapping("staff/totalActive")
     public int countActiveBookings() {
         ResponseEntity<List<BookingDto>> responseEntity = getStatusBooking("Active");
