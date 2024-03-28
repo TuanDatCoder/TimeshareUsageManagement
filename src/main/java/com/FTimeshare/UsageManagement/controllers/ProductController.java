@@ -230,6 +230,9 @@ public class ProductController {
     }
     @DeleteMapping("/delete/{productID}")
     public ResponseEntity<?> deleteProduct(@PathVariable int productID) {
+        if(bookingService.getBookingByProductIDAndActive(productID).size() > 0 ){
+            return ResponseEntity.badRequest().body("Can't delete, some bookings of this product haven't done");
+        }
         ProductDto deleteProduct= productService.deleteProductID(productID);
 
         if (deleteProduct != null) {

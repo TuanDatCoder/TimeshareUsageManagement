@@ -99,6 +99,7 @@ public class BookingService {
         List<BookingEntity> bookings = getBookingsByStatusAndProductId("Active", productID);
         bookings.addAll(getBookingsByStatusAndProductId("Wait to confirm", productID));
         bookings.addAll(getBookingsByStatusAndProductId("In progress", productID));
+        bookings.addAll(getBookingsByStatusAndProductId("active", productID));
 
         for (BookingEntity b: bookings) {
             if(reqStartDate.isAfter(b.getStartDate())&&reqStartDate.isBefore(b.getEndDate()))
@@ -182,7 +183,29 @@ public class BookingService {
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
     }
+    public List<BookingDto> getBookingByProductIDAndActive(int productID) {
+        List<BookingEntity> bookings = bookingRepository.findBookingEntityByBookingStatusAndProductID("Active", productID);
+        bookings.addAll(bookingRepository.findBookingEntityByBookingStatusAndProductID("active", productID));
+        bookings.addAll(bookingRepository.findBookingEntityByBookingStatusAndProductID("Wait to confirm", productID));
+        bookings.addAll(bookingRepository.findBookingEntityByBookingStatusAndProductID("In progress", productID));
 
+        return bookings.stream()
+                .map(bookingEntity -> new BookingDto(
+                        bookingEntity.getBookingID(),
+                        bookingEntity.getStartDate(),
+                        bookingEntity.getEndDate(),
+                        bookingEntity.getCreateDate(),
+                        bookingEntity.getBookingPrice(),
+                        bookingEntity.getBookingPerson(),
+                        bookingEntity.getBookingStatus(),
+                        "http://localhost:8080/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                        new byte[0],
+                        "http://localhost:8080/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                        new byte[0],
+                        bookingEntity.getAccID().getAccID(),
+                        bookingEntity.getProductID().getProductID()))
+                .collect(Collectors.toList());
+    }
     public BookingDto deleteBooking(int bookingID) {
         // Tìm đặt phòng theo ID
         Optional<BookingEntity> bookingEntityOptional = bookingRepository.findById(bookingID);
