@@ -70,19 +70,15 @@ public class ReportController {
     public ResponseEntity<?> updateReport(@PathVariable int reportID, @RequestBody ReportDto updatedReport) {
         LocalDateTime now = LocalDateTime.now();
         updatedReport.setReportCreateDate(now);
-        ReportDto editedFeedback = reportService.editFeedback(reportID, updatedReport);
+        ReportDto editedFeedback = reportService.editReport(reportID, updatedReport);
         return ResponseEntity.ok(editedFeedback);
-
     }
-
 
     // API endpoint để xóa một báo cáo dựa trên reportID
     @DeleteMapping("delete/{reportID}")
     public void deleteReport(@PathVariable int reportID) {
         reportRepository.deleteById(reportID);
     }
-
-
     LocalDateTime now = LocalDateTime.now();
 
 private ReportDto convertToDto(ReportEntity reportEntity) {

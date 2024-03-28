@@ -199,11 +199,23 @@ public class AccountService {
         AccountEntity existingAccount = accountRepository.findById(accountID)
                 .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountID));
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (accountRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
+
         existingAccount.setAccName(updatedAccount.getAccName());
         existingAccount.setAccPhone(updatedAccount.getAccPhone());
         existingAccount.setAccEmail(updatedAccount.getAccEmail());
         existingAccount.setAccPassword(passwordEncoder.encode(updatedAccount.getAccPassword()));
-        existingAccount.setImgName(file.getOriginalFilename());
+        existingAccount.setImgName(filename);
         existingAccount.setImgData(ImageService.compressImage(file.getBytes()));
         existingAccount.setAccStatus(updatedAccount.getAccStatus());
         existingAccount.setAccBirthday(updatedAccount.getAccBirthday());
