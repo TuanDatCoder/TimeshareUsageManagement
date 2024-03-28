@@ -374,6 +374,8 @@ public class BookingController {
                     + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - booking.getBookingPrice() * moneyRefund)+ "</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "<br/>"
+                    + "<p>If you have any questions, please respond to this email!</p>"
                     + "</body></html>";
 
             helper.setText(content, true);
@@ -407,6 +409,8 @@ public class BookingController {
                     + "<li>Total: " + booking.getBookingPrice() + "</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "<br/>"
+                    + "<p>If you have any questions, please respond to this email!</p>"
                     + "</body></html>";
 
             helper.setText(content, true);
@@ -442,7 +446,7 @@ public class BookingController {
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
         ProductEntity productEntity = productService.getProductById(booking.getProductID().getProductID());
         sendBookingEmail(bookingID, "Thank! Your reservation at " + productEntity.getProductName()
-                + " has been confirmed.","Thank you for your reservation at ");
+                + " has been confirmed.","Thank you for your reservation at "+ productEntity.getProductName());
         return ResponseEntity.ok("Done");
     }
     @PutMapping("staff/cancel/{bookingID}")
