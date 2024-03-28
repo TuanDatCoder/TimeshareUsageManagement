@@ -91,7 +91,7 @@ public class AccountService {
         RoleEntity roleEntity = roleRepository.findById(roleID)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found with ID: " +roleID));
         if (accountRepository.existsByAccEmail(accEmail)){
-            return accEmail + " already exists";
+            return "already exists";
         }
 
         String originalFilename = file.getOriginalFilename();
@@ -118,8 +118,9 @@ public class AccountService {
                 .roleID(roleEntity)
                 .build());
 
-        return "File uploaded successfully: " + filename;
+        return "File uploaded successfully";
     }
+
 
 
 
@@ -167,7 +168,7 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    @Transactional
+
     public void deleteAccountByEmail(String email) {
         AccountEntity theAccount = getAccount(email);
         if (theAccount != null){
