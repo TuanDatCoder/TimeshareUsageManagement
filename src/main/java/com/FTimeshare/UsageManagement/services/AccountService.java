@@ -38,6 +38,10 @@ public class AccountService {
     public void deleteUserById(int userId) {
         accountRepository.deleteById(userId);
     }
+    public void deleteAccountByEmail(String email) {
+        AccountEntity account = findByAccountEmail(email);
+        deleteUserById(account.getAccID());
+    }
     @Transactional
     public void deleteAccountsByAccIDs(List<Integer> accIDs) {
         accountRepository.deleteAllByAccIDIn(accIDs);
@@ -174,13 +178,7 @@ public class AccountService {
     }
 
 
-    public void deleteAccountByEmail(String email) {
-        AccountEntity theAccount = getAccount(email);
-        if (theAccount != null){
-            accountRepository.deleteByAccEmail(email);
-        }
 
-    }
 
     public AccountEntity getAccount(String email) {
         return accountRepository.findByAccEmail(email);

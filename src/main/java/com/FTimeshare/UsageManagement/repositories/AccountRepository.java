@@ -24,7 +24,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     AccountEntity findByAccEmail(String email);
     AccountEntity findByAccName(String username);
     Optional<AccountEntity> findByAccNameOrAccEmail(String accName, String accEmail);
-    void deleteByAccEmail(String email);
+
     Boolean existsByAccName(String accName);
     Boolean existsByAccEmail(String accEmail);
 
@@ -42,5 +42,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Integer>
     void deleteAllByAccIDIn(List<Integer> accIDs);
 
     boolean existsByImgName(String filename);
+
+    void deleteByAccEmail(String email);
 }
 
