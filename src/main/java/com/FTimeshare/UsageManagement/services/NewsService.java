@@ -99,10 +99,22 @@ public class NewsService {
         NewsEntity existingNews = newsRepository.findById(newsID)
                 .orElseThrow(() -> new RuntimeException("News not found with id: " + newsID));
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = originalFilename;
+        int counter = 1;
+
+        while (newsRepository.existsByImgName(filename)) {
+            // If it does, append a counter to the filename and try again
+            filename = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+                    + "_" + counter
+                    + originalFilename.substring(originalFilename.lastIndexOf('.'));
+            counter++;
+        }
+
         existingNews.setNewsTitle(updatedNews.getNewsTitle());
         existingNews.setNewsPost(updatedNews.getNewsPost());
         existingNews.setNewsContent(updatedNews.getNewsContent());
-        existingNews.setImgName(file.getOriginalFilename());
+        existingNews.setImgName(filename);
         existingNews.setImgData(ImageService.compressImage(file.getBytes()));
         existingNews.setNewsViewer(updatedNews.getNewsViewer());
         existingNews.setNewsStatus(updatedNews.getNewsStatus());

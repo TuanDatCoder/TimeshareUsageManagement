@@ -1,6 +1,5 @@
 package com.FTimeshare.UsageManagement.services;
 
-import com.FTimeshare.UsageManagement.dtos.PictureDto;
 import com.FTimeshare.UsageManagement.dtos.ReportDto;
 import com.FTimeshare.UsageManagement.entities.*;
 import com.FTimeshare.UsageManagement.repositories.ReportRepository;
@@ -70,7 +69,7 @@ public class ReportService {
     }
 
 
-    public ReportDto editFeedback(int reportID, ReportDto updatedReport) {
+    public ReportDto editReport(int reportID, ReportDto updatedReport) {
         // Tìm phản hồi cần chỉnh sửa trong cơ sở dữ liệu
         ReportEntity existingReport = reportRepository.findById(reportID)
                 .orElseThrow(() -> new RuntimeException("Report not found with id: " + reportID));
