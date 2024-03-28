@@ -139,9 +139,40 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
         //Dat send email customer booking
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        AccountEntity accountEntity = accountService.getAccountById(booking.getAccID());
         ProductEntity productEntity = productService.getProductById(booking.getProductID());
-        sendBookingEmail(booking.getBookingID(), "Booking " + productEntity.getProductName()
-                + " is pending.","This booking will be approved within 24 hours.");
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(accountEntity.getAccEmail());
+            helper.setSubject("Booking " + productEntity.getProductName()+" is pending.");
+
+            String content = "<html><body>"
+                    + "<p>Dear " + accountEntity.getAccName() + ",</p>"
+                    + "<p>This booking will be approved within 24 hours.</strong>.</p>"
+                    + "<p>Your booking details:</p>"
+                    + "<ul>"
+                    + "<li>Booking ID: " + booking.getBookingID() + "</li>"
+                    + "<li>Start: " + booking.getStartDate() + "</li>"
+                    + "<li>End: " + booking.getEndDate() + "</li>"
+                    + "<li>Address: " + productEntity.getProductAddress() + "</li>"
+                    + "<li>Person: " + booking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
+                    + "</ul>"
+                    + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "<br/>"
+                    + "<p>If you have any questions, please respond to this email!</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
 
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
