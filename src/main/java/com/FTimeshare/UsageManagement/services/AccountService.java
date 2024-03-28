@@ -76,8 +76,13 @@ public class AccountService {
             account.setAccStatus(Status);
             accountRepository.save(account);
         } else {
-            throw new RuntimeException("Sản phẩm không tồn tại với ID: " + accID);
+            throw new RuntimeException("This account does not exist with Id: " + accID);
         }
+    }
+    public void statusAccountEmail(String email, String status) {
+        AccountEntity account = accountRepository.findByAccEmail(email);
+        account.setAccStatus(status);
+        accountRepository.save(account);
     }
     public String uploadImage(MultipartFile file,
                               String accName,
