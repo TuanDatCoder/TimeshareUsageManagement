@@ -2,6 +2,7 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.controllers.ProductController;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
+import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
 import com.FTimeshare.UsageManagement.repositories.FeedbackRepository;
 import com.FTimeshare.UsageManagement.repositories.ProductRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +23,8 @@ public class ProductService {
     @Autowired
     private ProductController productController;
 
+    @Autowired
+    private BookingService bookingService;
     //Đạt
     public List<ProductEntity> getProductsByStatus(String status) {
         return productRepository.findByProductStatus(status);
@@ -86,6 +90,52 @@ public class ProductService {
     }
     public int getProductPersonByProductId(int productID){
         return productRepository.findByProductID(productID).getProductPerson();
+    }
+
+    public String checkDateForFilter(String startDate, String endDate){
+        if(startDate.equals("null")&&endDate.equals("null")){
+            return "OK";
+        } else if (startDate.equals("null")&&(!endDate.equals("null"))) {
+            return "Please input your check-in date";
+        } else if ((!startDate.equals("null"))&&endDate.equals("null")) {
+            return "Please input your check-out date";
+        } else {
+            LocalDateTime checkinDate = LocalDateTime.parse(startDate);
+            LocalDateTime checkoutDate = LocalDateTime.parse(endDate);
+            LocalDateTime present = LocalDateTime.now();
+            if(checkinDate.isBefore(present)|| checkoutDate.isBefore(present)){
+                return "Check-in date or check-out date is passed";
+            }
+
+            if(checkinDate.isAfter(checkoutDate))
+                return "Check-out date must after check-in date";
+        }
+        return "OK";
+    }
+
+    //kiểm tra xem thanh phố trong địa chỉ của product có giống thành phố muốn filter hay ko, nếu là all thì auto true
+    public Boolean checkContainAddress(String productAddress, String filterCity){
+        if(filterCity.equals("All")) return true;
+        if(productAddress.contains(filterCity)) return true;
+
+        return false;
+    }
+
+    public Boolean checkEmptyDateOfProduct(String startDate, String endDate, ProductEntity product){
+        List<BookingEntity> bookings = bookingService.getBookingsByStatusAndProductId("Active", product.getProductID());
+        bookings.addAll(bookingService.getBookingsByStatusAndProductId("In progress", product.getProductID()));
+        LocalDateTime reqStartDate = LocalDateTime.parse(startDate);
+        LocalDateTime reqEndDate = LocalDateTime.parse(endDate);
+
+        for (BookingEntity b: bookings) {
+            if(reqStartDate.isAfter(b.getStartDate())&&reqStartDate.isBefore(b.getEndDate()))
+                return false;
+            if (reqEndDate.isAfter(b.getStartDate())&&reqEndDate.isBefore(b.getEndDate()))
+                return false;
+            if(reqStartDate.isBefore(b.getStartDate())&&reqEndDate.isAfter(b.getEndDate()))
+                return false;
+        }
+        return true;
     }
     public List<ProductEntity> findByProductNameContainingIgnoreCaseAndProductStatus(String productName, String productStatus) {
         return productRepository.findByProductNameContainingIgnoreCaseAndProductStatus(productName, productStatus);
