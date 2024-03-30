@@ -1,4 +1,5 @@
 package com.FTimeshare.UsageManagement.controllers;
+import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.*;
 import com.FTimeshare.UsageManagement.services.BookingService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -188,6 +190,19 @@ public class ProductController {
         return ResponseEntity.ok(convertToDtoList(productEntities));
     }
 
+    @GetMapping("/view/bookedDate/{productID}")
+    public List<LocalDateTime> getProductsBookedDateByProductID(@PathVariable int productID) {
+        List<BookingEntity> bookingOfProduct= bookingService.getBookingsByStatusAndProductId("Active", productID);
+        bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("active", productID));
+        bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("In progress", productID));
+//        List<BookingDto> bookingOfProduct = bookingService.getBookingByProductIDAndActive(productID);
+        List<LocalDateTime> bookedDate = new ArrayList<>();
+        for(int i = 0; i<bookingOfProduct.size(); i++){
+            bookedDate.add(bookingOfProduct.get(i).getStartDate());
+            bookedDate.add(bookingOfProduct.get(i).getEndDate());
+        }
+        return bookedDate;
+    }
     //sau khi da qua available end date cua san pham thi status cua san pham tu chuyen thanh closed
     @PutMapping("status/change_status_to_closed/{productId}")
     public ResponseEntity<String> changeStatusProductToClosed(@PathVariable int productId) {

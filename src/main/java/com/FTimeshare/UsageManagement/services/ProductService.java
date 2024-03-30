@@ -21,8 +21,6 @@ public class ProductService {
     @Autowired
     private ProductController productController;
 
-    @Autowired
-    private FeedbackRepository feedbackRepository;
     //Đạt
     public List<ProductEntity> getProductsByStatus(String status) {
         return productRepository.findByProductStatus(status);
