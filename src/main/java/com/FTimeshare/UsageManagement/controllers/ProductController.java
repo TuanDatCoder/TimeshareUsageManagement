@@ -206,7 +206,7 @@ public class ProductController {
     }
 
     //filter product
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     public ResponseEntity<?>  filterProduct(@RequestParam String cityInAddress,
                                             @RequestParam int numberOfPerson,
                                              @RequestParam String startDate,
