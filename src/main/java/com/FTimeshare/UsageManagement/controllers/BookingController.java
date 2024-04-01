@@ -252,6 +252,7 @@ public class BookingController {
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Cancelled");
+
         return ResponseEntity.ok("Done");
     }
     @DeleteMapping("/customer/deletebooking/{bookingID}")
