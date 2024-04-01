@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("https://pass-timeshare.vercel.app/")
+@CrossOrigin("https://pass-timeshare.vercel.app")
 @RequestMapping("/api/products")
 public class ProductController {
     @Autowired

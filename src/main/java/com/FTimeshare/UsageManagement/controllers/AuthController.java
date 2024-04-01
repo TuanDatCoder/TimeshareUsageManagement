@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://pass-timeshare.vercel.app")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
