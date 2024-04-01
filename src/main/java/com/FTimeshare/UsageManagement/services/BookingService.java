@@ -133,7 +133,7 @@ public class BookingService {
 
 
     public BookingDto createBooking(BookingDto booking,MultipartFile file) throws IOException {
-//
+
 //        String originalFilename = file.getOriginalFilename();
 //        String filename = originalFilename;
 //        int counter = 1;
@@ -157,7 +157,7 @@ public class BookingService {
 
         bookingEntity.setBookingPerson(booking.getBookingPerson());
         bookingEntity.setBookingStatus("Wait to confirm");
-        //bookingEntity.setImgName(filename);
+//        bookingEntity.setImgName(filename);
         bookingEntity.setImgData(ImageService.compressImage(file.getBytes()));
         AccountEntity accountEntity = accountRepository.findById(booking.getAccID()).orElse(null);
         ProductEntity productEntity = productRepository.findById(booking.getProductID()).orElse(null);
