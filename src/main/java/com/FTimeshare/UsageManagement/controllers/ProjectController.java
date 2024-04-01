@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin("https://pass-timeshare.vercel.app")
+@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
 @RestController
 @RequestMapping("/api/project")
 public class ProjectController {

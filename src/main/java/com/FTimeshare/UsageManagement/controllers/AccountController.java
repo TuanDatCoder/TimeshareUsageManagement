@@ -15,13 +15,14 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("https://pass-timeshare.vercel.app")
+@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
 @RequestMapping("/api/users")
 public class AccountController {
 

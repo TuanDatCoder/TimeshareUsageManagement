@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("https://pass-timeshare.vercel.app")
+@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
 @RequestMapping("/api/staff")
 public class StaffController {
 
