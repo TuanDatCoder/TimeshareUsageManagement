@@ -140,8 +140,8 @@ public class BookingController {
 
         //Dat send email customer booking
 
-        AccountEntity accountEntity = accountService.getAccountById(booking.getAccID());
-        ProductEntity productEntity = productService.getProductById(booking.getProductID());
+        AccountEntity accountEntity = accountService.getAccountById(createdBooking.getAccID());
+        ProductEntity productEntity = productService.getProductById(createdBooking.getProductID());
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
@@ -154,12 +154,12 @@ public class BookingController {
                     + "<p>This booking will be approved within 24 hours</strong>.</p>"
                     + "<p>Your booking details:</p>"
                     + "<ul>"
-                    + "<li>Booking ID: " + booking.getBookingID() + "</li>"
-                    + "<li>Start: " + booking.getStartDate() + "</li>"
-                    + "<li>End: " + booking.getEndDate() + "</li>"
+                    + "<li>Booking ID: " + createdBooking.getBookingID() + "</li>"
+                    + "<li>Start: " + createdBooking.getStartDate() + "</li>"
+                    + "<li>End: " + createdBooking.getEndDate() + "</li>"
                     + "<li>Address: " + productEntity.getProductAddress() + "</li>"
-                    + "<li>Person: " + booking.getBookingPerson() + "</li>"
-                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
+                    + "<li>Person: " + createdBooking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + createdBooking.getBookingPrice() + "</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
                     + "<br/>"
