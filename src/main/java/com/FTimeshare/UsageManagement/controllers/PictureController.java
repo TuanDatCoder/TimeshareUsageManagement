@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://pass-timeshare.vercel.app/")
 @RequestMapping("/api/pictures")
 public class PictureController {
     @Autowired

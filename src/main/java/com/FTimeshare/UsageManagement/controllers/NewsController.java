@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://pass-timeshare.vercel.app/")
 @RequestMapping("/api/news")
 public class NewsController {
 

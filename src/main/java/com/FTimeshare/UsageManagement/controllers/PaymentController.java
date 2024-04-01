@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://pass-timeshare.vercel.app/")
 @RequestMapping("/api/payment")
 public class PaymentController {
 

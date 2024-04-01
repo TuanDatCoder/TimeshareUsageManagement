@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://pass-timeshare.vercel.app/")
 @RequestMapping("/api/productType")
 public class ProductTypeController {
     @Autowired
