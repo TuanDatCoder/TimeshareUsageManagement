@@ -22,4 +22,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     List<String> findAllProductStatuses();
 
     List<ProductEntity> findByProductTypeID_ProductTypeID(int productTypeID);
+
+    //tim product theo thanh pho ma dang active
+
+//    List<ProductEntity> findByProductAddressAndPrAndProductStatus
 }
