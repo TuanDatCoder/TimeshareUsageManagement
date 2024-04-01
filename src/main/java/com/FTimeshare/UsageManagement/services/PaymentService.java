@@ -56,7 +56,7 @@ public class PaymentService {
                         paymentEntity.getAccountName(),
                         paymentEntity.getBanking(),
                         paymentEntity.getAccountNumber(),
-                        "http://localhost:8080/api/payment/viewImg/" + paymentEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        "https://bookinghomestayswp.azurewebsites.net/api/payment/viewImg/" + paymentEntity.getImgName(),  // Thêm imgName vào đường dẫn
                         new byte[0],
                         paymentEntity.getAccID().getAccID()))
                 .collect(Collectors.toList());
@@ -76,7 +76,7 @@ public class PaymentService {
                 paymentEntity.getAccountName(),
                 paymentEntity.getBanking(),
                 paymentEntity.getAccountNumber(),
-                "http://localhost:8080/api/payment/viewImg/" + paymentEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                "https://bookinghomestayswp.azurewebsites.net/api/payment/viewImg/" + paymentEntity.getImgName(),  // Thêm imgName vào đường dẫn
                 new byte[0],
                 paymentEntity.getAccID().getAccID());
     }
