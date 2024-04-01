@@ -1,7 +1,7 @@
 package com.FTimeshare.UsageManagement.controllers;
 
+import com.FTimeshare.UsageManagement.config.Config;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
-import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -120,12 +121,12 @@ public class BookingController {
 
     //Khach hang create booking, booking Entity duoc tao ra voi status Wait to confirm
     @PostMapping("/customer/createbooking")
-    public ResponseEntity<?> createBooking(@RequestParam("bill") MultipartFile file,
-                                           @RequestParam String startDate,
-                                           @RequestParam String endDate,
-                                           @RequestParam int booking_person,
-                                           @RequestParam int acc_id,
-                                           @RequestParam int productID) throws IOException {
+    public String createBooking(@RequestParam("bill") MultipartFile file,
+                                @RequestParam String startDate,
+                                @RequestParam String endDate,
+                                @RequestParam int booking_person,
+                                @RequestParam int acc_id,
+                                @RequestParam int productID) throws IOException {
         LocalDateTime start_date = LocalDateTime.parse(startDate);
         LocalDateTime end_date = LocalDateTime.parse(endDate);
 
@@ -140,8 +141,8 @@ public class BookingController {
 
         //Dat send email customer booking
 
-        AccountEntity accountEntity = accountService.getAccountById(booking.getAccID());
-        ProductEntity productEntity = productService.getProductById(booking.getProductID());
+        AccountEntity accountEntity = accountService.getAccountById(createdBooking.getAccID());
+        ProductEntity productEntity = productService.getProductById(createdBooking.getProductID());
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
@@ -154,12 +155,12 @@ public class BookingController {
                     + "<p>This booking will be approved within 24 hours</strong>.</p>"
                     + "<p>Your booking details:</p>"
                     + "<ul>"
-                    + "<li>Booking ID: " + booking.getBookingID() + "</li>"
-                    + "<li>Start: " + booking.getStartDate() + "</li>"
-                    + "<li>End: " + booking.getEndDate() + "</li>"
+                    + "<li>Booking ID: " + createdBooking.getBookingID() + "</li>"
+                    + "<li>Start: " + createdBooking.getStartDate() + "</li>"
+                    + "<li>End: " + createdBooking.getEndDate() + "</li>"
                     + "<li>Address: " + productEntity.getProductAddress() + "</li>"
-                    + "<li>Person: " + booking.getBookingPerson() + "</li>"
-                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
+                    + "<li>Person: " + createdBooking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + createdBooking.getBookingPrice() + "</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
                     + "<br/>"
@@ -172,11 +173,81 @@ public class BookingController {
             e.printStackTrace();
         }
 
-
-
-
-        return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
+        return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
+
+    //@GetMapping("/pay")
+    public String getPay(long amountPaymemnt, int bookingID) throws UnsupportedEncodingException {
+
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
+        String orderType = "other";
+        long amount = amountPaymemnt*100;
+        String bankCode = "NCB";
+
+        String vnp_TxnRef = Config.getRandomNumber(8);
+        String vnp_IpAddr = "127.0.0.1";
+
+        String vnp_TmnCode = Config.vnp_TmnCode;
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_CurrCode", "VND");
+
+        vnp_Params.put("vnp_BankCode", bankCode);
+        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderType", orderType);
+
+        vnp_Params.put("vnp_Locale", "vn");
+        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+        List fieldNames = new ArrayList(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                //Build hash data
+                hashData.append(fieldName);
+                hashData.append('=');
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                //Build query
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
+                query.append('=');
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                if (itr.hasNext()) {
+                    query.append('&');
+                    hashData.append('&');
+                }
+            }
+        }
+        String queryUrl = query.toString();
+        String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
+        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+        String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
+
+        return paymentUrl;
+
+    }
+
     //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
     //nếu status là Active thì đổi thành wait to respond + x
     @PostMapping("/cancel/{bookingID}")

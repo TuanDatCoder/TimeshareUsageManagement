@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
@@ -32,6 +32,8 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
+
+
     @GetMapping("/viewImg/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName){
         byte[] imageData=paymentService.downloadImage(fileName);
