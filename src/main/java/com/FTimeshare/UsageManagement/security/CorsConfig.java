@@ -28,6 +28,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://pass-timeshare.vercel.app");
         config.setMaxAge(MAX_AGE);
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
