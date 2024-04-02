@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+//@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+@CrossOrigin(origins = "https://pass-timeshare-tuandat-frontends-projects.vercel.app")
 @RequestMapping("/api/users")
 public class AccountController {
 

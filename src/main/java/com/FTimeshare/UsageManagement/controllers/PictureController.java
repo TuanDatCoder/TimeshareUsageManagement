@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+//@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+@CrossOrigin(origins = "https://pass-timeshare-tuandat-frontends-projects.vercel.app")
 @RequestMapping("/api/pictures")
 public class PictureController {
     @Autowired

@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+//@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+@CrossOrigin(origins = "https://pass-timeshare-tuandat-frontends-projects.vercel.app")
 @RestController
 @RequestMapping("/api/feedback")
 public class FeedbackController {
