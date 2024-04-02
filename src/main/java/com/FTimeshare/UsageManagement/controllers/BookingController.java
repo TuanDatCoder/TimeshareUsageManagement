@@ -121,6 +121,15 @@ public class BookingController {
         return new ResponseEntity<>("Your booking is acceptable", HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/customer/checkbooking_person")
+    public ResponseEntity<?> checkbooking(@RequestParam int productID,
+                                          @RequestParam int booking_person) throws IOException{
+        ProductEntity chosenTimeShare = productService.getProductById(productID);
+        if (booking_person > chosenTimeShare.getProductPerson())
+            return new ResponseEntity<>("Sorry! The maximum number of persons available for this timeshare is " + productService.getProductPersonByProductId(productID), HttpStatus.NOT_ACCEPTABLE);
+
+        return new ResponseEntity<>("Your booking is acceptable", HttpStatus.ACCEPTED);
+    }
     //Khach hang create booking, booking Entity duoc tao ra voi status Wait to confirm
     @PostMapping("/customer/createbooking")
     public String createBooking(@RequestParam("bill") MultipartFile file,
@@ -623,6 +632,12 @@ public class BookingController {
     @PutMapping("staff/Done/{bookingID}")
     public ResponseEntity<String> doneBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Done");
+        return ResponseEntity.ok("Done");
+    }
+
+    @PutMapping("staff/In_progress/{bookingID}")
+    public ResponseEntity<String> in_progressBooking(@PathVariable int bookingID) {
+        bookingService.statusBooking(bookingID,"In progress");
         return ResponseEntity.ok("Done");
     }
 
