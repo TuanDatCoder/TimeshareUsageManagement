@@ -36,6 +36,8 @@ public class CorsConfig {
         config.setAllowedHeaders(Arrays.asList(
                 "*"));
         config.setAllowedMethods(Arrays.asList(
+                HttpMethod.PATCH.name(),
+                HttpMethod.OPTIONS.name(),
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
