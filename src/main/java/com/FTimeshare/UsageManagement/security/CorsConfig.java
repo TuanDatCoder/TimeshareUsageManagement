@@ -34,7 +34,8 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.setMaxAge(MAX_AGE);
         config.setAllowedHeaders(Arrays.asList(
-                "*"));
+                "Origin, Accept, X-Requested-With, Content-Type, "
+                        + "Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"));
         config.setAllowedMethods(Arrays.asList(
                 HttpMethod.PATCH.name(),
                 HttpMethod.OPTIONS.name(),
