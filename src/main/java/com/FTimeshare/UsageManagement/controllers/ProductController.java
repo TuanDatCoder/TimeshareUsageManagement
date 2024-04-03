@@ -103,7 +103,7 @@ public class ProductController {
     }
     @PutMapping("staff/reject/{productID}")
     public ResponseEntity<String> rejectProduct(@PathVariable int productID, @RequestParam String reason) {
-        sendAcceptRejectionEmail(productID,"reason"," has been rejected");
+        sendAcceptRejectionEmail(productID,reason," has been rejected");
         productService.statusProduct(productID,"Rejected");
         return ResponseEntity.ok("Done");
     }
