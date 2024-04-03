@@ -215,8 +215,8 @@ public class BookingController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vi_VN");
-        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        //vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
