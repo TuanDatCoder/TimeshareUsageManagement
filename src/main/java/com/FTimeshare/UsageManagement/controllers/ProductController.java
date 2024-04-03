@@ -98,7 +98,6 @@ public class ProductController {
     @PutMapping("staff/active/{productID}")
     public ResponseEntity<String> activeProduct(@PathVariable int productID) {
         sendAcceptRejectionEmail(productID,"We feel great about your apartment. Thank you for accompanying us."," has been accepted");
-
         productService.statusProduct(productID,"Active");
         return ResponseEntity.ok("Done");
     }
