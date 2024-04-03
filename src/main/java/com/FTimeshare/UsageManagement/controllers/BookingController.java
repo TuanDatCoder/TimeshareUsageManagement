@@ -333,7 +333,54 @@ public class BookingController {
 
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
-        sendCancelEmail(bookingID);
+        //sendCancelEmail(bookingID);
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
+        ProductEntity productEntity = productService.getProductById(booking.getProductID().getProductID());
+        float respondPayment = 0f;
+        if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) respondPayment = 0.2f;
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(accountEntity.getAccEmail());
+            helper.setSubject("You have successfully canceled Booking " + productEntity.getProductName()+".");
+
+            String content = "<html><body>"
+                    + "<p>Dear " + accountEntity.getAccName() + ",</p>"
+                    + "<p>You have successfully canceled Booking</strong>.</p>"
+                    + "<p>Your booking details:</p>"
+                    + "<ul>"
+                    + "<li>Booking ID: " + booking.getBookingID() + "</li>"
+                    + "<li>Start: " + booking.getStartDate() + "</li>"
+                    + "<li>End: " + booking.getEndDate() + "</li>"
+                    + "<li>Address: " + productEntity.getProductAddress() + "</li>"
+                    + "<li>Person: " + booking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
+                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - (booking.getBookingPrice() * respondPayment))+ "</li>"
+                    + "</ul>"
+                    + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "<br/>"
+                    + "<p>If you have any questions, please respond to this email!</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
+
+
         bookingService.statusBooking(bookingID,"Cancelled");
         return ResponseEntity.ok("Done");
     }
