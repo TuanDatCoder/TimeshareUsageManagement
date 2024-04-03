@@ -396,27 +396,27 @@ public class BookingController {
         return ResponseEntity.ok(convertToDtoList(statusBooking));
     }
 
-    @GetMapping("staff/DoneCancelled/{accID}")
-    public List<BookingDto> getDoneCancelledByOwner(@PathVariable int accID) {
-        ResponseEntity<List<BookingDto>> listBooking = getBookingStatusAccID("Done", "Cancelled", accID);
-        List<BookingDto> bookingList = listBooking.getBody();
-
-        return bookingList;
-    }
 //    @GetMapping("staff/DoneCancelled/{accID}")
 //    public List<BookingDto> getDoneCancelledByOwner(@PathVariable int accID) {
-//        ResponseEntity<List<BookingDto>> listBooking = getStatusBooking2("Done", "Cancelled");
+//        ResponseEntity<List<BookingDto>> listBooking = getBookingStatusAccID("Done", "Cancelled", accID);
 //        List<BookingDto> bookingList = listBooking.getBody();
-//        List<BookingDto> ownerBookingList = new ArrayList<>();
-//        if (bookingList != null) {
-//            for (BookingDto booking : bookingList) {
-//                ProductEntity product = productService.getProductById(booking.getProductID());
-//                if (product.getAccID().getAccID() == accID) ownerBookingList.add(booking);
-//            }
-//        }
 //
-//        return ownerBookingList;
+//        return bookingList;
 //    }
+    @GetMapping("staff/DoneCancelled/{accID}")
+    public List<BookingDto> getDoneCancelledByOwner(@PathVariable int accID) {
+        ResponseEntity<List<BookingDto>> listBooking = getStatusBooking2("Done", "Cancelled");
+        List<BookingDto> bookingList = listBooking.getBody();
+        List<BookingDto> ownerBookingList = new ArrayList<>();
+        if (bookingList != null) {
+            for (BookingDto booking : bookingList) {
+                ProductEntity product = productService.getProductById(booking.getProductID());
+                if (product.getAccID().getAccID() == accID) ownerBookingList.add(booking);
+            }
+        }
+
+        return ownerBookingList;
+    }
     @GetMapping("staff/TotalOwnerDoneCancelled/{accID}")
     public float getTotalOwnerDoneCancelled(@PathVariable int accID) {
 
