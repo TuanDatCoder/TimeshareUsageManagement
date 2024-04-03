@@ -193,7 +193,7 @@ public class BookingController {
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
 
-    @GetMapping("/pay")
+    @PostMapping("/pay")
     public String getPay(long amountPaymemnt, int bookingID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
