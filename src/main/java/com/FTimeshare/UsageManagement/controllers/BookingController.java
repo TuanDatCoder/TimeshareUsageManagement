@@ -232,7 +232,7 @@ public class BookingController {
 //        String vnp_ExpireDate = expireDateTime.format(formatter);
 //        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"));
+        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String vnp_CreateDate = currentDateTime.format(formatter);
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
