@@ -90,9 +90,6 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-
-
-
     @PostMapping("/customer/checkbooking")
     public ResponseEntity<?> checkbooking(@RequestParam String startDate,
                                           @RequestParam String endDate,
@@ -157,8 +154,38 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
         //Dat send email customer booking
-        sendBookingEmail(createdBooking.getBookingID(),"You have successfully booked the product: ","Thank you for your reservation at" );
 
+        AccountEntity accountEntity = accountService.getAccountById(createdBooking.getAccID());
+        ProductEntity productEntity = productService.getProductById(createdBooking.getProductID());
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(accountEntity.getAccEmail());
+            helper.setSubject("Booking " + productEntity.getProductName()+"is pending.");
+
+            String content = "<html><body>"
+                    + "<p>Dear " + accountEntity.getAccName() + ",</p>"
+                    + "<p>This booking will be approved within 24 hours</strong>.</p>"
+                    + "<p>Your booking details:</p>"
+                    + "<ul>"
+                    + "<li>Booking ID: " + createdBooking.getBookingID() + "</li>"
+                    + "<li>Start: " + createdBooking.getStartDate() + "</li>"
+                    + "<li>End: " + createdBooking.getEndDate() + "</li>"
+                    + "<li>Address: " + productEntity.getProductAddress() + "</li>"
+                    + "<li>Person: " + createdBooking.getBookingPerson() + "</li>"
+                    + "<li>Total: " + createdBooking.getBookingPrice() + "</li>"
+                    + "</ul>"
+                    + "<p>Best regards,<br/>BookingHomeStay</p>"
+                    + "<br/>"
+                    + "<p>If you have any questions, please respond to this email!</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
@@ -191,7 +218,7 @@ public class BookingController {
 
         vnp_Params.put("vnp_Locale", "vi_VN");
         //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
+        vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
@@ -541,8 +568,8 @@ public class BookingController {
             e.printStackTrace();
         }
 
-    } @PostMapping("/sendBookingEmail/")
-    public void sendBookingEmail(@RequestParam int bookingID,@RequestParam  String title,@RequestParam  String title2){
+    }
+    public void sendBookingEmail(int bookingID, String title, String title2){
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
         SimpleMailMessage msg = new SimpleMailMessage();
         AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
@@ -552,10 +579,10 @@ public class BookingController {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(accountEntity.getAccEmail());
-            helper.setSubject(title + productEntity.getProductName());
+            helper.setSubject(title);
             String content = "<html><body>"
                     + "<p>Dear " + accountEntity.getAccName() + ",</p>"
-                    + "<p>"+title2 + productEntity.getProductName()+"</p>"
+                    + "<p>"+title2+"</p>"
                     + "<p>Your booking details:</p>"
                     + "<ul>"
                     + "<li>Booking ID: " + booking.getBookingID() + "</li>"

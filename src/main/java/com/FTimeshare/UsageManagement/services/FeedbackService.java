@@ -1,6 +1,7 @@
 package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.dtos.FeedbackDto;
+import com.FTimeshare.UsageManagement.entities.AccountEntity;
 import com.FTimeshare.UsageManagement.entities.BookingEntity;
 import com.FTimeshare.UsageManagement.entities.FeedbackEntity;
 import com.FTimeshare.UsageManagement.entities.ProductEntity;
@@ -13,10 +14,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class FeedbackService {
+
     @Autowired
     private FeedbackRepository feedbackRepository;
-
-
     public List<FeedbackDto> getAllFeedback() {
         List<FeedbackEntity> feedbackEntities = feedbackRepository.findAll();
         return feedbackEntities.stream()
@@ -39,7 +39,9 @@ public class FeedbackService {
                 feedbackEntity.getFeedbackStatus(),
                 feedbackEntity.getFeedbackRating(),
                 feedbackEntity.getBookingID().getBookingID(),
-                feedbackEntity.getProductID().getProductID()
+                feedbackEntity.getProductID().getProductID(),
+                feedbackEntity.getAccID().getAccID()
+
         );
     }
 
@@ -88,11 +90,15 @@ public class FeedbackService {
 
         BookingEntity bookingEntity = new BookingEntity();
         ProductEntity productEntity = new ProductEntity();
+        AccountEntity accountEntity = new AccountEntity();
         bookingEntity.setBookingID(feedbackDto.getBookingID());
         productEntity.setProductID(feedbackDto.getProductID());
+        accountEntity.setAccID(feedbackDto.getAccID());
+
 
         feedbackEntity.setBookingID(bookingEntity);
         feedbackEntity.setProductID(productEntity);
+        feedbackEntity.setAccID(accountEntity);
 
         return feedbackEntity;
     }
@@ -118,4 +124,11 @@ public class FeedbackService {
 
             return (float) (sum / feedbackRatings.size());
         }
+
+    public List<FeedbackDto> getFeedbackByAccountId(int accID) {
+        List<FeedbackEntity> feedbackEntities = feedbackRepository.findByAccID_AccID(accID);
+        return feedbackEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 }
