@@ -339,7 +339,6 @@ public class BookingController {
         ProductEntity productEntity = productService.getProductById(booking.getProductID().getProductID());
         float respondPayment = 0f;
         if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) respondPayment = 0.2f;
-
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
@@ -370,16 +369,6 @@ public class BookingController {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
-
-
-
-
 
         bookingService.statusBooking(bookingID,"Cancelled");
         return ResponseEntity.ok("Done");
