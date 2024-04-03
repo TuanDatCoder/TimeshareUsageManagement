@@ -331,7 +331,7 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
-    @PutMapping("/confirm_booking_respond_payment{bookingID}")
+    @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         sendCancelEmail(bookingID);
         bookingService.statusBooking(bookingID,"Cancelled");
@@ -474,7 +474,7 @@ public class BookingController {
         SimpleMailMessage msg = new SimpleMailMessage();
         AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
         ProductEntity productEntity = productService.getProductById(booking.getProductID().getProductID());
-        float respondPayment = 1f;
+        float respondPayment = 0f;
         if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) respondPayment = 0.2f;
 
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -495,7 +495,7 @@ public class BookingController {
                     + "<li>Address: " + productEntity.getProductAddress() + "</li>"
                     + "<li>Person: " + booking.getBookingPerson() + "</li>"
                     + "<li>Total: " + booking.getBookingPrice() + "</li>"
-                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - booking.getBookingPrice() * respondPayment)+ "</li>"
+                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - (booking.getBookingPrice() * respondPayment))+ "</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
                     + "<br/>"
