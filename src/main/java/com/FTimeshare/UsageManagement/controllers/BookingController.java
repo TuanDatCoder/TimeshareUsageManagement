@@ -349,8 +349,10 @@ public class BookingController {
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         sendCancelEmail(bookingID);
 
+        BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
+        if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) booking.setBookingPrice(booking.getBookingPrice()*0.2f);;
+        booking.setBookingPrice(0f);
         bookingService.statusBooking(bookingID,"Cancelled");
-
         return ResponseEntity.ok("Done");
     }
     @DeleteMapping("/customer/deletebooking/{bookingID}")
@@ -385,6 +387,48 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getStatusBooking2( String status1, String status2) {
         List<BookingEntity> statusBooking = bookingService.getBookingsByStatus2(status1, status2);
         return ResponseEntity.ok(convertToDtoList(statusBooking));
+    }
+    @GetMapping("/view-booking-by-2statusByAccID/")
+    public ResponseEntity<List<BookingDto>> getBookingStatusAccID( String status1, String status2, int accID) {
+        List<BookingEntity> statusBooking = bookingService.getBookingStatusAndAccID(status1, status2, accID);
+        return ResponseEntity.ok(convertToDtoList(statusBooking));
+    }
+
+//    @GetMapping("staff/DoneCancelled/{accID}")
+//    public List<BookingDto> getDoneCancelledByOwner(@PathVariable int accID) {
+//        ResponseEntity<List<BookingDto>> listBooking = getBookingStatusAccID("Done", "Cancelled", accID);
+//        List<BookingDto> bookingList = listBooking.getBody();
+//
+//        return bookingList;
+//    }
+    @GetMapping("staff/DoneCancelled/{accID}")
+    public List<BookingDto> getDoneCancelledByOwner(@PathVariable int accID) {
+        ResponseEntity<List<BookingDto>> listBooking = getStatusBooking2("Done", "Cancelled");
+        List<BookingDto> bookingList = listBooking.getBody();
+        List<BookingDto> ownerBookingList = new ArrayList<>();
+        if (bookingList != null) {
+            for (BookingDto booking : bookingList) {
+                ProductEntity product = productService.getProductById(booking.getProductID());
+                if (product.getAccID().getAccID() == accID) ownerBookingList.add(booking);
+            }
+        }
+
+        return ownerBookingList;
+    }
+    @GetMapping("staff/TotalOwnerDoneCancelled/{accID}")
+    public float getTotalOwnerDoneCancelled(@PathVariable int accID) {
+
+        List<BookingDto> bookingList = getDoneCancelledByOwner(accID);
+        float totalBookingOwner = 0f;
+        if (bookingList != null) {
+            for (BookingDto booking : bookingList) {
+                if(booking.getBookingStatus().equals("Done")){
+                    totalBookingOwner += booking.getBookingPrice() * 0.9f;
+                }
+                totalBookingOwner += booking.getBookingPrice();
+            }
+        }
+        return totalBookingOwner;
     }
 
     @GetMapping("/admin/total_Price_For_Done_Bookings")

@@ -2,12 +2,18 @@ package com.FTimeshare.UsageManagement.controllers;
 import com.FTimeshare.UsageManagement.dtos.BookingDto;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
 import com.FTimeshare.UsageManagement.entities.*;
+import com.FTimeshare.UsageManagement.services.AccountService;
 import com.FTimeshare.UsageManagement.services.BookingService;
 import com.FTimeshare.UsageManagement.services.FeedbackService;
 import com.FTimeshare.UsageManagement.services.ProductService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -30,6 +36,10 @@ public class ProductController {
 
     @Autowired
     private FeedbackService feedbackService;
+    @Autowired
+    JavaMailSender javaMailSender;
+    @Autowired
+    private AccountService accountService;
     // Đạt
 
     // Làm Select Option
@@ -51,7 +61,32 @@ public class ProductController {
         return ResponseEntity.ok(productDtos);
     }
 
+    @PostMapping("/sendAcceptRejectionEmail/")
+    public void sendAcceptRejectionEmail(@RequestParam int productID, @RequestParam String reason,@RequestParam String title){
+        ProductEntity productEntity = productService.getProductById(productID);
+        AccountEntity accountEntity = accountService.getAccountById(productEntity.getAccID().getAccID());
+        MimeMessage message = javaMailSender.createMimeMessage();
 
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(accountEntity.getAccEmail());
+            helper.setSubject("Product: " + productEntity.getProductName()+" "+title+".");
+
+            String content = "<html><body>"
+                    + "<p>Dear " + accountEntity.getAccName() + ",</p>"
+                    + "<p>Reason: </p>"
+                    + "<p>"+reason+"</p>"
+                    + "<br/>"
+                    + "<p>If you have any questions, please respond to this email!</p>"
+                    + "</body></html>";
+
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     // Change Status
 
@@ -62,11 +97,13 @@ public class ProductController {
     }
     @PutMapping("staff/active/{productID}")
     public ResponseEntity<String> activeProduct(@PathVariable int productID) {
+        sendAcceptRejectionEmail(productID,"We feel great about your apartment. Thank you for accompanying us."," has been accepted");
         productService.statusProduct(productID,"Active");
         return ResponseEntity.ok("Done");
     }
     @PutMapping("staff/reject/{productID}")
-    public ResponseEntity<String> rejectProduct(@PathVariable int productID) {
+    public ResponseEntity<String> rejectProduct(@PathVariable int productID, @RequestParam String reason) {
+        sendAcceptRejectionEmail(productID,"reason"," has been rejected");
         productService.statusProduct(productID,"Rejected");
         return ResponseEntity.ok("Done");
     }
