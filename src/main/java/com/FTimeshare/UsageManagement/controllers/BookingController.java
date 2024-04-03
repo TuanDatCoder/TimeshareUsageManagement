@@ -219,25 +219,25 @@ public class BookingController {
         vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-        String vnp_CreateDate = currentDateTime.format(formatter);
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-
-        LocalDateTime expireDateTime = currentDateTime.plusMinutes(15);
-        String vnp_ExpireDate = expireDateTime.format(formatter);
-        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-
-//        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-//        String vnp_CreateDate = formatter.format(cld.getTime());
+//        LocalDateTime currentDateTime = LocalDateTime.now();
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+//
+//        String vnp_CreateDate = currentDateTime.format(formatter);
 //        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 //
-//        cld.add(Calendar.MINUTE, 15);
-//        String vnp_ExpireDate = formatter.format(cld.getTime());
+//        LocalDateTime expireDateTime = currentDateTime.plusMinutes(15);
+//        String vnp_ExpireDate = expireDateTime.format(formatter);
 //        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("UTC+07:00"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
