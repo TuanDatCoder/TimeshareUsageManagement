@@ -486,7 +486,7 @@ public class BookingController {
                     + "<li>Address: " + productEntity.getProductAddress() + "</li>"
                     + "<li>Person: " + booking.getBookingPerson() + "</li>"
                     + "<li>Total: " + booking.getBookingPrice() + "</li>"
-                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - booking.getBookingPrice() * moneyRefund)+ "</li>"
+                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - booking.getBookingPrice() * respondPayment)+ "</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
                     + "<br/>"
