@@ -188,7 +188,7 @@ public class BookingController {
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
 
-    //@GetMapping("/pay")
+    @GetMapping("/pay")
     public String getPay(long amountPaymemnt, int bookingID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
@@ -216,7 +216,7 @@ public class BookingController {
 
         vnp_Params.put("vnp_Locale", "vi_VN");
         //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
+        vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
