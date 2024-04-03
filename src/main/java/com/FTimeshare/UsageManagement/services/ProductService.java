@@ -194,6 +194,7 @@ public class ProductService {
         return productOptional.orElse(null);
     }
 
+
     public List<ProductDto> getProductByProductTypeId(int productTypeID) {
        List<ProductEntity> productEntities = productRepository.findByProductTypeID_ProductTypeID(productTypeID);
         return productEntities.stream()
