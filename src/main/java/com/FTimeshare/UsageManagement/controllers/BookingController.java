@@ -214,23 +214,19 @@ public class BookingController {
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
-        vnp_Params.put("vnp_Locale", "en_US");
+        vnp_Params.put("vnp_Locale", "vi_VN");
         //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
         vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
-// Lấy thời gian hiện tại trên máy chủ (server)
         LocalDateTime currentDateTime = LocalDateTime.now();
 
-// Định dạng thời gian theo định dạng "yyyyMMddHHmmss"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-// Tạo vnp_CreateDate từ currentDateTime
         String vnp_CreateDate = currentDateTime.format(formatter);
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-// Tạo vnp_ExpireDate bằng cách thêm 15 phút vào thời gian hiện tại
-        LocalDateTime expireDateTime = currentDateTime.plusMinutes(100);
+        LocalDateTime expireDateTime = currentDateTime.plusMinutes(15);
         String vnp_ExpireDate = expireDateTime.format(formatter);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
