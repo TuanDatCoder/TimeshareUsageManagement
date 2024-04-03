@@ -315,6 +315,9 @@ public class BookingService {
     public List<BookingEntity> getBookingsByStatus2(String status1, String status2) {
         return bookingRepository.findByBookingStatus2(status1, status2);
     }
+    public List<BookingEntity> getBookingStatusAndAccID(String status1, String status2, int accID) {
+        return bookingRepository.findByBookingStatusAndAccID(status1, status2, accID);
+    }
 
     public byte[] downloadImage(String fileName) {
         Optional<BookingEntity> dbImageData = bookingRepository.findByImgName(fileName);
