@@ -90,6 +90,9 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+
+
+
     @PostMapping("/customer/checkbooking")
     public ResponseEntity<?> checkbooking(@RequestParam String startDate,
                                           @RequestParam String endDate,
@@ -317,8 +320,6 @@ public class BookingController {
 //                    .body("Error updating image: " + e.getMessage());
 //        }
 //    }
-
-
 
 
     //View anh
