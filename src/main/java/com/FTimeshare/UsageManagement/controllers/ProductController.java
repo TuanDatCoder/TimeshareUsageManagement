@@ -97,14 +97,13 @@ public class ProductController {
     }
     @PutMapping("staff/active/{productID}")
     public ResponseEntity<String> activeProduct(@PathVariable int productID) {
-        //sendAcceptRejectionEmail(productID,"We feel great about your apartment. Thank you for accompanying us."," has been accepted");
-
+        sendAcceptRejectionEmail(productID,"We feel great about your apartment. Thank you for accompanying us."," has been accepted");
         productService.statusProduct(productID,"Active");
         return ResponseEntity.ok("Done");
     }
     @PutMapping("staff/reject/{productID}")
     public ResponseEntity<String> rejectProduct(@PathVariable int productID, @RequestParam String reason) {
-        //sendAcceptRejectionEmail(productID,"reason"," has been rejected");
+        sendAcceptRejectionEmail(productID,"reason"," has been rejected");
         productService.statusProduct(productID,"Rejected");
         return ResponseEntity.ok("Done");
     }
