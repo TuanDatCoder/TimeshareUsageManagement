@@ -194,7 +194,7 @@ public class BookingController {
     }
 
     @PostMapping("/pay")
-    public String getPay(long amountPaymemnt, int bookingID) throws UnsupportedEncodingException {
+    public String getPay(@RequestParam long amountPaymemnt, @RequestParam int bookingID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
