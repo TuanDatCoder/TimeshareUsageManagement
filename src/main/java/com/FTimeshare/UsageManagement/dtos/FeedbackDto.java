@@ -19,4 +19,5 @@ public class FeedbackDto {
     private float feedbackRating;
     private int bookingID;
     private int productID;
+    private int accID;
 }

@@ -31,6 +31,12 @@ public class FeedbackController {
         return new ResponseEntity<>(submittedFeedback, HttpStatus.CREATED);
     }
 
+    @GetMapping("/by-account/{accID}")
+    public ResponseEntity<List<FeedbackDto>> viewFeedbackByAccountId(@PathVariable int accID) {
+        List<FeedbackDto> feedbacks = feedbackService.getFeedbackByAccountId(accID);
+        return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+    }
+
     @PutMapping("/api/feedbacks/edit/{feedbackID}")
     public ResponseEntity<?> editFeedback(@PathVariable int feedbackID, @RequestBody FeedbackDto updatedFeedback) {
         LocalDateTime now = LocalDateTime.now();
