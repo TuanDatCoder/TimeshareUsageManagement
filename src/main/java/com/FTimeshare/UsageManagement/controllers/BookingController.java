@@ -193,7 +193,7 @@ public class BookingController {
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
 
-    //@GetMapping("/pay")
+    @GetMapping("/pay")
     public String getPay(long amountPaymemnt, int bookingID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
@@ -235,7 +235,7 @@ public class BookingController {
 //        String vnp_ExpireDate = expireDateTime.format(formatter);
 //        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"));
+        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String vnp_CreateDate = currentDateTime.format(formatter);
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
