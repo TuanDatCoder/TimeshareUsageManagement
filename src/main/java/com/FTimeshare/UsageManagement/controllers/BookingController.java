@@ -221,7 +221,7 @@ public class BookingController {
 
         vnp_Params.put("vnp_Locale", "vi_VN");
         //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
+        vnp_Params.put("vnp_ReturnUrl","https://bookinghomestayswp.azurewebsites.net/api/bookings/view-booking-by-Id/"+bookingID);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
