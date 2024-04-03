@@ -279,20 +279,20 @@ public class BookingController {
     }
 
     //upload respond
-    @PutMapping("/updateImgRespond/{bookingID}")
-    public ResponseEntity<?> updateImageRespond(@PathVariable int bookingID, @RequestParam("picture") MultipartFile file) {
-
-        try {
-            ResponseEntity<?> response = bookingService.updateImage(file, bookingID);
-            return response;
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error updating image: " + e.getMessage());
-        }
-    }
+//    @PutMapping("/updateImgRespond/{bookingID}")
+//    public ResponseEntity<?> updateImageRespond(@PathVariable int bookingID, @RequestParam("picture") MultipartFile file) {
+//
+//        try {
+//            ResponseEntity<?> response = bookingService.updateImage(file, bookingID);
+//            return response;
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(e.getMessage());
+//        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Error updating image: " + e.getMessage());
+//        }
+//    }
 
 
 
@@ -322,10 +322,10 @@ public class BookingController {
         return ResponseEntity.ok("Done");
     }
 
-    @PutMapping("/confirm_booking_respond_payment/{bookingID}")
+    @PutMapping("/confirm_booking_respond_payment{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
+        sendCancelEmail(bookingID);
         bookingService.statusBooking(bookingID,"Cancelled");
-
         return ResponseEntity.ok("Done");
     }
     @DeleteMapping("/customer/deletebooking/{bookingID}")
@@ -460,11 +460,14 @@ public class BookingController {
         return ResponseEntity.ok("Active");
     }
 
-    public void sendCancelEmail(int bookingID, float moneyRefund){
+    public void sendCancelEmail(int bookingID){
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
         SimpleMailMessage msg = new SimpleMailMessage();
         AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
         ProductEntity productEntity = productService.getProductById(booking.getProductID().getProductID());
+        float respondPayment = 1f;
+        if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) respondPayment = 0.2f;
+
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
@@ -534,14 +537,14 @@ public class BookingController {
     @PutMapping("staff/respond100/{bookingID}")
     public ResponseEntity<String> respondBooking2(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Wait To Respond (100%)");
-        sendCancelEmail(bookingID,1.0f );
+
         return ResponseEntity.ok("Active");
     }
 
     @PutMapping("staff/finalcancel80/{bookingID}")
     public ResponseEntity<String> finalcancelBooking(@PathVariable int bookingID) {
         bookingService.statusBooking(bookingID,"Cancelled");
-        sendCancelEmail(bookingID,0.2f );
+
         return ResponseEntity.ok("Wait To Respond (80%)");
     }
 
