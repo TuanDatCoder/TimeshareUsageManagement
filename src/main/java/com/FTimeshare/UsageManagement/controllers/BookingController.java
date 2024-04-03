@@ -230,7 +230,7 @@ public class BookingController {
 //        String vnp_ExpireDate = expireDateTime.format(formatter);
 //        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("UTC+07:00"));
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
