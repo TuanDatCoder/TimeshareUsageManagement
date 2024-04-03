@@ -90,9 +90,6 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-
-
-
     @PostMapping("/customer/checkbooking")
     public ResponseEntity<?> checkbooking(@RequestParam String startDate,
                                           @RequestParam String endDate,
@@ -193,8 +190,8 @@ public class BookingController {
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
 
-    @PostMapping("/pay")
-    public String getPay(@RequestParam long amountPaymemnt, @RequestParam int bookingID) throws UnsupportedEncodingException {
+    @GetMapping("/pay")
+    public String getPay(long amountPaymemnt, int bookingID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
@@ -221,7 +218,7 @@ public class BookingController {
 
         vnp_Params.put("vnp_Locale", "vi_VN");
         //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl","http://localhost:8080/api/bookings/view-booking-by-Id/"+bookingID);
+        vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
@@ -235,15 +232,14 @@ public class BookingController {
 //        String vnp_ExpireDate = expireDateTime.format(formatter);
 //        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String vnp_CreateDate = currentDateTime.format(formatter);
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("UTC+07:00"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        ZonedDateTime expireDateTime = currentDateTime.plusMinutes(10);
-        String vnp_ExpireDate = expireDateTime.format(formatter);
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
@@ -320,6 +316,8 @@ public class BookingController {
 //                    .body("Error updating image: " + e.getMessage());
 //        }
 //    }
+
+
 
 
     //View anh
