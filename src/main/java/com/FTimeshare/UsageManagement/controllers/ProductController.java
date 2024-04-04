@@ -140,6 +140,12 @@ public class ProductController {
 
     // Các phương thức hỗ trợ chuyển đổi từ entity sang DTO và từ danh sách entity sang danh sách DTO
     // total
+    @GetMapping("/sumRevenueOfProducts/{productid}")
+    public float getSumOfProduct( @PathVariable("productid") int productid){
+        float sum = 0;
+        sum+= (float) bookingService.getSumPriceByProductId(productid);
+        return sum;
+    }
 
     @GetMapping("staff/totalPending")
     public int countPendingProducts() {
@@ -161,6 +167,7 @@ public class ProductController {
         List<ProductDto> closeProducts = responseEntity.getBody();
         return closeProducts.size();
     }
+
     @GetMapping("staff/totalRejected")
     public int countRejectedProducts() {
         ResponseEntity<List<ProductDto>> responseEntity = getStatusProducts("Rejected");

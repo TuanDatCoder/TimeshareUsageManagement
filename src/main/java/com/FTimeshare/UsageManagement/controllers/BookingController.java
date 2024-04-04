@@ -158,11 +158,11 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
 
-        return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
+        return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID(),0);
     }
 
     @PostMapping("/pay")
-    public String getPay(@RequestParam long amountPaymemnt, @RequestParam int bookingID) throws UnsupportedEncodingException {
+    public String getPay(@RequestParam long amountPaymemnt, @RequestParam int bookingID, @RequestParam int type) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
@@ -188,7 +188,7 @@ public class BookingController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vi_VN");
-        vnp_Params.put("vnp_ReturnUrl", returnWebAfterPayment(bookingID));
+        vnp_Params.put("vnp_ReturnUrl", returnWebAfterPayment(bookingID, type));
 
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
@@ -244,8 +244,9 @@ public class BookingController {
 
     }
     @GetMapping  ("/returnWebAfterPayment")
-    public String returnWebAfterPayment(@RequestParam int bookingID){
-        return "http://localhost:5173/confirm-success-payment/"+ bookingID;
+    public String returnWebAfterPayment(@RequestParam int bookingID, @RequestParam int type){
+        if(type == 0) return "http://localhost:5173/confirm-success-payment/"+ bookingID;
+        return "http://localhost:5173/staff/confirm-success-payment/"+ bookingID;
     }
 
     @PostMapping ("/sendWebAfterPayment")
@@ -396,12 +397,7 @@ public class BookingController {
 
         return ownerBookingList;
     }
-    @GetMapping("/sumRevenueOfProducts/{productid}")
-    public float getSumOfProduct( @PathVariable("productid") int productid){
-        float sum = 0;
-        sum+= (float) bookingService.getSumPriceByProductId(productid);
-        return sum;
-    }
+
     @GetMapping("staff/TotalOwnerDoneCancelled/{accID}")
     public float getTotalOwnerDoneCancelled(@PathVariable int accID) {
 
