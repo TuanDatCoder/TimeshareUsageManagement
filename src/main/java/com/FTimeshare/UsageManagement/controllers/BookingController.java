@@ -244,7 +244,7 @@ public class BookingController {
 
     @PostMapping ("/returnWebAfterPayment")
     public String returnWebAfterPayment(@RequestParam int bookingID){
-        sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at" );
+        sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at " );
         return Config.vnp_ReturnUrl;
     }
 
