@@ -190,10 +190,8 @@ public class BookingController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vi_VN");
-        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        //vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
-        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
+        vnp_Params.put("vnp_ReturnUrl", returnWebAfterPayment(bookingID));
+
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
@@ -246,6 +244,12 @@ public class BookingController {
 
         return paymentUrl;
 
+    }
+
+    @GetMapping("/returnWebAfterPayment")
+    public String returnWebAfterPayment(@RequestParam int bookingID){
+        sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at" );
+        return Config.vnp_ReturnUrl;
     }
 
     //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
