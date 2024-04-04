@@ -240,6 +240,7 @@ public class ProductController {
     @GetMapping("/view/bookedDate/{productID}")
     public List<LocalDateTime> getProductsBookedDateByProductID(@PathVariable int productID) {
         List<BookingEntity> bookingOfProduct= bookingService.getBookingsByStatusAndProductId("Active", productID);
+        bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("Wait to confirm", productID));
         bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("active", productID));
         bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("In progress", productID));
 //        List<BookingDto> bookingOfProduct = bookingService.getBookingByProductIDAndActive(productID);
