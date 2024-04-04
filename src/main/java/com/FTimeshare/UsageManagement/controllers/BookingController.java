@@ -156,7 +156,6 @@ public class BookingController {
 
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
-
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
 
@@ -242,7 +241,7 @@ public class BookingController {
         return paymentUrl;
 
     }
-    @GetMapping  ("/returnWebAfterPayment")
+    @PostMapping  ("/returnWebAfterPayment")
     public String returnWebAfterPayment(@RequestParam int bookingID){
         return "http://localhost:5173/confirm-success-payment/"+ bookingID;
     }
