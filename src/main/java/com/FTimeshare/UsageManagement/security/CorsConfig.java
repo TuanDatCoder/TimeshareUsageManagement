@@ -30,11 +30,17 @@ public class CorsConfig {
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("https://pass-timeshare.vercel.app");
         config.addAllowedOrigin("https://bookinghomestayswp.azurewebsites.net");
-        config.addExposedHeader("*");
-        config.setAllowCredentials(true);
+        config.setAllowedHeaders(Arrays.asList(
+                HttpHeaders.AUTHORIZATION,
+                HttpHeaders.CONTENT_TYPE,
+                HttpHeaders.ACCEPT));
+        config.setAllowedMethods(Arrays.asList(
+                HttpMethod.GET.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name()));
         config.setMaxAge(MAX_AGE);
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
