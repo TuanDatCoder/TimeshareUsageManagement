@@ -58,7 +58,11 @@ public class WebSecurityConfig{
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/register-user").permitAll()
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/api/staff/**").hasRole("STAFF")
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/**").permitAll()
 //                        .requestMatchers("/api/users").permitAll()
 //                        .requestMatchers("/api/users/sendOTP/*").permitAll()
 //                        .requestMatchers("/api/users/verify/active/*").permitAll()
