@@ -38,8 +38,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-//@CrossOrigin("http://localhost:5173")
-@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
+@CrossOrigin("http://localhost:5173")
+//@CrossOrigin(origins = "https://pass-timeshare.vercel.app")
 //@CrossOrigin(origins = "https://pass-timeshare-tuandat-frontends-projects.vercel.app")
 @RequestMapping("/api/bookings")
 public class BookingController {
@@ -397,7 +397,12 @@ public class BookingController {
 
         return ownerBookingList;
     }
-
+    @GetMapping("/sumRevenueOfProducts/{productid}")
+    public float getSumOfProduct( @PathVariable("productid") int productid){
+        float sum = 0;
+        sum+= (float) bookingService.getSumPriceByProductId(productid);
+        return sum;
+    }
     @GetMapping("staff/TotalOwnerDoneCancelled/{accID}")
     public float getTotalOwnerDoneCancelled(@PathVariable int accID) {
 
