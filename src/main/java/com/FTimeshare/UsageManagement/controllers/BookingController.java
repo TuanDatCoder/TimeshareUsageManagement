@@ -190,6 +190,8 @@ public class BookingController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vi_VN");
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        //vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
         //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
         vnp_Params.put("vnp_ReturnUrl","http://localhost:5173/confirm-success-payment");
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
@@ -213,7 +215,6 @@ public class BookingController {
         ZonedDateTime expireDateTime = currentDateTime.plusMinutes(10);
         String vnp_ExpireDate = expireDateTime.format(formatter);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
@@ -325,6 +326,7 @@ public class BookingController {
         if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) booking.setBookingPrice(booking.getBookingPrice()*0.2f);;
         booking.setBookingPrice(0f);
         bookingService.statusBooking(bookingID,"Cancelled");
+
         return ResponseEntity.ok("Done");
     }
     @DeleteMapping("/customer/deletebooking/{bookingID}")

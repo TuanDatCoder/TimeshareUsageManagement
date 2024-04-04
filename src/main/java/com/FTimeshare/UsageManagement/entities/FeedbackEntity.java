@@ -36,4 +36,9 @@ public class FeedbackEntity {
     @ManyToOne
     @JoinColumn(name = "productID", referencedColumnName = "productID")
     private ProductEntity productID;
+
+    @ManyToOne
+    @JoinColumn(name = "acc_id", referencedColumnName = "acc_id")
+    private AccountEntity accID;
+
 }
