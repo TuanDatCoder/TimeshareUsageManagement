@@ -161,12 +161,12 @@ public class BookingController {
     }
 
     @PostMapping("/pay")
-    public String getPay(@RequestParam long amountPayment, @RequestParam int bookingID) throws UnsupportedEncodingException {
+    public String getPay(@RequestParam long amountPaymemnt, @RequestParam int bookingID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = amountPayment*100;
+        long amount = amountPaymemnt*100;
         String bankCode = "NCB";
 
         String vnp_TxnRef = Config.getRandomNumber(8);
