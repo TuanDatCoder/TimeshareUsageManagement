@@ -90,6 +90,9 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+
+
+
     @PostMapping("/customer/checkbooking")
     public ResponseEntity<?> checkbooking(@RequestParam String startDate,
                                           @RequestParam String endDate,
@@ -153,8 +156,6 @@ public class BookingController {
 
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
-        //Dat send email customer booking
-        //sendBookingEmail(createdBooking.getBookingID(),"You have successfully booked the product: ","Thank you for your reservation at" );
 
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
@@ -186,8 +187,8 @@ public class BookingController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vi_VN");
-        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl",returnWebAfterPayment(bookingID));
+        vnp_Params.put("vnp_ReturnUrl", returnWebAfterPayment(bookingID));
+
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
 //        LocalDateTime currentDateTime = LocalDateTime.now();
@@ -241,11 +242,17 @@ public class BookingController {
         return paymentUrl;
 
     }
-
-    @PostMapping ("/returnWebAfterPayment")
+    @GetMapping  ("/returnWebAfterPayment")
     public String returnWebAfterPayment(@RequestParam int bookingID){
-        sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at " );
-        return Config.vnp_ReturnUrl;
+        return "http://localhost:5173/confirm-success-payment/"+ bookingID;
+    }
+
+    @PostMapping ("/sendWebAfterPayment")
+    public void sendWebAfterPayment(@RequestParam int bookingID, @RequestParam int type){
+        if(type == 0) sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at " );
+        else{
+            confirmBookingRespondPayment(bookingID);
+        }
     }
 
     //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
@@ -321,7 +328,6 @@ public class BookingController {
     @PutMapping("/confirm_booking_respond_payment/{bookingID}")
     public ResponseEntity<String> confirmBookingRespondPayment(@PathVariable int bookingID) {
         sendCancelEmail(bookingID);
-
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
         if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) booking.setBookingPrice(booking.getBookingPrice()*0.2f);;
         booking.setBookingPrice(0f);
@@ -529,8 +535,8 @@ public class BookingController {
                     + "<li>End: " + booking.getEndDate() + "</li>"
                     + "<li>Address: " + productEntity.getProductAddress() + "</li>"
                     + "<li>Person: " + booking.getBookingPerson() + "</li>"
-                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
-                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - (booking.getBookingPrice() * respondPayment))+ "</li>"
+                    + "<li>Total: " + booking.getBookingPrice() + " VND</li>"
+                    + "<li>The amount you are refunded is: " + (booking.getBookingPrice() - (booking.getBookingPrice() * respondPayment))+ "VND</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
                     + "<br/>"
@@ -565,7 +571,7 @@ public class BookingController {
                     + "<li>End: " + booking.getEndDate() + "</li>"
                     + "<li>Address: " + productEntity.getProductAddress() + "</li>"
                     + "<li>Person: " + booking.getBookingPerson() + "</li>"
-                    + "<li>Total: " + booking.getBookingPrice() + "</li>"
+                    + "<li>Total: " + booking.getBookingPrice() + " VND</li>"
                     + "</ul>"
                     + "<p>Best regards,<br/>BookingHomeStay</p>"
                     + "<br/>"
