@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,7 +59,6 @@ public class BookingController {
     private ProductService productService;
     @Autowired
     private ProductController productController;
-
 
     @GetMapping("/customerview")
     public ResponseEntity<List<BookingDto>> getAllBookings() {
@@ -394,6 +395,12 @@ public class BookingController {
         }
 
         return ownerBookingList;
+    }
+    @GetMapping("/sumRevenueOfProducts/{productid}")
+    public float getSumOfProduct( @PathVariable("productid") int productid){
+        float sum = 0;
+        sum+= (float) bookingService.getSumPriceByProductId(productid);
+        return sum;
     }
     @GetMapping("staff/TotalOwnerDoneCancelled/{accID}")
     public float getTotalOwnerDoneCancelled(@PathVariable int accID) {
