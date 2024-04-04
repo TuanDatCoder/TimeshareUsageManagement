@@ -101,7 +101,7 @@ public class WebSecurityConfig{
                         .requestMatchers("/api/products/staff/reject/*").hasRole("STAFF")
                         .requestMatchers("/api/news/staff/totalNews").hasRole("STAFF")
                         .requestMatchers("/api/users/staffview").hasRole("STAFF")
-                        .requestMatchers("/api/products/viewById/*").hasRole("STAFF")
+                        .requestMatchers("/api/products/viewById/${productID}").hasRole("STAFF")
                         .requestMatchers("/api/reports/viewByProductId/*").hasRole("STAFF")
                         .requestMatchers("/api/users/ROLE_CUSTOMER").permitAll()
                         .requestMatchers("/api/users/staff/active/*").permitAll()
