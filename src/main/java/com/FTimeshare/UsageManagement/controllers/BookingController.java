@@ -157,7 +157,7 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
         //Dat send email customer booking
-        sendBookingEmail(createdBooking.getBookingID(),"You have successfully booked the product: ","Thank you for your reservation at" );
+        //sendBookingEmail(createdBooking.getBookingID(),"You have successfully booked the product: ","Thank you for your reservation at" );
 
 
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
@@ -246,7 +246,7 @@ public class BookingController {
 
     }
 
-    @GetMapping("/returnWebAfterPayment")
+    @PostMapping ("/returnWebAfterPayment")
     public String returnWebAfterPayment(@RequestParam int bookingID){
         sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at" );
         return Config.vnp_ReturnUrl;
