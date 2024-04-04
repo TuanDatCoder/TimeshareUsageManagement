@@ -154,7 +154,7 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBooking(booking, file);
 
         //Dat send email customer booking
-        sendBookingEmail(createdBooking.getBookingID(),"You have successfully booked the product: ","Thank you for your reservation at" );
+        //sendBookingEmail(createdBooking.getBookingID(),"You have successfully booked the product: ","Thank you for your reservation at" );
 
         return getPay((long) createdBooking.getBookingPrice(), createdBooking.getBookingID());
     }
@@ -210,7 +210,6 @@ public class BookingController {
         String vnp_ExpireDate = expireDateTime.format(formatter);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
@@ -241,6 +240,12 @@ public class BookingController {
 
         return paymentUrl;
 
+    }
+
+    @PostMapping ("/returnWebAfterPayment")
+    public String returnWebAfterPayment(@RequestParam int bookingID){
+        sendBookingEmail(bookingID,"You have successfully booked the product: ","Thank you for your reservation at" );
+        return Config.vnp_ReturnUrl;
     }
 
     //Api cancel, nếu status là wait to confirm thì đổi thành wait to confirm(request cancel)
@@ -321,6 +326,7 @@ public class BookingController {
         if(booking.getBookingStatus().equals("Wait to respond payment (80%)")) booking.setBookingPrice(booking.getBookingPrice()*0.2f);;
         booking.setBookingPrice(0f);
         bookingService.statusBooking(bookingID,"Cancelled");
+
         return ResponseEntity.ok("Done");
     }
     @DeleteMapping("/customer/deletebooking/{bookingID}")
@@ -537,8 +543,8 @@ public class BookingController {
             e.printStackTrace();
         }
 
-    }
-    public void sendBookingEmail(int bookingID, String title, String title2){
+    } @PostMapping("/sendBookingEmail/")
+    public void sendBookingEmail(@RequestParam int bookingID,@RequestParam  String title,@RequestParam  String title2){
         BookingEntity booking = bookingService.getBookingByBookingIDV2(bookingID);
         SimpleMailMessage msg = new SimpleMailMessage();
         AccountEntity accountEntity = accountService.getAccountById(booking.getAccID().getAccID());
@@ -548,10 +554,10 @@ public class BookingController {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(accountEntity.getAccEmail());
-            helper.setSubject(title);
+            helper.setSubject(title + productEntity.getProductName());
             String content = "<html><body>"
                     + "<p>Dear " + accountEntity.getAccName() + ",</p>"
-                    + "<p>"+title2+"</p>"
+                    + "<p>"+title2 + productEntity.getProductName()+"</p>"
                     + "<p>Your booking details:</p>"
                     + "<ul>"
                     + "<li>Booking ID: " + booking.getBookingID() + "</li>"
