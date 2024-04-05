@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - BookingHomeStayFPT
+name: Build and deploy JAR app to Azure Web App - FPTUBookingHomeStay
 
 on:
   push:
@@ -48,15 +48,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6E01340B9F5E4AE39172EFD47DE7E2DE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2086EECD74274AF2A61CD3CECB51112C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_650EF39159D145F2B468FF0A89BB8944 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3A5504FFC20840998C8B2981B9DEA8F5 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_87D55B71CE4944E69C268E939A02D360 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5E989BC5DBC94832A1DB24FF6803AC29 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'BookingHomeStayFPT'
+          app-name: 'FPTUBookingHomeStay'
           slot-name: 'Production'
           package: '*.jar'
           
