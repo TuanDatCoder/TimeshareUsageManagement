@@ -771,9 +771,9 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "https://bookinghomstay.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                "https://bookinghomestayfptu.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "https://bookinghomstay.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "https://bookinghomestayfptu.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
