@@ -227,7 +227,7 @@ public class AccountController {
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
         accountDto.setAccStatus(accountEntity.getAccStatus());
-        accountDto.setImgName( "https://bookinghomestayfpt.azurewebsites.net/api/users/viewImg/"+ accountEntity.getImgName());
+        accountDto.setImgName( "http://localhost:8080/api/users/viewImg/"+ accountEntity.getImgName());
         accountDto.setImgData(new byte[0]);
         int roleID = 0;
         if (accountEntity.getRoleID() != null) {

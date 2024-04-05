@@ -417,7 +417,7 @@ public class BookingController {
             for (BookingDto booking : bookingList) {
                 if(booking.getBookingStatus().equals("Done")){
                     totalBookingOwner += booking.getBookingPrice() * 0.9f;
-                }
+                }else
                 totalBookingOwner += booking.getBookingPrice();
             }
         }
@@ -771,9 +771,9 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "https://bookinghomestayfpt.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                "http://localhost:8080/api/bookings/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "https://bookinghomestayfpt.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "http://localhost:8080/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
@@ -794,9 +794,9 @@ public class BookingController {
         bookingEntity.setBookingPrice(bookingDto.getBookingPrice());
         bookingEntity.setBookingPerson(bookingDto.getBookingPerson());
         bookingEntity.setBookingStatus(bookingDto.getBookingStatus());
-        bookingEntity.setImgName("https://bookinghomestayswp.azurewebsites.net/api/booking/payment/viewImg/" + bookingEntity.getImgName());
+        bookingEntity.setImgName("http://localhost:8080/api/booking/payment/viewImg/" + bookingEntity.getImgName());
         bookingEntity.setImgData(new byte[0]);
-        bookingEntity.setImgRespondName("https://bookinghomestayswp.azurewebsites.net/api/booking/paymentRespond/viewImg/" + bookingEntity.getImgRespondName());
+        bookingEntity.setImgRespondName("http://localhost:8080/api/booking/paymentRespond/viewImg/" + bookingEntity.getImgRespondName());
         bookingEntity.setImgRespondData(new byte[0]);
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccID(bookingDto.getAccID());
