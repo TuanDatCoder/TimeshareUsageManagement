@@ -302,6 +302,18 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @PutMapping("edit/{productId}")
+    public ResponseEntity<String> updateProduct(@PathVariable int productId, @RequestBody ProductDto productDto) {
+        if (!productService.existsById(productId)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        productService.updateProduct(productId, productDto);
+
+        return ResponseEntity.ok("Product updated successfully");
+    }
+
+
     //Delete product, truyền vào userID của customer, nếu đúng là chủ của product thì đc sửa
     @PutMapping("/edit/{product_id}/{user_id}")
     public ResponseEntity<?> editProducts(@PathVariable int product_id, @PathVariable int user_id, @RequestBody  ProductDto updateProduct) {

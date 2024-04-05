@@ -2,10 +2,8 @@ package com.FTimeshare.UsageManagement.services;
 
 import com.FTimeshare.UsageManagement.controllers.ProductController;
 import com.FTimeshare.UsageManagement.dtos.ProductDto;
-import com.FTimeshare.UsageManagement.entities.BookingEntity;
-import com.FTimeshare.UsageManagement.entities.ProductEntity;
-import com.FTimeshare.UsageManagement.repositories.FeedbackRepository;
-import com.FTimeshare.UsageManagement.repositories.ProductRepository;
+import com.FTimeshare.UsageManagement.entities.*;
+import com.FTimeshare.UsageManagement.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,12 @@ import java.util.stream.Collectors;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
 
     @Autowired
     private ProductController productController;
@@ -113,6 +117,46 @@ public class ProductService {
         return "OK";
     }
 
+    public boolean existsById(int productId) {
+        return productRepository.existsById(productId);
+    }
+
+    public void updateProduct(int productId, ProductDto productDto) {
+        ProductEntity existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("ProductID not found with id: " + productId));
+        if (existingProduct != null) {
+            existingProduct.setProductName(productDto.getProductName());
+            existingProduct.setProductArea(productDto.getProductArea());
+            existingProduct.setProductAddress(productDto.getProductAddress());
+            existingProduct.setProductDescription(productDto.getProductDescription());
+            existingProduct.setProductConvenience(productDto.getProductConvenience());
+            existingProduct.setProductPrice(productDto.getProductPrice());
+            existingProduct.setAvailableStartDate(productDto.getAvailableStartDate());
+            existingProduct.setAvailableEndDate(productDto.getAvailableEndDate());
+            existingProduct.setProductStatus(productDto.getProductStatus());
+            existingProduct.setProductPerson(productDto.getProductPerson());
+            existingProduct.setProductRating(productDto.getProductRating());
+            existingProduct.setProductSale(productDto.getProductSale());
+            existingProduct.setProductViewer(productDto.getProductViewer());
+            // Set projectID, productTypeID, accID
+            ProjectEntity projectEntity = projectRepository.findById(productDto.getProjectID())
+                    .orElseThrow(() -> new RuntimeException("ProjectID not found with id: " + productDto.getProjectID()));
+            existingProduct.setProjectID(projectEntity);
+
+            ProductTypeEntity productTypeEntity = productTypeRepository.findById(productDto.getProductTypeID())
+                    .orElseThrow(() -> new RuntimeException("ProductTypeID not found with id: " + productDto.getProductTypeID()));
+            existingProduct.setProductTypeID(productTypeEntity);
+
+            AccountEntity accountEntity = accountRepository.findById(productDto.getAccID())
+                    .orElseThrow(() -> new RuntimeException("AccID not found with id: " + productDto.getAccID()));
+            existingProduct.setAccID(accountEntity);
+
+
+            ProductEntity savedProduct =  productRepository.save(existingProduct);
+
+            //return convertToDto(savedProduct);
+        }
+    }
     //kiểm tra xem thanh phố trong địa chỉ của product có giống thành phố muốn filter hay ko, nếu là all thì auto true
     public Boolean checkContainAddress(String productAddress, String filterCity){
         if(filterCity.equals("All")) return true;
