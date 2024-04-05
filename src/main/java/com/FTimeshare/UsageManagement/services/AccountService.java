@@ -237,7 +237,7 @@ public class AccountService {
                         accountEntity.getAccPhone(),
                         accountEntity.getAccEmail(),
                         accountEntity.getAccPassword(),
-                        "https://bookinghomestaypass.azurewebsites.net/api/users/viewImg/" + accountEntity.getImgName(),  // Thêm imgName vào đường dẫn
+                        "https://bookinghomestayfpt.azurewebsites.net/api/users/viewImg/" + accountEntity.getImgName(),  // Thêm imgName vào đường dẫn
                         new byte[0],
                         accountEntity.getAccStatus(),
                         accountEntity.getAccBirthday(),
@@ -253,7 +253,7 @@ public class AccountService {
         accountDto.setAccEmail(accountEntity.getAccEmail());
         accountDto.setAccPassword(accountEntity.getAccPassword());
         accountDto.setAccBirthday(accountEntity.getAccBirthday());
-        accountDto.setImgName( "https://bookinghomestaypass.azurewebsites.net/api/users/viewImg/"+ accountEntity.getImgName());
+        accountDto.setImgName( "https://bookinghomestayfpt.azurewebsites.net/api/users/viewImg/"+ accountEntity.getImgName());
         accountDto.setImgData(new byte[0]);
         int roleID = 0; // Giá trị mặc định nếu không tìm thấy roleID
         if (accountEntity.getRoleID() != null) {

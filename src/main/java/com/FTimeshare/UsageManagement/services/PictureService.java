@@ -122,7 +122,7 @@ public class PictureService {
     private PictureDto convertToDto(PictureEntity pictureEntity) {
         return new PictureDto(
                 pictureEntity.getImgID(),
-                "https://bookinghomestaypass.azurewebsites.net/api/pictures/imgView/"+pictureEntity.getImgName(),
+                "https://bookinghomestayfpt.azurewebsites.net/api/pictures/imgView/"+pictureEntity.getImgName(),
                 new byte[0],
                 pictureEntity.getProductID().getProductID());
     }
@@ -132,7 +132,7 @@ public class PictureService {
         return pictures.stream()
                 .map(pictureEntity -> new PictureDto(
                         pictureEntity.getImgID(),
-                        "https://bookinghomestaypass.azurewebsites.net/api/pictures/imgView/"+pictureEntity.getImgName(),
+                        "https://bookinghomestayfpt.azurewebsites.net/api/pictures/imgView/"+pictureEntity.getImgName(),
                         new byte[0],
                         pictureEntity.getProductID().getProductID()))
                 .collect(Collectors.toList());
