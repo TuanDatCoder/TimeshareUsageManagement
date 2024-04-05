@@ -125,7 +125,7 @@ public class NewsService {
         newsDto.setNewsTitle(newsEntity.getNewsTitle());
         newsDto.setNewsPost(newsEntity.getNewsPost());
         newsDto.setNewsContent(newsEntity.getNewsContent());
-        newsDto.setImgName("https://bookinghomestayswp.azurewebsites.net/api/news/imgView/"+newsEntity.getImgName());
+        newsDto.setImgName("https://bookinghomstay.azurewebsites.net/api/news/imgView/"+newsEntity.getImgName());
         newsDto.setImgData(new byte[0]);
         newsDto.setNewsViewer(newsEntity.getNewsViewer());
         newsDto.setNewsStatus(newsEntity.getNewsStatus());

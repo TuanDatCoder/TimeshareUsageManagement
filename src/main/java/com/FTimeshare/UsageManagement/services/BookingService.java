@@ -87,9 +87,9 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        "https://bookinghomestayswp.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                        "https://bookinghomstay.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
                         new byte[0],
-                        "https://bookinghomestayswp.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                        "https://bookinghomstay.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                         new byte[0],
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))
@@ -188,7 +188,13 @@ public class BookingService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Booking Payment Picture submit successfully.");
     }
-
+    //Quy
+    public List<BookingDto> getBookingsByProductID(int productID){
+        List<BookingEntity> bookingEntities = bookingRepository.findByProductID(productID);
+        return bookingEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
     public ResponseEntity<?> uploadBookingRespondPaymentPicture(MultipartFile file, int bookingID) throws IOException {
         BookingEntity booking = getBookingByBookingIDV2(bookingID);
 
@@ -208,9 +214,9 @@ public class BookingService {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "https://bookinghomestayswp.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                "https://bookinghomstay.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "https://bookinghomestayswp.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "https://bookinghomstay.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());
@@ -230,9 +236,9 @@ public class BookingService {
                         bookingEntity.getBookingPrice(),
                         bookingEntity.getBookingPerson(),
                         bookingEntity.getBookingStatus(),
-                        "https://bookinghomestayswp.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                        "https://bookinghomstay.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
                         new byte[0],
-                        "https://bookinghomestayswp.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                        "https://bookinghomstay.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                         new byte[0],
                         bookingEntity.getAccID().getAccID(),
                         bookingEntity.getProductID().getProductID()))

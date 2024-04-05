@@ -91,7 +91,12 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-
+    //Quy
+    @GetMapping("/view-booking-by-product-Id/{productId}")
+    public ResponseEntity<List<BookingDto>> viewBookingsByProductId(@PathVariable int productId) {
+        List<BookingDto> bookings = bookingService.getBookingsByProductID(productId);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
 
 
     @PostMapping("/customer/checkbooking")
@@ -766,9 +771,9 @@ public class BookingController {
                 bookingEntity.getBookingPrice(),
                 bookingEntity.getBookingPerson(),
                 bookingEntity.getBookingStatus(),
-                "https://bookinghomestayswp.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
+                "https://bookinghomstay.azurewebsites.net/api/bookings/viewImg/" + bookingEntity.getImgName(),
                 new byte[0],
-                "https://bookinghomestayswp.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
+                "https://bookinghomstay.azurewebsites.net/api/bookings/paymentRespond/viewImg/" + bookingEntity.getImgRespondName(),
                 new byte[0],
                 bookingEntity.getAccID().getAccID(),
                 bookingEntity.getProductID().getProductID());

@@ -240,6 +240,7 @@ public class ProductController {
     @GetMapping("/view/bookedDate/{productID}")
     public List<LocalDateTime> getProductsBookedDateByProductID(@PathVariable int productID) {
         List<BookingEntity> bookingOfProduct= bookingService.getBookingsByStatusAndProductId("Active", productID);
+        bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("Wait to confirm", productID));
         bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("active", productID));
         bookingOfProduct.addAll(bookingService.getBookingsByStatusAndProductId("In progress", productID));
 //        List<BookingDto> bookingOfProduct = bookingService.getBookingByProductIDAndActive(productID);
@@ -250,6 +251,7 @@ public class ProductController {
         }
         return bookedDate;
     }
+
     //filter product
     @PostMapping("/filter")
     public ResponseEntity<?>  filterProduct(@RequestParam String cityInAddress,
@@ -330,15 +332,15 @@ public class ProductController {
         }
     }
 
-//    @GetMapping("/sum/{user_id}")
-//    public float getSumOfAllProductByUserID( @PathVariable("user_id") int user_id){
-//        List<ProductEntity> productEntities = productService.getProductsByAccountID(user_id);
-//        float sum = 0;
-//        for(int i = 0; i<productEntities.size(); i++){
-//            sum+= (float) bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());
-//        }
-//        return sum;
-//    }
+    @GetMapping("/sum/{user_id}")
+    public float getSumOfAllProductByUserID( @PathVariable("user_id") int user_id){
+        List<ProductEntity> productEntities = productService.getProductsByAccountID(user_id);
+        float sum = 0;
+        for(int i = 0; i<productEntities.size(); i++){
+            sum+= (float) bookingService.getSumPriceByProductId(productEntities.get(i).getProductID());
+        }
+        return sum;
+    }
     private List<ProductDto> convertToDtoList(List<ProductEntity> productEntities) {
         return productEntities.stream()
                 .map(this::convertToDto)
